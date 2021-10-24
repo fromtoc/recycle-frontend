@@ -1,10 +1,10 @@
 <template>
 <div>
-        <!-- 面包导航 -->
+        <!-- 面包導航 -->
     <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
       <el-breadcrumb-item>其他管理</el-breadcrumb-item>
-      <el-breadcrumb-item>图标管理</el-breadcrumb-item>
+      <el-breadcrumb-item>圖標管理</el-breadcrumb-item>
     </el-breadcrumb>
       <el-card>
     <ul class="icon-list">
@@ -2554,7 +2554,7 @@ textarea {
 export default {
   methods: {
     copyText(text, callback) {
-      // text: 要复制的内容， callback: 回调
+      // text: 要复制的内容， callback: 回調
       var tag = document.createElement("input");
       tag.setAttribute("id", "cp_hgz_input");
       tag.value = text;
@@ -2581,7 +2581,7 @@ export default {
             $this.copyText(ele.innerHTML, function() {
               $this.$notify({
                 title: "成功",
-                message: "已复制图标到剪切板",
+                message: "已复制圖標到剪切板",
                 type: "success"
               });
             });

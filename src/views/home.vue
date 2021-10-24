@@ -1,39 +1,40 @@
 <template>
     <el-container class="home-container">
-        <!--    导航-->
+        <!--    導航-->
         <el-header>
             <div>
         <span style="margin-left:20px;">
-          <img
+          <!-- <img
                   src="../assets/ilogo.png"
                   width="250px;"
                   style="margin-left:-10px;"
                   height="100%;"
                   alt
                   srcset
-          />
+          /> -->
         </span>
             </div>
             <el-dropdown>
                 <div class="block">
-                    <el-avatar  :size="50" :src="this.userInfo.avatar" style="cursor: pointer;"></el-avatar>
+                    <!-- <el-avatar  :size="50" :src="this.userInfo.avatar" style="cursor: pointer;"></el-avatar> -->
+                    <el-avatar  :size="50" :src="this" style="cursor: pointer;"></el-avatar>
                 </div>
                 <el-dropdown-menu slot="dropdown" trigger="click">
                     <el-dropdown-item>
-                        <span type="danger"  @click="toWelcome"><span class="el-icon-house"></span> &nbsp;系统首页</span>
+                        <span type="danger"  @click="toWelcome"><span class="el-icon-house"></span> &nbsp;系統首頁</span>
                     </el-dropdown-item>
                     <el-dropdown-item>
-                        <span type="danger" @click="getContact"><span class="el-icon-ship"></span> &nbsp;交流讨论</span>
+                        <span type="danger" @click="getContact"><span class="el-icon-ship"></span> &nbsp;重設密碼</span>
                     </el-dropdown-item>
                     <el-dropdown-item>
-                        <span type="danger" @click="logout"><span class="el-icon-switch-button"></span> &nbsp;退出登入</span>
+                        <span type="danger" @click="logout"><span class="el-icon-switch-button"></span> &nbsp;登出</span>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
-        <!--主体-->
+        <!--主體-->
         <el-container style="height: 500px;">
-            <!--菜单-->
+            <!--選單-->
             <el-aside :width="isOpen===true?'64px':'200px'">
                 <div class="toggle-btn" @click="toggleMenu">|||</div>
                 <el-menu
@@ -50,7 +51,7 @@
                 </el-menu>
             </el-aside>
 
-            <!--右边主体-->
+            <!--右邊主體-->
             <el-main  v-loading="loading">
                 <router-view></router-view>
             </el-main>
@@ -59,13 +60,13 @@
 </template>
 
 <script>
-    import MenuTree from "../components/MenuTree"; //引进菜单模板
+    import MenuTree from "../components/MenuTree"; //引進選單模板
 
     export default {
         data() {
             return {
                 loading: true,
-                activePath: "", //激活的路径
+                activePath: "", //激活的路徑
                 isOpen: false,
                 menuList: {},
                 userInfo: {},
@@ -80,14 +81,14 @@
              * 退出登入
              */
             async logout() {
-                const res = await this.$confirm("此操作将退出系统, 是否继续?", "提示", {
-                    confirmButtonText: "确定",
+                const res = await this.$confirm("此操作將退出系統, 是否繼續?", "提示", {
+                    confirmButtonText: "確定",
                     cancelButtonText: "取消",
                     type: "warning"
                 }).catch(() => {
                     this.$message({
                         type: "info",
-                        message: "已取消退出登入"
+                        message: "已取消登出"
                     });
                 });
                 if (res === "confirm") {
@@ -96,41 +97,41 @@
                 }
             },
             /**
-             * 去系统首页
+             * 去系统首頁
              */
             toWelcome(){
                 this.$router.push("/welcome");
             },
             /**
-             加载菜单数据
+             加載選單數據
              */
             async getMenuList() {
                 const { data: res } = await this.$http.get("system/user/findMenu");
                 if(!res.success){
-                    return this.$message.error("获取菜单失败:" + res.msg);
+                    return this.$message.error("獲取選單失敗:" + res.msg);
                 }
                 this.menuList = res.data;
             },
             /**
-             获取用户信息
+             獲取用戶信息
              */
             async getUserInfo() {
                 const { data: res } = await this.$http.get("system/user/info");
                 if(!res.success){
-                    return this.$message.error("获取用户信息失败:" + res.msg);
+                    return this.$message.error("獲取用戶信息失敗:" + res.msg);
                 } else {
                     this.userInfo = res.data;
                     this.$store.commit("setUserInfo", res.data);
                 }
             },
             /**
-             * 菜单伸缩
+             * 選單伸缩
              */
             toggleMenu() {
                 this.isOpen = !this.isOpen;
             },
             /**
-             * 点击交流
+             * 點擊交流
              */
             getContact(){
                 const w = window.open('about:blank');
@@ -151,7 +152,7 @@
 </script>
 
 <style>
-    /* 为对应的路由跳转时设置动画效果 */
+    /* 為對應的路由跳轉時設置動画效果 */
 
     .el-header {
         background-color: #001529;

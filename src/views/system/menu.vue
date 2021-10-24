@@ -1,19 +1,19 @@
 <template>
     <div id="roles" v-loading="loading">
-        <!-- 面包导航 -->
+        <!-- 面包導航 -->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
             <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-            <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
+            <el-breadcrumb-item>選單管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <!-- 卡片主体 -->
+        <!-- 卡片主體 -->
         <el-card class="box-card">
             <div class="block">
-                <!-- 节点过滤 -->
+                <!-- 節點過濾 -->
                 <el-row>
                     <el-col :span="16">
                         <div class="grid-content bg-purple">
-                            <el-input placeholder="输入关键字进行过滤" v-model="filterText" clearable></el-input>
+                            <el-input placeholder="輸入關鍵字進行過濾" v-model="filterText" clearable></el-input>
                         </div>
                     </el-col>
                     <el-col :span="2">
@@ -23,7 +23,7 @@
                                     icon="el-icon-plus"
                                     style="margin-left:20px;"
                                     @click="openParentAdd"
-                            >父级</el-button>
+                            >父級</el-button>
                         </div>
                     </el-col>
                     <el-col :span="2">
@@ -32,12 +32,12 @@
                                 style="margin-left:20px;"
                                 icon="el-icon-download"
                                 @click="downExcel"
-                        >导出</el-button>
+                        >導出</el-button>
                     </el-col>
 
                 </el-row>
 
-                <p>菜单权限树</p>
+                <p>選單權限樹</p>
                 <el-tree
                         :data="data"
                         accordion
@@ -54,7 +54,7 @@
                 ></el-tree>
             </div>
         </el-card>
-        <!-- 节点新增弹出框 -->
+        <!-- 節點新增彈出框 -->
         <el-dialog :title="addTitle" :visible.sync="addDialogVisible" @close="addClose" width="50%">
       <span>
         <el-form
@@ -64,16 +64,16 @@
                 label-width="80px"
                 :rules="addFormRules"
         >
-          <el-form-item label="节点名称" prop="menuName">
+          <el-form-item label="節點名稱" prop="menuName">
             <el-input v-model="addForm.menuName"></el-input>
           </el-form-item>
           <el-form-item label="URL">
             <el-input v-model="addForm.url"></el-input>
           </el-form-item>
-          <el-form-item label="权限编码">
+          <el-form-item label="權限編碼">
             <el-input v-model="addForm.perms"></el-input>
           </el-form-item>
-          <el-form-item label="图标">
+          <el-form-item label="圖標">
             <el-input v-model="addForm.icon"></el-input>
           </el-form-item>
           <el-form-item label="是否可用" prop="disabled">
@@ -82,29 +82,29 @@
               <el-radio v-model="addForm.disabled" label="true">禁用</el-radio>
             </template>
           </el-form-item>
-          <el-form-item label="是否展开" prop="open">
+          <el-form-item label="是否展開" prop="open">
             <template>
-              <el-radio v-model="addForm.open" label="1">展开</el-radio>
-              <el-radio v-model="addForm.open" label="0">关闭</el-radio>
+              <el-radio v-model="addForm.open" label="1">展開</el-radio>
+              <el-radio v-model="addForm.open" label="0">關閉</el-radio>
             </template>
           </el-form-item>
           <el-form-item label="排序" prop="orderNum">
             <el-input-number v-model="addForm.orderNum" :min="1" :max="10" label="描述文字"></el-input-number>
           </el-form-item>
-          <el-form-item label="类型" prop="type">
+          <el-form-item label="類型" prop="type">
             <template>
-              <el-radio v-model="addForm.type" label="0">菜单</el-radio>
-              <el-radio v-model="addForm.type" label="1">按钮</el-radio>
+              <el-radio v-model="addForm.type" label="0">選單</el-radio>
+              <el-radio v-model="addForm.type" label="1">按鈕</el-radio>
             </template>
           </el-form-item>
         </el-form>
       </span>
             <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addNode" :loading="btnLoading" :disabled="btnDisabled">确 定</el-button>
+        <el-button type="primary" @click="addNode" :loading="btnLoading" :disabled="btnDisabled">確 定</el-button>
       </span>
         </el-dialog>
-        <!-- 编辑节点弹出框 -->
+        <!-- 編輯節點彈出框 -->
         <el-dialog :title="editTitle" :visible.sync="editlogVisible" width="50%" @close="editClose">
       <span>
         <el-form
@@ -114,16 +114,16 @@
                 label-width="80px"
                 :rules="addFormRules"
         >
-          <el-form-item label="节点名称" prop="menuName">
+          <el-form-item label="節點名稱" prop="menuName">
             <el-input v-model="editForm.menuName"></el-input>
           </el-form-item>
           <el-form-item label="URL">
             <el-input v-model="editForm.url"></el-input>
           </el-form-item>
-          <el-form-item label="权限编码">
+          <el-form-item label="權限編碼">
             <el-input v-model="editForm.perms"></el-input>
           </el-form-item>
-          <el-form-item label="图标">
+          <el-form-item label="圖標">
             <el-input v-model="editForm.icon"></el-input>
           </el-form-item>
           <el-form-item label="是否可用" prop="disabled">
@@ -132,19 +132,19 @@
               <el-radio v-model="editForm.disabled" :label="true">禁用</el-radio>
             </template>
           </el-form-item>
-          <el-form-item label="是否展开" prop="open">
+          <el-form-item label="是否展開" prop="open">
             <template>
-              <el-radio v-model="editForm.open" :label="1">展开</el-radio>
-              <el-radio v-model="editForm.open" :label="0">关闭</el-radio>
+              <el-radio v-model="editForm.open" :label="1">展開</el-radio>
+              <el-radio v-model="editForm.open" :label="0">關閉</el-radio>
             </template>
           </el-form-item>
           <el-form-item label="排序" prop="orderNum">
             <el-input-number v-model="editForm.orderNum" :min="1" :max="10" label="描述文字"></el-input-number>
           </el-form-item>
-          <el-form-item label="类型" prop="type">
+          <el-form-item label="類型" prop="type">
             <template>
-              <el-radio v-model="editForm.type" :label="0">菜单</el-radio>
-              <el-radio v-model="editForm.type" :label="1">按钮</el-radio>
+              <el-radio v-model="editForm.type" :label="0">選單</el-radio>
+              <el-radio v-model="editForm.type" :label="1">按鈕</el-radio>
             </template>
           </el-form-item>
         </el-form>
@@ -156,7 +156,7 @@
                 @click="updateMenu"
                 :loading="btnLoading"
                 :disabled="btnDisabled"
-        >确 定</el-button>
+        >確 定</el-button>
       </span>
         </el-dialog>
     </div>
@@ -180,10 +180,10 @@
                 btnLoading: false,
                 btnDisabled: false,
                 loading: true,
-                open: [], //展开节点
-                filterText: "", //节点过滤文本
-                addDialogVisible: false, //新增节点弹出框
-                editlogVisible: false, //编辑节点弹出框
+                open: [], //展開節點
+                filterText: "", //節點過濾文本
+                addDialogVisible: false, //新增節點彈出框
+                editlogVisible: false, //編輯節點彈出框
                 addTitle: "",
                 editTitle: "",
                 addForm: {
@@ -195,24 +195,24 @@
                     disabled: "",
                     open: "",
                     perms: ""
-                }, //添加请求表单数据
-                editForm: {}, //编辑节点表单数据
+                }, //添加請求表單數據
+                editForm: {}, //編輯節點表單數據
                 addFormRules: {
                     menuName: [
-                        { required: true, message: "节点名称不能为空", trigger: "blur" },
-                        { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+                        { required: true, message: "節點名稱不能為空", trigger: "blur" },
+                        { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
                     ],
                     disabled: [
-                        { required: true, message: "节点状态不能为空", trigger: "blur" }
+                        { required: true, message: "節點狀態不能為空", trigger: "blur" }
                     ],
 
                     orderNum: [
-                        { required: true, message: "排序不能为空", trigger: "blur" }
+                        { required: true, message: "排序不能為空", trigger: "blur" }
                     ],
-                    type: [{ required: true, message: "类型不能为空", trigger: "blur" }],
-                    open: [{ required: true, message: "是否展开不能为空", trigger: "blur" }]
-                }, //添加表单验证规则
-                pNode: {}, //父节点
+                    type: [{ required: true, message: "類型不能為空", trigger: "blur" }],
+                    open: [{ required: true, message: "是否展開不能為空", trigger: "blur" }]
+                }, //添加表單驗證規則
+                pNode: {}, //父節點
                 data: JSON.parse(JSON.stringify(data)),
 
                 defaultProps: {
@@ -230,7 +230,7 @@
         methods: {
 
             /**
-             * 加载菜单表格
+             * 加載選單表格
              */
             downExcel() {
                 var $this = this;
@@ -244,18 +244,18 @@
                             return $this.$message.error("Subject does not have permission [menu:export]");
                         }
                         const data = res.data;
-                        let url = window.URL.createObjectURL(data); // 将二进制文件转化为可访问的url
+                        let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
                         const a = document.createElement("a");
                         document.body.appendChild(a);
                         a.href = url;
-                        a.download = "菜单列表.xls";
+                        a.download = "選單列表.xls";
                         a.click();
                         window.URL.revokeObjectURL(url);
                     });
             },
 
 
-            //更新菜单
+            //更新選單
             async updateMenu() {
                 this.$refs.editFormRef.validate(async valid => {
                     if (!valid) {
@@ -270,7 +270,7 @@
                         if (res.success) {
                             this.$message({
                                 title: "成功",
-                                message: "节点信息更新",
+                                message: "節點信息更新",
                                 type: "success"
                             });
                             this.editForm = {};
@@ -279,28 +279,28 @@
                         } else {
                             this.btnLoading = false;
                             this.btnDisabled = false;
-                            return this.$message.error("更新菜单失败"+res.data.errorMsg);
+                            return this.$message.error("更新選單失敗"+res.data.errorMsg);
                         }
                     }
                 });
             },
-            //点击编辑节点
+            //點擊編輯節點
             async edit(data) {
-                this.editTitle = "编辑：【" + data.menuName + "】";
+                this.editTitle = "編輯：【" + data.menuName + "】";
                 const { data: res } = await this.$http.get("system/menu/edit/" + data.id);
                 if (res.success) {
                     this.editForm = res.data;
                     this.editlogVisible = true;
                 } else {
-                    return this.$message.error("节点编辑失败:" + res.data.errorMsg);
+                    return this.$message.error("節點編輯失敗:" + res.data.errorMsg);
                 }
             },
-            //过滤节点
+            //過濾節點
             filterNode(value, data) {
                 if (!value) return true;
                 return data.menuName.indexOf(value) !== -1;
             },
-            //关闭添加
+            //關閉添加
             addClose() {
                 this.$refs.addFormRef.clearValidate();
                 this.addForm = {};
@@ -309,7 +309,7 @@
                 this.$refs.editFormRef.clearValidate();
                 this.editForm = {};
             },
-            //加载菜单树
+            //加載選單樹
             async getMenuTree() {
                 const { data: res } = await this.$http.get("system/menu/tree");
                 if (res.success) {
@@ -317,26 +317,26 @@
                     this.open = res.data.open;
                 }
             },
-            //打开添加框
+            //打開添加框
             openAdd(data) {
-                this.addTitle = "添加节点 ：当前【" + data.menuName + "】";
+                this.addTitle = "添加節點 ：當前【" + data.menuName + "】";
                 this.addDialogVisible = true;
                 this.addForm.parentId = data.id;
                 this.pNode = data;
             },
-            //添加最高父级节点
+            //添加最高父級節點
             openParentAdd(data) {
-                this.addTitle = "添加第一父级";
+                this.addTitle = "添加第一父級";
                 this.addDialogVisible = true;
                 this.addForm.parentId = 0;
             },
-            //点击删除按钮
+            //點擊删除按鈕
             async delNode(node, data) {
                 const res = await this.$confirm(
-                    "此操作将永久删除该节点, 是否继续?",
+                    "此操作將永久删除該節點, 是否繼續?",
                     "提示",
                     {
-                        confirmButtonText: "确定",
+                        confirmButtonText: "確定",
                         cancelButtonText: "取消",
                         type: "warning"
                     }
@@ -352,14 +352,14 @@
                         "system/menu/delete/" + node.data.id
                     );
                     if (res.success) {
-                        this.$message.success("节点删除成功");
+                        this.$message.success("節點删除成功");
                         await this.getMenuTree();
                     } else {
-                        this.$message.error("节点删除失败:" + res.data.errorMsg);
+                        this.$message.error("節點删除失敗:" + res.data.errorMsg);
                     }
                 }
             },
-            //发送添加节点请求
+            //發送添加節點請求
             async addNode() {
                 this.$refs.addFormRef.validate(async valid => {
                     if (!valid) {
@@ -369,18 +369,18 @@
                         this.btnDisabled = true;
                         const { data: res } = await this.$http.post("system/menu/add", this.addForm);
                         if (res.success) {
-                            this.$message.success("节点添加成功");
+                            this.$message.success("節點添加成功");
                             this.addDialogVisible = false;
                             await this.getMenuTree();
                         } else {
-                            this.$message.error("节点添加失败:"+res.data.errorMsg);
+                            this.$message.error("節點添加失敗:"+res.data.errorMsg);
                         }
                         this.btnLoading=false;
                         this.btnDisabled = false;
                     }
                 });
             },
-            //前端添加节点
+            //前端添加節點
             append(data, newChild) {
                 //   var newChild = { id: 1231, label: "qqqqq", children: [] };
                 if (!data.children) {
@@ -401,8 +401,8 @@
                     <span class="custom-tree-node">
                     <span>
                     <i class={data.icon}></i>&nbsp;&nbsp;&nbsp;{node.label}
-                {node.data.type == 0 ?  <el-tag style='margin-left:20px;'  effect='plain' size='mini'>菜单</el-tag>:
-                    <el-tag style='margin-left:20px;' type='warning' effect='plain' size='mini'>权限  [{node.data.perms}]</el-tag>
+                {node.data.type == 0 ?  <el-tag style='margin-left:20px;'  effect='plain' size='mini'>選單</el-tag>:
+                    <el-tag style='margin-left:20px;' type='warning' effect='plain' size='mini'>權限  [{node.data.perms}]</el-tag>
 
                 }
             </span>
@@ -415,7 +415,7 @@
                     return false;
                 }}
             >
-            <i class="el-icon-edit"></i>&nbsp;编辑
+            <i class="el-icon-edit"></i>&nbsp;編輯
                     </el-button>
                     <el-button
                 size="mini"

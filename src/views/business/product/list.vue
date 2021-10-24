@@ -1,17 +1,17 @@
 <template>
     <div id="productCategroys">
-        <!-- 面包导航 -->
+        <!-- 面包導航 -->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>物资管理</el-breadcrumb-item>
-            <el-breadcrumb-item>物资资料</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+            <el-breadcrumb-item>廢棄物管理</el-breadcrumb-item>
+            <el-breadcrumb-item>廢棄物資料</el-breadcrumb-item>
         </el-breadcrumb>
-        <!-- 右侧卡片区域 -->
+        <!-- 右側卡片區域 -->
         <el-card class="box-card">
             <el-container style="margin-bottom:20px;">
                 <el-alert
                         show-icon
-                        title="友情提示:  商品的分类只支持三级分类"
+                        title="友情提示:  商品的分類只支持三級分類"
                         type="warning">
                 </el-alert>
             </el-container>
@@ -19,7 +19,7 @@
                 <el-col :span="5">
                     <el-cascader
                             size="small"
-                            placeholder="请选择分类查询"
+                            placeholder="請選擇分類查詢"
                             :change-on-select="true"
                             @change="selectChange"
                             v-model="categorykeys"
@@ -33,14 +33,14 @@
                             clearable
                             size="small"
                             v-model="queryMap.name"
-                            placeholder="请输入物资名称查询"
+                            placeholder="請輸入廢棄物名稱查詢"
                             @clear="search"
                             class="input-with-select"
                     ></el-input>
                 </el-col>
                 <el-col :span="5">
                     <template>
-                        <el-select size="small" v-model="queryMap.status" @click="search" placeholder="请选择状态">
+                        <el-select size="small" v-model="queryMap.status" @click="search" placeholder="請選擇狀態">
                             <el-option label="正常" :value="0"></el-option>
                             <el-option label="回收站" :value="1"></el-option>
                             <el-option label="待审核" :value="2"></el-option>
@@ -57,7 +57,7 @@
                 </el-col>
             </el-row>
 
-            <!-- 表格区域 -->
+            <!-- 表格區域 -->
             <template>
                 <el-table
                         size="mini"
@@ -70,7 +70,7 @@
                 >
                     <el-table-column prop="id" type="index" label="ID"></el-table-column>
 
-                    <el-table-column prop="imageUrl" label="图片" align="center" width="150px" padding="0px">
+                    <!-- <el-table-column prop="imageUrl" label="圖片" align="center" width="150px" padding="0px"> -->
                         <!--            <template slot-scope="scope">-->
                         <!--              <img-->
                         <!--                slot="error"-->
@@ -79,7 +79,7 @@
                         <!--                style="width: 55px;height:55px"-->
                         <!--              />-->
                         <!--            </template>-->
-                        <template slot-scope="scope">
+                        <!-- <template slot-scope="scope">
                             <el-popover placement="right" trigger="hover">
                                 <img :src="'https://www.zykhome.club/'+scope.row.imageUrl"
                                      style="height: 200px;width: 200px"/>
@@ -87,27 +87,27 @@
                                      :alt="scope.row.imgUrl" style="height: 38px;width: 38px;cursor: pointer">
                             </el-popover>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
 
-                    <el-table-column prop="name" label="物资名称"></el-table-column>
+                    <el-table-column prop="name" label="廢棄物名稱"></el-table-column>
 
 
-                    <el-table-column prop="pnum" :show-overflow-tooltip='true' label="物资编号"></el-table-column>
-                    <el-table-column label="物资规格" width="100">
+                    <!-- <el-table-column prop="pnum" :show-overflow-tooltip='true' label="廢棄物編號"></el-table-column> -->
+                    <el-table-column label="單價" width="100">
                         <template slot-scope="scope">
                             <el-tag type="success" size="mini" closable v-text="scope.row.model"></el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="unit" label="单位" width="80"></el-table-column>
-                    <el-table-column prop="remark" label="备注"></el-table-column>
-                    <el-table-column prop="status" label="状态" width="100">
+                    <el-table-column prop="unit" label="單位" width="80"></el-table-column>
+                    <!-- <el-table-column prop="remark" label="備註"></el-table-column> -->
+                    <el-table-column prop="status" label="狀態" width="100">
                         <template slot-scope="scope">
                             <el-tag size="mini" type="danger" effect="plain" v-if="scope.row.status==1">回收</el-tag>
                             <el-tag size="mini" effect="plain" v-if="scope.row.status==0">正常</el-tag>
                             <el-tag size="mini" effect="plain" type="warning" v-if="scope.row.status==2">审核中</el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="createTime" label="创建时间"></el-table-column>
+                    <!-- <el-table-column prop="createTime" label="創建時間"></el-table-column> -->
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <!--              给管理员提供的恢复和删除-->
@@ -121,7 +121,7 @@
                          cancelButtonText='不用了'
                          icon="el-icon-info"
                          iconColor="green"
-                         title="这是一段内容确定恢复吗？"
+                         title="這是一段内容確定恢复嗎？"
                  >
                 <el-button type="text" size="mini" slot="reference" icon="el-icon-back">恢复</el-button>
                  </el-popconfirm>
@@ -129,23 +129,23 @@
                          @click="del(scope.row.id)">删除</el-button>
               </span>
 
-                            <!--              给操作员提供的编辑和回收-->
+                            <!--              给操作员提供的編輯和回收-->
                             <span v-if="scope.row.status==0">
-               <el-button type="text" size="mini" icon="el-icon-edit" @click="edit(scope.row.id)">编辑</el-button>
-              <el-popconfirm
+               <el-button type="text" size="mini" icon="el-icon-edit" @click="edit(scope.row.id)">編輯</el-button>
+              <!-- <el-popconfirm
                       @onConfirm="remove(scope.row.id)"
                       style="margin-left:10px;"
                       confirmButtonText='好的'
                       cancelButtonText='不用了'
                       icon="el-icon-info"
                       iconColor="red"
-                      title="这是一段内容确定移入回收站吗？"
+                      title="這是一段内容確定移入回收站嗎？"
               >
               <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">回收站</el-button>
-            </el-popconfirm>
+            </el-popconfirm> -->
               </span>
 
-                            <!--          给管理员提供的审核和不通过-->
+                            <!--          给管理员提供的审核和不通過-->
                             <span v-if="scope.row.status==2">
               <el-popconfirm
                       @onConfirm="publish(scope.row.id)"
@@ -154,9 +154,9 @@
                       cancelButtonText='不用了'
                       icon="el-icon-info"
                       iconColor="blue"
-                      title="确定审核通过吗？"
+                      title="確定审核通過嗎？"
               >
-              <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">通过</el-button>
+              <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">通過</el-button>
             </el-popconfirm>
               <el-button style="margin-left:10px;" type="text" size="mini" icon="el-icon-delete"
                          @click="del(scope.row.id)">删除</el-button>
@@ -165,7 +165,7 @@
                     </el-table-column>
                 </el-table>
             </template>
-            <!-- 分页 -->
+            <!-- 分頁 -->
             <el-pagination
                     style="margin-top:10px;"
                     background
@@ -177,8 +177,8 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total"
             ></el-pagination>
-            <!-- 物资添加弹出框 -->
-            <el-dialog title="添加物资" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
+            <!-- 廢棄物添加彈出框 -->
+            <el-dialog title="添加廢棄物" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
         <span>
           <el-form
                   size="mini"
@@ -188,12 +188,12 @@
                   label-width="100px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="物资名称" prop="name">
+            <el-form-item label="廢棄物名稱" prop="name">
               <el-input v-model="addRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="物资图片" prop="name">
-              <!-- 图片上传部分 -->
-              <el-upload
+            <!-- <el-form-item label="廢棄物圖片" prop="name"> -->
+              <!-- 圖片上傳部分 -->
+              <!-- <el-upload
                       :action="uploadApi"
                       :class="{ disabled: uploadDisabled }"
                       list-type="picture-card"
@@ -208,19 +208,20 @@
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
-            </el-form-item>
+            </el-form-item> -->
             <el-row>
               <el-col :span="12">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="物资规格" prop="model">
+                  <el-form-item label="單價" prop="model">
                     <el-input v-model="addRuleForm.model"></el-input>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="12">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="分类" prop="categoryKeys">
+                  <el-form-item label="分類" prop="categoryKeys">
                     <el-cascader
+                            placeholder="請選擇"
                             :options="cateories"
                             clearable
                             filterable
@@ -234,7 +235,7 @@
             <el-row>
               <el-col :span="12">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="单位" prop="unit">
+                  <el-form-item label="單位" prop="unit">
                     <el-input v-model="addRuleForm.unit"></el-input>
                   </el-form-item>
                 </div>
@@ -248,20 +249,20 @@
               </el-col>
             </el-row>
 
-            <el-form-item label="备注信息" prop="remark">
+            <el-form-item label="備註信息" prop="remark">
               <el-input type="textarea" v-model="addRuleForm.remark"></el-input>
             </el-form-item>
           </el-form>
         </span>
                 <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="add" :disabled="btnDisabled" :loading="btnLoading">确 定</el-button>
+          <el-button type="primary" @click="add" :disabled="btnDisabled" :loading="btnLoading">確 定</el-button>
         </span>
             </el-dialog>
 
-            <!-- 物资编辑弹出框 -->
+            <!-- 廢棄物編輯彈出框 -->
             <el-dialog
-                    title="更新物资"
+                    title="更新廢棄物"
                     :visible.sync="editDialogVisible"
                     width="50%"
                     @close="closeEditDialog"
@@ -275,12 +276,12 @@
                   label-width="100px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="物资名称" prop="name">
+            <el-form-item label="廢棄物名稱" prop="name">
               <el-input v-model="editRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="物资图片" prop="name">
-              <!-- 图片上传部分 -->
-              <el-upload
+            <!-- <el-form-item label="廢棄物圖片" prop="name"> -->
+              <!-- 圖片上傳部分 -->
+              <!-- <el-upload
                       :action="uploadApi"
                       :class="{ disabled: uploadDisabled }"
                       list-type="picture-card"
@@ -294,18 +295,19 @@
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
-            </el-form-item>
+            </el-form-item> -->
             <el-row>
               <el-col :span="12">
-                <el-form-item label="物资规格" prop="model">
+                <el-form-item label="單價" prop="model">
                   <el-input v-model="editRuleForm.model"></el-input>
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="分类" prop="categoryKeys">
+                  <el-form-item label="分類" prop="categoryKeys">
                     <el-cascader
+                            placeholder="請選擇"
                             :options="cateories"
                             clearable
                             filterable
@@ -319,7 +321,7 @@
             <el-row>
               <el-col :span="12">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="单位" prop="unit">
+                  <el-form-item label="單位" prop="unit">
                     <el-input v-model="editRuleForm.unit"></el-input>
                   </el-form-item>
                 </div>
@@ -341,10 +343,10 @@
                   @click="update"
                   :disabled="btnDisabled"
                   :loading="btnLoading"
-          >确 定</el-button>
+          >確 定</el-button>
         </span>
             </el-dialog>
-            <!-- 图片预览 -->
+            <!-- 圖片预覽 -->
             <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt/>
             </el-dialog>
@@ -362,28 +364,28 @@
                 loading: true,
                 headerObject: {
                     Authorization: LocalStorage.get(LOCAL_KEY_XINGUAN_ACCESS_TOKEN)
-                }, //图片上传请求头
-                cateories: [], //类别选择
+                }, //圖片上傳請求頭
+                cateories: [], //類別選擇
                 selectProps: {
                     expandTrigger: "hover",
                     value: "id",
                     label: "name",
                     children: "children",
                     checkStrictly: false
-                }, //级联选择器配置项
+                }, //級聯選擇器配置项
                 searchSelectProps: {
                     expandTrigger: "hover",
                     value: "id",
                     label: "name",
                     children: "children",
                     checkStrictly: true
-                }, //级联搜索选择器配置项
+                }, //級聯搜索選擇器配置项
 
 
                 editDialogVisible: false,
-                addDialogVisible: false, //添加弹框是否显示
-                total: 0, //总共多少条数据
-                productData: [], //表格数据
+                addDialogVisible: false, //添加彈框是否顯示
+                total: 0, //總共多少條數據
+                productData: [], //表格數據
                 queryMap: {
                     pageNum: 1,
                     pageSize: 6,
@@ -392,44 +394,44 @@
                     supplier: "",
                     status: 0,
 
-                }, //查询对象
-                addRuleForm: {}, //添加表单数据
-                editRuleForm: {}, //修改表单数据
+                }, //查詢對象
+                addRuleForm: {}, //添加表單數據
+                editRuleForm: {}, //修改表單數據
                 uploadDisabled: false,
                 limitCount: 1,
                 dialogImageUrl: "",
                 dialogVisible: false,
                 addRules: {
                     name: [
-                        {required: true, message: "请输入物资名称", trigger: "blur"},
-                        {min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur"}
+                        {required: true, message: "請輸入廢棄物名稱", trigger: "blur"},
+                        {min: 2, max: 10, message: "長度在 2 到 10 個字符", trigger: "blur"}
                     ],
                     unit: [
-                        {required: true, message: "请输入物资单位", trigger: "blur"},
-                        {min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur"}
+                        {required: true, message: "請輸入廢棄物單位", trigger: "blur"},
+                        {min: 1, max: 10, message: "長度在 1 到 10 個字符", trigger: "blur"}
                     ],
                     model: [
-                        {required: true, message: "请输入物资规格", trigger: "blur"},
-                        {min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur"}
+                        {required: true, message: "請輸入單價", trigger: "blur"},
+                        {min: 1, max: 10, message: "長度在 1 到 10 個字符", trigger: "blur"}
                     ],
                     remark: [
-                        {required: true, message: "请输入物资说明备注", trigger: "blur"},
-                        {min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur"}
+                        {required: true, message: "請輸入廢棄物说明備註", trigger: "blur"},
+                        {min: 2, max: 10, message: "長度在 2 到 10 個字符", trigger: "blur"}
                     ],
                     categorys: [
-                        {required: true, message: "请输入物资分类", trigger: "blur"}
+                        {required: true, message: "請輸入廢棄物分類", trigger: "blur"}
                     ],
-                    sort: [{required: true, message: "请输入地址信息", trigger: "blur"}],
+                    sort: [{required: true, message: "請輸入地址信息", trigger: "blur"}],
                     categoryKeys: [
-                        {required: true, message: "请选择物资分类", trigger: "blur"}
+                        {required: true, message: "請選擇廢棄物分類", trigger: "blur"}
                     ]
-                }, //添加验证
+                }, //添加驗證
                 imgFilesList: [],
-                categorykeys: [] //搜索类别
+                categorykeys: [] //搜索類別
             };
         },
         methods: {
-            //重置查询表单
+            //重置查詢表單
             resetForm() {
                 this.queryMap = {
                     pageNum: 1,
@@ -441,14 +443,14 @@
                 };
             },
             /**
-             * 打开添加物资弹框
+             * 打開添加廢棄物彈框
              */
             openAdd() {
                 this.getCatetorys();
                 this.addDialogVisible = true;
             },
             /**
-             * 搜索物资
+             * 搜索廢棄物
              */
             search() {
                 this.queryMap.pageNum = 1;
@@ -456,26 +458,26 @@
             },
 
             /**
-             * 物资添加审核
+             * 廢棄物添加审核
              */
             async publish(id) {
                 const {data: res} = await this.$http.put("business/product/publish/" + id);
                 if (!res.success) {
-                    return this.$message.error("审核失败:" + res.data.errorMsg);
+                    return this.$message.error("审核失敗:" + res.data.errorMsg);
                 } else {
                     await this.getproductList();
-                    return this.$message.success("物资已审核通过");
+                    return this.$message.success("廢棄物已审核通過");
                 }
             },
             /**
-             * 删除物资
+             * 删除廢棄物
              */
             async del(id) {
                 var res = await this.$confirm(
-                    "此操作将永久删除该物资, 是否继续?",
+                    "此操作將永久删除該廢棄物, 是否繼續?",
                     "提示",
                     {
-                        confirmButtonText: "确定",
+                        confirmButtonText: "確定",
                         cancelButtonText: "取消",
                         type: "warning"
                     }
@@ -488,7 +490,7 @@
                 if (res === "confirm") {
                     const {data: res} = await this.$http.delete("business/product/delete/" + id);
                     if (res.success) {
-                        this.$message.success("物资删除成功");
+                        this.$message.success("廢棄物删除成功");
                         await this.getproductList();
                     } else {
                         this.$message.error(res.data.errorMsg);
@@ -496,7 +498,7 @@
                 }
             },
             /**
-             * 更新物资
+             * 更新廢棄物
              */
             async update() {
                 this.$refs.editRuleFormRef.validate(async valid => {
@@ -512,13 +514,13 @@
                         if (res.success) {
                             this.$notify({
                                 title: "成功",
-                                message: "物资信息更新",
+                                message: "廢棄物信息更新",
                                 type: "success"
                             });
                             this.editRuleForm = {};
                             await this.getproductList();
                         } else {
-                            this.$message.error("物资信息更新失败:" + res.data.errorMsg);
+                            this.$message.error("廢棄物信息更新失敗:" + res.data.errorMsg);
                         }
                         this.editDialogVisible = false;
                         this.btnDisabled = false;
@@ -527,7 +529,7 @@
                 });
             },
             /**
-             * 编辑物资
+             * 編輯廢棄物
              */
             async edit(id) {
                 const {data: res} = await this.$http.get("business/product/edit/" + id);
@@ -540,7 +542,7 @@
                         id: item.id
                     });
                 } else {
-                    return this.$message.error("物资信息编辑失败" + res.data.errorMsg);
+                    return this.$message.error("廢棄物信息編輯失敗" + res.data.errorMsg);
                 }
                 const array = [];
                 array.push(res.data.oneCategoryId);
@@ -550,7 +552,7 @@
                 this.editDialogVisible = true;
             },
             /**
-             * 添加物资
+             * 添加廢棄物
              */
             add() {
 
@@ -565,11 +567,11 @@
                             this.addRuleForm
                         );
                         if (res.success) {
-                            this.$message.success("物资添加成功");
+                            this.$message.success("廢棄物添加成功");
                             this.addRuleForm = {};
                             await this.getproductList();
                         } else {
-                            return this.$message.error("物资添加失败:" + res.data.errorMsg);
+                            return this.$message.error("廢棄物添加失敗:" + res.data.errorMsg);
                         }
                         this.addDialogVisible = false;
                         this.btnDisabled = false;
@@ -583,47 +585,47 @@
             async remove(id) {
                 const {data: res} = await this.$http.put("business/product/remove/" + id);
                 if (!res.success) {
-                    return this.$message.error("移入回收站失败:" + res.data.errorMsg);
+                    return this.$message.error("移入回收站失敗:" + res.data.errorMsg);
                 } else {
                     await this.getproductList();
                     return this.$message.success("移入回收站成功");
                 }
             },
             /**
-             * 从回收站恢复
+             * 從回收站恢复
              */
             async back(id) {
                 const {data: res} = await this.$http.put("product/back/" + id);
                 if (!res.success) {
-                    return this.$message.error("从回收站恢复失败:" + res.data.errorMsg);
+                    return this.$message.error("從回收站恢复失敗:" + res.data.errorMsg);
                 } else {
                     await this.getproductList();
-                    return this.$message.success("从回收站中已恢复");
+                    return this.$message.success("從回收站中已恢复");
                 }
             },
             /**
-             * 加载物资列表
+             * 加載廢棄物列表
              */
             async getproductList() {
                 const {data: res} = await this.$http.get("business/product/findProductList", {
                     params: this.queryMap
                 });
                 if (!res.success) {
-                    return this.$message.error("获取物资列表失败");
+                    return this.$message.error("獲取廢棄物列表失敗");
                 } else {
                     this.total = res.data.total;
                     this.productData = res.data.rows;
                 }
             },
             /**
-             * 加载物资类别
+             * 加載廢棄物類別
              */
             async getCatetorys() {
                 const {data: res} = await this.$http.get(
                     "business/productCategory/categoryTree"
                 );
                 if (!res.success) {
-                    return this.$message.error("获取物资类别失败");
+                    return this.$message.error("獲取廢棄物類別失敗");
                 } else {
                     this.cateories = res.data.rows;
                 }
@@ -635,23 +637,23 @@
                 this.uploadDisabled = fileList.length >= this.limitCount;
                 this.addRuleForm.imageUrl = "";
             },
-            //改变页码
+            //改變頁碼
             handleSizeChange(newSize) {
                 this.queryMap.pageSize = newSize;
                 this.getproductList();
             },
-            //翻页
+            //翻頁
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
                 this.getproductList();
             },
-            //关闭弹出框
+            //關閉彈出框
             closeAddDialog() {
                 this.$refs.addRuleFormRef.clearValidate();
                 this.addRuleForm = {};
                 this.$refs.upload.clearFiles();
             },
-            //关闭弹出框
+            //關閉彈出框
             closeEditDialog() {
                 this.$refs.editRuleFormRef.clearValidate();
                 this.editRuleForm = {};
@@ -665,12 +667,12 @@
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
             },
-            //编辑
+            //編輯
             editHandleSuccess(response, file, fileList) {
                 this.editRuleForm.imageUrl = response.msg;
             },
             /**
-             * 分类搜索改变时
+             * 分類搜索改變時
              */
             selectChange() {
                 var str = "";

@@ -1,37 +1,37 @@
 <template>
   <div id="productCategroys">
-    <!-- 面包导航 -->
+    <!-- 面包導航 -->
     <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>物资流向</el-breadcrumb-item>
-      <el-breadcrumb-item>物资去处</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+      <el-breadcrumb-item>廢棄物流向</el-breadcrumb-item>
+      <el-breadcrumb-item>廢棄物去處</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 右侧卡片区域 -->
-    <!-- 用户列表卡片区 -->
+    <!-- 右側卡片區域 -->
+    <!-- 用戶列表卡片區 -->
     <el-card class="box-card">
       <el-form size="small" :inline="true" :model="queryMap" class="demo-form-inline">
-        <el-form-item label="省市区县">
-          <el-input v-model="queryMap.address" clearable @clear="search" placeholder="省市区县"></el-input>
+        <el-form-item label="省市區縣">
+          <el-input v-model="queryMap.address" clearable @clear="search" placeholder="省市區縣"></el-input>
         </el-form-item>
-        <el-form-item label="联系人">
-          <el-input v-model="queryMap.contact" clearable @clear="search" placeholder="联系人"></el-input>
+        <el-form-item label="聯繫人">
+          <el-input v-model="queryMap.contact" clearable @clear="search" placeholder="聯繫人"></el-input>
         </el-form-item>
-        <el-form-item label="具体地点">
+        <el-form-item label="具體地點">
           <el-input
             clearable
             v-model="queryMap.name"
-            placeholder="请具体地点查询"
+            placeholder="請具體地點查詢"
             @clear="search"
             class="input-with-el-select"
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="search">查詢</el-button>
           <el-button type="success" icon="el-icon-circle-plus-outline" v-hasPermission="'consumer:add'" @click="openAdd">添加</el-button>
         </el-form-item>
       </el-form>
 
-      <!-- 表格区域 -->
+      <!-- 表格區域 -->
       <template>
         <el-table
           border
@@ -43,7 +43,7 @@
           height="460"
         >
           <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
-          <el-table-column label="物资去向地址">
+          <el-table-column label="廢棄物去向地址">
             <el-table-column
                     prop="address"
                     label="省份"
@@ -62,7 +62,7 @@
             </el-table-column>
             <el-table-column
                     prop="address"
-                    label="区县"
+                    label="區縣"
                     width="100">
               <template slot-scope="scope">
                 <span v-text="scope.row.address.split('/')[2]"></span>
@@ -75,20 +75,20 @@
             </el-table-column>
           </el-table-column>
 
-          <el-table-column prop="createTime" label="创建时间" width="190"></el-table-column>
-          <el-table-column prop="contact" label="联系人" width="140"></el-table-column>
-          <el-table-column prop="phone" label="电话" width="140"></el-table-column>
+          <el-table-column prop="createTime" label="創建時間" width="190"></el-table-column>
+          <el-table-column prop="contact" label="聯繫人" width="140"></el-table-column>
+          <el-table-column prop="phone" label="電話" width="140"></el-table-column>
           <el-table-column prop="sort" label="排序" width="100"></el-table-column>
           <el-table-column label="操作" fixed="right" width="150">
             <template slot-scope="scope">
-              <el-button v-hasPermission="'consumer:edit'" type="text" size="mini" icon="el-icon-edit" @click="edit(scope.row.id)">编辑</el-button>
+              <el-button v-hasPermission="'consumer:edit'" type="text" size="mini" icon="el-icon-edit" @click="edit(scope.row.id)">編輯</el-button>
 
               <el-button v-hasPermission="'consumer:delete'" type="text" size="mini" icon="el-icon-delete" @click="del(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </template>
-      <!-- 分页 -->
+      <!-- 分頁 -->
       <el-pagination
         style="margin-top:10px;"
         background
@@ -100,9 +100,9 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
-      <!-- 系别添加弹出框 -->
+      <!-- 系別添加彈出框 -->
       <el-dialog
-        title="添加物资去处"
+        title="添加廢棄物去處"
         :visible.sync="addDialogVisible"
         width="50%"
         @close="closeAddDialog"
@@ -121,7 +121,7 @@
                 <el-form-item label="省份" prop="valueProvince">
                   <el-select
                     v-model="addRuleForm.valueProvince"
-                    placeholder="请选择省"
+                    placeholder="請選擇省"
                     @change="changeProvince"
                   >
                     <el-option
@@ -138,7 +138,7 @@
                   <el-form-item label="城市" prop="valueCity">
                     <el-select
                       v-model="addRuleForm.valueCity"
-                      placeholder="请选择市"
+                      placeholder="請選擇市"
                       @change="changeCity"
                     >
                       <el-option
@@ -153,10 +153,10 @@
               </el-col>
               <el-col :span="8">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="区县" prop="valueOrigin">
+                  <el-form-item label="區縣" prop="valueOrigin">
                     <el-select
                       v-model="addRuleForm.valueOrigin"
-                      placeholder="请选择区"
+                      placeholder="請選擇區"
                       @change="changeOrigin"
                     >
                       <el-option
@@ -170,15 +170,15 @@
                 </div>
               </el-col>
             </el-row>
-            <el-form-item label="联系人" prop="contact">
+            <el-form-item label="聯繫人" prop="contact">
               <el-input v-model="addRuleForm.contact"></el-input>
             </el-form-item>
 
-            <el-form-item label="详细去处" prop="name">
+            <el-form-item label="详细去處" prop="name">
               <el-input type="textarea" v-model="addRuleForm.name"></el-input>
             </el-form-item>
 
-            <el-form-item label="电话" prop="phone">
+            <el-form-item label="電話" prop="phone">
               <el-input v-model="addRuleForm.phone"></el-input>
             </el-form-item>
 
@@ -189,13 +189,13 @@
         </span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="add">确 定</el-button>
+          <el-button type="primary" @click="add">確 定</el-button>
         </span>
       </el-dialog>
 
-      <!-- 系别编辑弹出框 -->
+      <!-- 系別編輯彈出框 -->
       <el-dialog
-        title="更新物资去处"
+        title="更新廢棄物去處"
         :visible.sync="editDialogVisible"
         width="50%"
         @close="closeEditDialog"
@@ -208,17 +208,17 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="省市区县" prop="address">
+            <el-form-item label="省市區縣" prop="address">
               <el-input v-model="editRuleForm.address" disabled></el-input>
             </el-form-item>
-            <el-form-item label="详细去处" prop="name">
+            <el-form-item label="详细去處" prop="name">
               <el-input type="textarea" v-model="editRuleForm.name"></el-input>
             </el-form-item>
 
-            <el-form-item label="电话" prop="phone">
+            <el-form-item label="電話" prop="phone">
               <el-input v-model="editRuleForm.phone"></el-input>
             </el-form-item>
-            <el-form-item label="联系人" prop="contact">
+            <el-form-item label="聯繫人" prop="contact">
               <el-input v-model="editRuleForm.contact"></el-input>
             </el-form-item>
 
@@ -229,7 +229,7 @@
         </span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="editDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="update">确 定</el-button>
+          <el-button type="primary" @click="update">確 定</el-button>
         </span>
       </el-dialog>
     </el-card>
@@ -242,19 +242,19 @@ export default {
     const checkPhone = (rule, value, callback) => {
       const phoneReg = /^1[34578]\d{9}$$/;
       if (!value) {
-        return callback(new Error("电话号码不能为空"));
+        return callback(new Error("電話號碼不能為空"));
       }
       setTimeout(() => {
-        // Number.isInteger是es6验证数字是否为整数的方法,实际输入的数字总是识别成字符串
-        // 所以在前面加了一个+实现隐式转换
+        // Number.isInteger是es6驗證數字是否為整數的方法,實际輸入的數字總是识別成字符串
+        // 所以在前面加了一個+實現隐式轉换
 
         if (!Number.isInteger(+value)) {
-          callback(new Error("请输入数字值"));
+          callback(new Error("請輸入數字值"));
         } else {
           if (phoneReg.test(value)) {
             callback();
           } else {
-            callback(new Error("电话号码格式不正确"));
+            callback(new Error("電話號碼格式不正確"));
           }
         }
       }, 100);
@@ -262,35 +262,35 @@ export default {
     return {
       loading: true,
       editDialogVisible: false,
-      addDialogVisible: false, //添加弹框是否显示
-      total: 0, //总共多少条数据
-      consumerData: [], //表格数据
-      queryMap: { pageNum: 1, pageSize: 10, name: "" }, //查询对象
-      addRuleForm: {}, //添加表单数据
-      editRuleForm: {}, //修改表单数据
+      addDialogVisible: false, //添加彈框是否顯示
+      total: 0, //總共多少條數據
+      consumerData: [], //表格數據
+      queryMap: { pageNum: 1, pageSize: 10, name: "" }, //查詢對象
+      addRuleForm: {}, //添加表單數據
+      editRuleForm: {}, //修改表單數據
       deans: [], //所有系主任
       addRules: {
         name: [
-          { required: true, message: "请输入物资去处名称", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
+          { required: true, message: "請輸入廢棄物去處名稱", trigger: "blur" },
+          { min: 2, max: 10, message: "長度在 2 到 10 個字符", trigger: "blur" }
         ],
         address: [
-          { required: true, message: "请输入地址信息", trigger: "blur" },
-          { min: 2, max: 12, message: "长度在 2 到 12 个字符", trigger: "blur" }
+          { required: true, message: "請輸入地址信息", trigger: "blur" },
+          { min: 2, max: 12, message: "長度在 2 到 12 個字符", trigger: "blur" }
         ],
-        sort: [{ required: true, message: "请输入排序号", trigger: "blur" }],
+        sort: [{ required: true, message: "請輸入排序號", trigger: "blur" }],
         valueProvince: [
-          { required: true, message: "请输入省份", trigger: "blur" }
+          { required: true, message: "請輸入省份", trigger: "blur" }
         ],
-        valueCity: [{ required: true, message: "请输入城市", trigger: "blur" }],
+        valueCity: [{ required: true, message: "請輸入城市", trigger: "blur" }],
         valueOrigin: [
-          { required: true, message: "请输入区县", trigger: "blur" }
+          { required: true, message: "請輸入區縣", trigger: "blur" }
         ],
-        contact: [{ required: true, message: "请输入联系人", trigger: "blur" }],
+        contact: [{ required: true, message: "請輸入聯繫人", trigger: "blur" }],
         phone: [
           {
             required: true,
-            message: "请输入联系方式",
+            message: "請輸入聯繫方式",
             validator: checkPhone,
             trigger: "blur"
           }
@@ -298,14 +298,14 @@ export default {
       },
       provinceList: [], // 省列表
       cityList: [], // 市列表
-      originList: [], // 区列表
-      cityOptions: [], // 市下拉框数据
-      originOptions: [] // 区下拉框数据
+      originList: [], // 區列表
+      cityOptions: [], // 市下拉框數據
+      originOptions: [] // 區下拉框數據
     };
   },
   methods: {
     /**
-     * 打开添加弹出框
+     * 打開添加彈出框
      */
     openAdd() {
       this.addDialogVisible = true;
@@ -316,13 +316,13 @@ export default {
       this.queryMap.pageNum = 1;
       this.getConsumerList();
     },
-    //删除物资去处
+    //删除廢棄物去處
     async del(id) {
       var res = await this.$confirm(
-        "此操作将永久删除该用户, 是否继续?",
+        "此操作將永久删除該用戶, 是否繼續?",
         "提示",
         {
-          confirmButtonText: "确定",
+          confirmButtonText: "確定",
           cancelButtonText: "取消",
           type: "warning"
         }
@@ -335,14 +335,14 @@ export default {
       if (res === "confirm") {
         const { data: res } = await this.$http.delete("business/consumer/delete/" + id);
         if (res.success) {
-          this.$message.success("物资去处删除成功");
+          this.$message.success("廢棄物去處删除成功");
           await this.getConsumerList();
         } else {
           this.$message.error(res.data.errorMsg);
         }
       }
     },
-    //更新用户
+    //更新用戶
     async update() {
       this.$refs.editRuleFormRef.validate(async valid => {
         if (!valid) {
@@ -355,13 +355,13 @@ export default {
           if (res.success) {
             this.$notify({
               title: "成功",
-              message: "物资去处更新",
+              message: "廢棄物去處更新",
               type: "success"
             });
             this.editRuleForm = {};
             await this.getConsumerList();
           } else {
-            this.$message.error("物资去处更新失败:" + res.data.errorMsg);
+            this.$message.error("廢棄物去處更新失敗:" + res.data.errorMsg);
           }
 
           this.editDialogVisible = false;
@@ -369,7 +369,7 @@ export default {
       });
     },
     /**
-     * 编辑
+     * 編輯
      */
     async edit(id) {
       this._getJsonData();
@@ -377,7 +377,7 @@ export default {
       if (res.success) {
         this.editRuleForm = res.data;
       } else {
-        return this.$message.error("物资去处编辑失败" + res.data.errorMsg);
+        return this.$message.error("廢棄物去處編輯失敗" + res.data.errorMsg);
       }
       this.editDialogVisible = true;
     },
@@ -399,42 +399,42 @@ export default {
             this.addRuleForm
           );
           if (res.success) {
-            this.$message.success("物资去处添加成功");
+            this.$message.success("廢棄物去處添加成功");
             this.addRuleForm = {};
             await this.getConsumerList();
           } else {
-            return this.$message.error("物资去处添加失败:" + res.data.errorMsg);
+            return this.$message.error("廢棄物去處添加失敗:" + res.data.errorMsg);
           }
           this.addDialogVisible = false;
         }
       });
     },
     /**
-     * 加载物资去处列表
+     * 加載廢棄物去處列表
      */
     async getConsumerList() {
       const { data: res } = await this.$http.get("business/consumer/findConsumerList", {
         params: this.queryMap
       });
       if (!res.success) {
-        return this.$message.error("获取用户列表失败:"+res.data.errorMsg);
+        return this.$message.error("獲取用戶列表失敗:"+res.data.errorMsg);
       } else {
         this.total = res.data.total;
         this.consumerData = res.data.rows;
       }
     },
 
-    //改变页码
+    //改變頁碼
     handleSizeChange(newSize) {
       this.queryMap.pageSize = newSize;
       this.getConsumerList();
     },
-    //翻页
+    //翻頁
     handleCurrentChange(current) {
       this.queryMap.pageNum = current;
       this.getConsumerList();
     },
-    //关闭弹出框
+    //關閉彈出框
     closeAddDialog() {
       this.$refs.addRuleFormRef.clearValidate();
 
@@ -447,24 +447,24 @@ export default {
 
       this.addRuleForm = {};
     },
-    //关闭弹出框
+    //關閉彈出框
     closeEditDialog() {
       this.$refs.editRuleFormRef.clearValidate();
       this.editRuleForm = {};
     },
-    // 选择省
+    // 選擇省
     changeProvince(val) {
       this.provinceList.forEach((province, index) => {
         if (val.toString() === this.provinceList[index].value) {
           this.cityOptions = this.provinceList[index].children;
           this.addRuleForm.valueCity = this.provinceList[
             index
-          ].children[0].value; //设置市的值
+          ].children[0].value; //設置市的值
           this.addRuleForm.city = this.provinceList[index].children[0].label;
 
           this.addRuleForm.valueOrigin = this.provinceList[
             index
-          ].children[0].children[0].value; //设置县的值
+          ].children[0].children[0].value; //設置縣的值
           this.addRuleForm.origin = this.provinceList[
             index
           ].children[0].children[0].label;
@@ -475,18 +475,18 @@ export default {
         }
       });
     },
-    // 选择市
+    // 選擇市
     changeCity(val) {
       this.cityList.forEach((city, index) => {
         if (val.toString() === this.cityList[index].value) {
           this.originOptions = this.cityList[index].children;
-          this.addRuleForm.valueOrigin = this.cityList[index].children[0].value; //设置县的值;
+          this.addRuleForm.valueOrigin = this.cityList[index].children[0].value; //設置縣的值;
           //set value
           this.addRuleForm.city = this.cityList[index].label;
         }
       });
     },
-    // 选择区
+    // 選擇區
     changeOrigin(val) {
       this.addRuleForm.valueOrigin = val;
 
@@ -496,7 +496,7 @@ export default {
           this.addRuleForm.origin = this.originList[index].label;
         }
       });
-      //添加this.$forceUpdate();进行强制渲染，效果实现。搜索资料得出结果：因为数据层次太多，render函数没有自动更新，需手动强制刷新。
+      //添加this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
       this.$forceUpdate();
     },
 

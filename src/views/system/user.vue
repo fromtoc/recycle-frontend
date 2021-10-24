@@ -1,20 +1,20 @@
 <template>
     <div id="users">
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
             <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-            <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+            <el-breadcrumb-item>用戶管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <!-- 用户列表卡片区 -->
+        <!-- 用戶列表卡片區 -->
         <el-card class="box-card">
             <el-form :inline="true" ref="form" :model="queryMap" label-width="70px" size="small">
-                <el-form-item label="部门">
+                <el-form-item label="公司">
                     <el-select
                             clearable
                             @change="searchUser"
                             @clear="searchUser"
                             v-model="queryMap.departmentId"
-                            placeholder="请选择所属部门"
+                            placeholder="請選擇所屬公司"
                     >
                         <el-option
                                 v-for="department in departments"
@@ -31,41 +31,41 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="用户名">
+                <el-form-item label="用戶名">
                     <el-input
                             @keyup.enter.native="searchUser"
                             @clear="searchUser"
                             clearable
                             v-model="queryMap.username"
-                            placeholder="请输入用户名查询"
+                            placeholder="請輸入用戶名查詢"
                     ></el-input>
                 </el-form-item>
 
-                <el-form-item label="邮箱">
+                <el-form-item label="郵箱">
                     <el-input
                             @keyup.enter.native="searchUser"
                             clearable
                             @clear="searchUser"
                             v-model="queryMap.email"
-                            placeholder="请输入邮箱查询"
+                            placeholder="請輸入郵箱查詢"
                     ></el-input>
                 </el-form-item>
 
-                <el-form-item label="性别">
+                <el-form-item label="性別">
                     <el-radio v-model="queryMap.sex" label="1">男</el-radio>
                     <el-radio v-model="queryMap.sex" label="0">女</el-radio>
                     <el-radio v-model="queryMap.sex" label>全部</el-radio>
                 </el-form-item>
 
-                <el-form-item label="昵称">
-                    <el-input clearable @clear="searchUser" v-model="queryMap.nickname" placeholder="请输入昵称查询"></el-input>
+                <el-form-item label="名稱">
+                    <el-input clearable @clear="searchUser" v-model="queryMap.nickname" placeholder="請輸入名稱查詢"></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="状态">
+                <!-- <el-form-item label="狀態">
                   <el-select
                     clearable
                     v-model="queryMap.isban"
                     @clear="searchUser"
-                    placeholder="请选择用户状态"
+                    placeholder="請選擇用戶狀態"
                   >
                     <el-option label="全部" value=""></el-option>
                     <el-option label="禁用" value="1"></el-option>
@@ -75,32 +75,32 @@
 
                 <el-form-item style="margin-left:50px;">
                     <el-button  @click="reset" icon="el-icon-refresh">重置</el-button>
-                    <el-button type="primary" @click="searchUser" icon="el-icon-search">查询</el-button>
+                    <el-button type="primary" @click="searchUser" icon="el-icon-search">查詢</el-button>
                     <el-button
                             type="success"
                             icon="el-icon-plus"
                             @click="addDialogVisible=true"
                             v-hasPermission="'user:add'"
                     >添加</el-button>
-                    <el-button @click="downExcel" v-hasPermission="'user:export'"  icon="el-icon-download">导出</el-button>
+                    <el-button @click="downExcel" v-hasPermission="'user:export'"  icon="el-icon-download">導出</el-button>
                 </el-form-item>
             </el-form>
 
-            <!-- 表格区域 -->
+            <!-- 表格區域 -->
             <el-table v-loading="loading" size="small" :data="userList" border style="width: 100%;" height="420">
                 <!-- <el-table-column type="selection" width="40"></el-table-column> -->
                 <el-table-column label="#" prop="id" width="50"></el-table-column>
-                <el-table-column prop="username" label="用户名" width="110"></el-table-column>
-                <el-table-column prop="sex" :formatter="showSex" label="性别" width="100">
+                <el-table-column prop="username" label="用戶名" width="110"></el-table-column>
+                <el-table-column prop="sex" :formatter="showSex" label="性別" width="100">
                     <template slot-scope="scope">
-                        <el-tag size="small" type="success" v-if="scope.row.sex===1">帅哥</el-tag>
+                        <el-tag size="small" type="success" v-if="scope.row.sex===1">帥哥</el-tag>
                         <el-tag size="small"  type="warning" v-else>美女</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="departmentName" label="所属部门" width="180" sortable></el-table-column>
+                <el-table-column prop="departmentName" label="所屬公司" width="180" sortable></el-table-column>
                 <el-table-column prop="birth" label="生日" width="180" sortable></el-table-column>
-                <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
-                <el-table-column prop="phoneNumber" label="电话" width="150"></el-table-column>
+                <el-table-column prop="email" label="郵箱" width="180"></el-table-column>
+                <el-table-column prop="phoneNumber" label="電話" width="150"></el-table-column>
                 <el-table-column prop="isban" label="是否禁用" width="100">
                     <template slot-scope="scope">
                         <el-switch v-model="scope.row.status" @change="changUserStatus(scope.row)"></el-switch>
@@ -128,7 +128,7 @@
                 </el-table-column>
             </el-table>
 
-            <!-- 分页 -->
+            <!-- 分頁 -->
             <el-pagination
                     style="margin-top:10px;"
                     background
@@ -141,9 +141,9 @@
                     :total="total"
             ></el-pagination>
 
-            <!-- 添加对话框 -->
-            <el-dialog title="添加用户" @close="closeDialog" :visible.sync="addDialogVisible" width="50%;">
-                <!-- 表单 -->
+            <!-- 添加對話框 -->
+            <el-dialog title="添加用戶" @close="closeDialog" :visible.sync="addDialogVisible" width="50%;">
+                <!-- 表單 -->
                 <span>
           <el-form
                   :model="addForm"
@@ -155,15 +155,15 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="用户名" prop="username">
+                  <el-form-item label="用戶名" prop="username">
                     <el-input v-model="addForm.username"></el-input>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="12">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="部门" prop="departmentId">
-                    <el-select v-model="addForm.departmentId" placeholder="请选择所属部门">
+                  <el-form-item label="公司" prop="departmentId">
+                    <el-select v-model="addForm.departmentId" placeholder="請選擇所屬公司">
                       <el-option
                               v-for="department in departments"
                               :key="department.id"
@@ -178,29 +178,29 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="昵称" prop="nickname">
+                  <el-form-item label="名稱" prop="nickname">
                     <el-input v-model="addForm.nickname"></el-input>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="12">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="性别" prop="sex">
+                  <el-form-item label="性別" prop="sex">
                     <el-radio-group v-model="addForm.sex">
-                      <el-radio :label="1">帅哥</el-radio>
+                      <el-radio :label="1">帥哥</el-radio>
                       <el-radio :label="0">美女</el-radio>
                     </el-radio-group>
                   </el-form-item>
                 </div>
               </el-col>
             </el-row>
-            <el-form-item label="密码" prop="password">
+            <el-form-item label="密碼" prop="password">
               <el-input v-model="addForm.password"></el-input>
             </el-form-item>
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item label="郵箱" prop="email">
               <el-input v-model="addForm.email"></el-input>
             </el-form-item>
-            <el-form-item label="手机" prop="phoneNumber">
+            <el-form-item label="手機" prop="phoneNumber">
               <el-input v-model="addForm.phoneNumber"></el-input>
             </el-form-item>
             <el-form-item prop="birth" label="生日">
@@ -208,7 +208,7 @@
                 <el-date-picker
                         type="date"
                         value-format="yyyy年MM月dd日"
-                        placeholder="选择出生日期"
+                        placeholder="選擇出生日期"
                         v-model="addForm.birth"
                         style="width: 100%;"
                 ></el-date-picker>
@@ -224,11 +224,11 @@
                   @click="addUser"
                   :loading="btnLoading"
                   :disabled="btnDisabled"
-          >确 定</el-button>
+          >確 定</el-button>
         </span>
             </el-dialog>
-            <!-- 修改对话框 -->
-            <el-dialog title="修改用户" :visible.sync="editDialogVisible" width="50%" @close="editClose">
+            <!-- 修改對話框 -->
+            <el-dialog title="修改用戶" :visible.sync="editDialogVisible" width="50%" @close="editClose">
         <span>
           <el-form
                   :model="editForm"
@@ -240,7 +240,7 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="用户名" prop="username">
+                  <el-form-item label="用戶名" prop="username">
                     <el-input v-model="editForm.username" :disabled="true"></el-input>
                     <el-input
                             type="hidden"
@@ -253,8 +253,8 @@
               </el-col>
               <el-col :span="12">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="部门" prop="departmentId">
-                    <el-select v-model="editForm.departmentId" placeholder="请选择所属部门">
+                  <el-form-item label="公司" prop="departmentId">
+                    <el-select v-model="editForm.departmentId" placeholder="請選擇所屬公司">
                       <el-option
                               v-for="department in departments"
                               :key="department.id"
@@ -270,16 +270,16 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="昵称" prop="nickname">
+                  <el-form-item label="名稱" prop="nickname">
                     <el-input v-model="editForm.nickname"></el-input>
                   </el-form-item>
                 </div>
               </el-col>
               <el-col :span="12">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="性别" prop="sex">
+                  <el-form-item label="性別" prop="sex">
                     <el-radio-group v-model="editForm.sex">
-                      <el-radio :label="1">帅哥</el-radio>
+                      <el-radio :label="1">帥哥</el-radio>
                       <el-radio :label="0">美女</el-radio>
                     </el-radio-group>
                   </el-form-item>
@@ -287,10 +287,10 @@
               </el-col>
             </el-row>
 
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item label="郵箱" prop="email">
               <el-input v-model="editForm.email"></el-input>
             </el-form-item>
-            <el-form-item label="联系方式" prop="phoneNumber">
+            <el-form-item label="聯繫方式" prop="phoneNumber">
               <el-input v-model="editForm.phoneNumber"></el-input>
             </el-form-item>
             <el-form-item prop="birth" label="生日">
@@ -298,7 +298,7 @@
                 <el-date-picker
                         type="date"
                         value-format="yyyy年MM月dd日"
-                        placeholder="选择出生日期"
+                        placeholder="選擇出生日期"
                         v-model="editForm.birth"
                         style="width: 100%;"
                 ></el-date-picker>
@@ -314,17 +314,18 @@
                   @click="updateUser"
                   :loading="btnLoading"
                   :disabled="btnDisabled"
-          >确 定</el-button>
+          >確 定</el-button>
         </span>
             </el-dialog>
-            <!-- 分配角色对话框 -->
+            <!-- 分配角色對話框 -->
             <el-dialog center title="分配角色" :visible.sync="assignDialogVisible" width="49%">
         <span>
           <template>
             <el-transfer
+                    filter-placeholder="請輸入搜索內容"
                     filterable
-                    :titles="['未拥有','已拥有']"
-                    :button-texts="['到左边', '到右边']"
+                    :titles="['未擁有','已擁有']"
+                    :button-texts="['到左邊', '到右邊']"
                     v-model="value"
                     :data="roles"
             ></el-transfer>
@@ -339,7 +340,7 @@
                   class="el-icon-check"
                   :loading="btnLoading"
                   :disabled="btnDisabled"
-          >确定分配</el-button>
+          >確定分配</el-button>
         </span>
             </el-dialog>
         </el-card>
@@ -352,29 +353,29 @@
             const checkEmail = (rule, value, callback) => {
                 const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
                 if (!value) {
-                    return callback(new Error("邮箱不能为空"));
+                    return callback(new Error("郵箱不能為空"));
                 }
                 setTimeout(() => {
                     if (mailReg.test(value)) {
                         callback();
                     } else {
-                        callback(new Error("请输入正确的邮箱格式"));
+                        callback(new Error("請輸入正確的郵箱格式"));
                     }
                 }, 100);
             };
             const checkPhone = (rule, value, callback) => {
                 const phoneReg = /^1[34578]\d{9}$$/;
                 if (!value) {
-                    return callback(new Error("电话号码不能为空"));
+                    return callback(new Error("電話號碼不能為空"));
                 }
                 setTimeout(() => {
                     if (!Number.isInteger(+value)) {
-                        callback(new Error("请输入数字值"));
+                        callback(new Error("請輸入數字值"));
                     } else {
                         if (phoneReg.test(value)) {
                             callback();
                         } else {
-                            callback(new Error("电话号码格式不正确"));
+                            callback(new Error("電話號碼格式不正確"));
                         }
                     }
                 }, 100);
@@ -385,11 +386,11 @@
                 departments: [],
                 loading: true,
                 total: 0,
-                addDialogVisible: false, //添加对话框,
-                editDialogVisible: false, //修改对话框
-                assignDialogVisible: false, //分配角色对话框
-                labelPosition: "right", //lable对齐方式
-                //查询对象
+                addDialogVisible: false, //添加對話框,
+                editDialogVisible: false, //修改對話框
+                assignDialogVisible: false, //分配角色對話框
+                labelPosition: "right", //lable對齊方式
+                //查詢對象
                 queryMap: {
                     pageNum: 1,
                     pageSize: 6,
@@ -407,38 +408,38 @@
                     phoneNumber: "",
                     sex: "",
                     birth: ""
-                }, //添加表单
-                editForm: {}, //更新表单
+                }, //添加表單
+                editForm: {}, //更新表單
                 addFormRules: {
                     username: [
-                        { required: true, message: "请输入用户名", trigger: "blur" },
-                        { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入用戶名", trigger: "blur" },
+                        { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
                     ],
                     password: [
-                        { required: true, message: "请输入密码", trigger: "blur" },
-                        { min: 3, max: 12, message: "长度在 3 到 12 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入密碼", trigger: "blur" },
+                        { min: 3, max: 12, message: "長度在 3 到 12 個字符", trigger: "blur" }
                     ],
                     departmentId: [
-                        { required: true, message: "请选择部门", trigger: "blur" }
+                        { required: true, message: "請選擇公司", trigger: "blur" }
                     ],
-                    sex: [{ required: true, message: "请选择性别", trigger: "blur" }],
-                    birth: [{ required: true, message: "请填写出生日期", trigger: "blur" }],
+                    sex: [{ required: true, message: "請選擇性別", trigger: "blur" }],
+                    birth: [{ required: true, message: "請填寫出生日期", trigger: "blur" }],
                     email: [{ required: true, validator: checkEmail, trigger: "blur" }],
                     phoneNumber: [
                         {
                             required: true,
-                            message: "请输入联系方式",
-                            validator: checkPhone,
+                            message: "請輸入聯繫方式",
+                            // validator: checkPhone,
                             trigger: "blur"
                         }
                     ],
                     nickname: [
-                        { required: true, message: "请输入昵称", trigger: "blur" },
-                        { min: 5, max: 10, message: "长度在 5 到 10 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入名稱", trigger: "blur" },
+                        { min: 5, max: 10, message: "長度在 5 到 10 個字符", trigger: "blur" }
                     ]
-                }, //添加表单验证规则
+                }, //添加表單驗證規則
                 roles: [], //角色
-                value: [], //用户拥有的角色
+                value: [], //用戶擁有的角色
                 uid: ""
             };
         },
@@ -457,7 +458,7 @@
                 };
             },
             /**
-             * 加载用户表格
+             * 加載用戶表格
              */
             downExcel() {
                 const $this = this;
@@ -474,17 +475,17 @@
                             );
                         }
                         const data = res.data;
-                        let url = window.URL.createObjectURL(data); // 将二进制文件转化为可访问的url
+                        let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
                         const a = document.createElement("a");
                         document.body.appendChild(a);
                         a.href = url;
-                        a.download = "用户列表.xls";
+                        a.download = "用戶列表.xls";
                         a.click();
                         window.URL.revokeObjectURL(url);
                     });
             },
             /**
-             * 弹出用户分配角色
+             * 彈出用戶分配角色
              */
             async assignRoles(id) {
                 const loading = this.$loading({
@@ -503,11 +504,11 @@
                         this.assignDialogVisible = true;
                     }, 400);
                 } else {
-                    this.$message.error("分配角色失败:" + res.data.errorMsg);
+                    this.$message.error("分配角色失敗:" + res.data.errorMsg);
                 }
             },
             /**
-             * 确定分配角色
+             * 確定分配角色
              */
             async doAssignRoles() {
                 this.assignDialogVisible = true;
@@ -520,38 +521,38 @@
                 if(res.success){
                     this.$notify.success({
                         title:'操作成功',
-                        message:'用户分配角色成功',
+                        message:'用戶分配角色成功',
                     });
                 } else {
-                    this.$message.error("分配角色失败:" + res.data.errorMsg);
+                    this.$message.error("分配角色失敗:" + res.data.errorMsg);
                 }
                 this.assignDialogVisible = false;
                 this.btnLoading = false;
                 this.btnDisabled = false;
             },
             /**
-             * 加载用户列表
+             * 加載用戶列表
              */
             async getUserList() {
                 const { data: res } = await this.$http.get("system/user/findUserList", {
                     params: this.queryMap
                 });
                 if(!res.success){
-                    return this.$message.error("获取用户列表失败:"+res.data.errorMsg);
+                    return this.$message.error("獲取用戶列表失敗:"+res.data.errorMsg);
                 }
                 this.total = res.data.total;
                 this.userList = res.data.rows;
             },
 
             /**
-             * 删除用户
+             * 删除用戶
              */
             async del(id) {
                 const res = await this.$confirm(
-                    "此操作将永久删除该用户, 是否继续?",
+                    "此操作將永久删除該用戶, 是否繼續?",
                     "提示",
                     {
-                        confirmButtonText: "确定",
+                        confirmButtonText: "確定",
                         cancelButtonText: "取消",
                         type: "warning"
                     }
@@ -567,7 +568,7 @@
                     if(res.success){
                         this.$notify.success({
                             title:'操作成功',
-                            message:'用户删除成功',
+                            message:'用戶删除成功',
                         });
                         await this.getUserList();
                         await this.getDepartmets();
@@ -577,7 +578,7 @@
                 }
             },
             /**
-             * 添加用户
+             * 添加用戶
              */
             async addUser() {
                 this.$refs.addFormRef.validate(async valid => {
@@ -590,13 +591,13 @@
                         if(res.success){
                             this.$notify.success({
                                 title:'操作成功',
-                                message:'用户添加成功',
+                                message:'用戶添加成功',
                             });
                             this.addForm = {};
                             await this.getUserList();
                             await this.getDepartmets();
                         } else {
-                            return this.$message.error("用户添加失败:" + res.data.errorMsg);
+                            return this.$message.error("用戶添加失敗:" + res.data.errorMsg);
                         }
                         this.addDialogVisible = false;
                         this.btnLoading = false;
@@ -605,7 +606,7 @@
                 });
             },
             /**
-             * 更新用户
+             * 更新用戶
              */
             async updateUser() {
                 this.$refs.editFormRef.validate(async valid => {
@@ -621,14 +622,14 @@
                         if(res.success){
                             this.$notify({
                                 title: "操作成功",
-                                message: "用户基本信息已更新",
+                                message: "用戶基本信息已更新",
                                 type: "success"
                             });
                             this.editForm = {};
                             await this.getUserList();
                             await this.getDepartmets();
                         } else {
-                            this.$message.error("用户信息更新失败:" + res.data.errorMsg);
+                            this.$message.error("用戶信息更新失敗:" + res.data.errorMsg);
                         }
                         this.editDialogVisible = false;
                         this.btnLoading = false;
@@ -637,14 +638,14 @@
                 });
             },
             /**
-             * 搜索用户
+             * 搜索用戶
              */
             searchUser() {
                 this.queryMap.pageNum = 1;
                 this.getUserList();
             },
             /**
-             * 修改用户信息
+             * 修改用戶信息
              */
             async edit(id) {
                 const { data: res } = await this.$http.get("system/user/edit/" + id);
@@ -652,18 +653,18 @@
                     this.editForm = res.data;
                     this.editDialogVisible = true;
                 } else {
-                    return this.$message.error("用户信息编辑失败:" + res.data.errorMsg);
+                    return this.$message.error("用戶信息編輯失敗:" + res.data.errorMsg);
                 }
             },
             /**
-             *  改变页码
+             *  改變頁碼
              */
             handleSizeChange(newSize) {
                 this.queryMap.pageSize = newSize;
                 this.getUserList();
             },
             /**
-             * 翻页
+             * 翻頁
              */
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
@@ -671,7 +672,7 @@
             },
 
             /**
-             * 关闭添加弹出框
+             * 關閉添加彈出框
              */
             closeDialog() {
                 this.$refs.addFormRef.clearValidate();
@@ -679,24 +680,24 @@
                 this.addForm = {};
             },
             /**
-             * 关闭编辑弹出框
+             * 關閉編輯彈出框
              */
             editClose() {
                 this.$refs.editFormRef.clearValidate();
                 this.editForm = {};
             },
             /**
-             * 禁用启用用户
+             * 禁用啟用用戶
              */
             async changUserStatus(row) {
                 const { data: res } = await this.$http.put(
                     "system/user/updateStatus/" + row.id + "/" + row.status
                 );
                 if(!res.success){
-                    this.$message.error("更新用户状态失败:" + res.data.errorMsg);
+                    this.$message.error("更新用戶狀態失敗:" + res.data.errorMsg);
                     row.status = !row.status;
                 } else {
-                    const message = row.status ? '用户状态已禁用' : '用户状态已启用';
+                    const message = row.status ? '用戶狀態已禁用' : '用戶狀態已啟用';
                     this.$notify.success({
                         title: '操作成功',
                         message: message,
@@ -704,20 +705,20 @@
                 }
             },
             /**
-             * 加载所有部门
+             * 加載所有公司
              */
             async getDepartmets() {
                 const { data: res } = await this.$http.get("system/department/findAll");
                 if(!res.success){
-                    return this.$message.error("获取部门列表失败:"+res.data.errorMsg);
+                    return this.$message.error("獲取公司列表失敗:"+res.data.errorMsg);
                 }
                 this.departments = res.data;
             },
             /**
-             * 显示用户性别
+             * 顯示用戶性別
              */
             showSex(row, column) {
-                return row.sex === 1 ? "帅哥" : "美女";
+                return row.sex === 1 ? "帥哥" : "美女";
             },
         },
         created() {

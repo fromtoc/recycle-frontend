@@ -1,30 +1,30 @@
 <template>
   <div class="hello">
     <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>健康报备</el-breadcrumb-item>
-      <el-breadcrumb-item>全国疫情</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+      <el-breadcrumb-item>健康報備</el-breadcrumb-item>
+      <el-breadcrumb-item>全國疫情</el-breadcrumb-item>
     </el-breadcrumb>
-    <!--    初始化echarts需要个有宽高的盒子-->
+    <!--    初始化echarts需要個有寬高的盒子-->
     <el-row :gutter="10">
       <el-col :span="12">
         <div class="grid-content bg-purple">
             <el-tabs type="border-card">
-              <el-tab-pane label="疫情概览">
+              <el-tab-pane label="疫情概覽">
                 <el-table  v-loading="loading" border :data="info" style="width: 100%" height="495">
-                  <el-table-column prop="name" label="名称" width="150"></el-table-column>
-                  <el-table-column prop="value" label="数量" >
+                  <el-table-column prop="name" label="名稱" width="150"></el-table-column>
+                  <el-table-column prop="value" label="數量" >
                     <template slot-scope="scope">
                       <el-tag effect="plain" size="mini">{{scope.row.value}}人</el-tag>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="yesterday" label="较昨日" width="100">
+                  <el-table-column prop="yesterday" label="較昨日" width="100">
                     <template slot-scope="scope">
                       <el-tag effect="plain" size="mini" v-if="scope.row.yesterday>0" type="danger">{{scope.row.yesterday}} 人</el-tag>
                       <el-tag effect="plain" size="mini" v-else type="success">{{scope.row.yesterday}}人</el-tag>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="name" label="时间"> <span style="font-size: 11px;">{{times}}</span></el-table-column>
+                  <el-table-column prop="name" label="時間"> <span style="font-size: 11px;">{{times}}</span></el-table-column>
                 </el-table>
               </el-tab-pane>
               <el-tab-pane label="TOP10城市" >
@@ -38,7 +38,7 @@
               <el-table-column
 
                       prop="name"
-                      label="城市名称"
+                      label="城市名稱"
                       width="180">
               </el-table-column>
               <el-table-column
@@ -48,7 +48,7 @@
               </el-table-column>
                   <el-table-column
                           prop="jwsrNum"
-                          label="确诊人数"
+                          label="確診人數"
                           width="180">
                     <template slot-scope="scope">
                       <el-tag v-text="scope.row.jwsrNum+'人'" size="mini" type="danger" effect="plain"></el-tag>
@@ -79,22 +79,22 @@
               <el-table-column type="expand">
                 <template slot-scope="scope">
                   <el-table  :data="scope.row.city" style="width: 100%">
-                    <el-table-column prop="name" label="城市/区" width="200"></el-table-column>
+                    <el-table-column prop="name" label="城市/區" width="200"></el-table-column>
 
-                    <el-table-column sortable label="现存确诊" prop="econNum"></el-table-column>
-                    <el-table-column sortable label="累计确诊" prop="cureNum"></el-table-column>
+                    <el-table-column sortable label="現存確診" prop="econNum"></el-table-column>
+                    <el-table-column sortable label="累計確診" prop="cureNum"></el-table-column>
                     <el-table-column sortable label="疑似" prop="susNum"></el-table-column>
                     <el-table-column sortable label="死亡" prop="deathNum"></el-table-column>
-                    <el-table-column sortable label="现存无症状" prop="asymptomNum"></el-table-column>
+                    <el-table-column sortable label="現存無症狀" prop="asymptomNum"></el-table-column>
                   </el-table>
                 </template>
               </el-table-column>
               <el-table-column sortable label="省份" prop="name"></el-table-column>
-              <el-table-column sortable label="现存确诊" prop="econNum"></el-table-column>
-              <el-table-column sortable label="累计确诊" prop="value"></el-table-column>
+              <el-table-column sortable label="現存確診" prop="econNum"></el-table-column>
+              <el-table-column sortable label="累計確診" prop="value"></el-table-column>
               <el-table-column sortable label="疑似" prop="susNum"></el-table-column>
               <el-table-column sortable label="死亡" prop="deathNum"></el-table-column>
-              <el-table-column sortable label="现存无症状" prop="asymptomNum"></el-table-column>
+              <el-table-column sortable label="現存無症狀" prop="asymptomNum"></el-table-column>
             </el-table>
           </el-card>
         </div>
@@ -110,30 +110,30 @@ import jsonp from "jsonp";
 
 const option = {
   title: {
-    text: "疫情地图",
+    text: "疫情地圖",
     link: "https://baidu.com",
-    subtext: "疫情地图",
+    subtext: "疫情地圖",
     sublink: "https://baidu.com"
   },
   series: [
     {
-      name: "确诊人数",
-      type: "map", //告诉echarts要去渲染一个地图
+      name: "確診人數",
+      type: "map", //告诉echarts要去渲染一個地圖
       map: "china",
       label: {
-        show: true, // 控制对应地区的汉字
+        show: true, // 控制對應地區的漢字
         color: "#333",
         fontSize: 10
       },
-      roam: true, //控制地图放大缩小
-      zoom: 1.2, //控制地图的放大缩小
-      data: [], //用来展示后台给的数据  {name:xx,value:xxx}
-      /*      控制地图板块的颜色和边框*/
+      roam: true, //控制地圖放大缩小
+      zoom: 1.2, //控制地圖的放大缩小
+      data: [], //用来展示後台给的數據  {name:xx,value:xxx}
+      /*      控制地圖板塊的顏色和邊框*/
       itemStyle: {
         areaColor: "#83b5e7",
-        borderColor: "yellow" //边框颜色
+        borderColor: "yellow" //邊框顏色
       },
-      /*     控制鼠标滑过之后的背景色和字体颜色*/
+      /*     控制鼠標滑過之後的背景色和字體顏色*/
       emphasis: {
         label: {
           color: "#fff",
@@ -166,7 +166,7 @@ const option = {
     }
   ],
   tooltip: {
-    trigger: "item" //鼠标移入后显示人数
+    trigger: "item" //鼠標移入後顯示人數
   }
 };
 export default {
@@ -181,8 +181,8 @@ export default {
     };
   },
   mounted() {
-    //template挂载到页面时调用
-    this.getData(); //执行getData方法
+    //template掛載到頁面時調用
+    this.getData(); //執行getData方法
 
     this.mychart = echarts.init(this.$refs.mapbox);
     this.mychart.setOption(option);
@@ -194,63 +194,63 @@ export default {
         {},
         (err, data) => {
           if (!err) {
-            //代表请求数据成功
+            //代表請求數據成功
             let list = data.data.list.map(item => ({
               name: item.name,
               value: item.value
-            })); //从接口获取到数据后，使用map()函数，进行接口数据映射
+            })); //從接口獲取到數據後，使用map()函數，進行接口數據映射
             option.series[0].data = list;
             this.tableData = data.data.list;
 
             this.mychart.setOption(option);
-            //这行代码能执行的前提是DOM已经渲染完成，只有DOM已渲染完成才能echarts初始化
-            this.buildTable(data); //构建表格数据
+            //這行代碼能執行的前提是DOM已經渲染完成，只有DOM已渲染完成才能echarts初始化
+            this.buildTable(data); //構建表格數據
           }
         }
       );
     },
     /**
-     * 构建表格数据:每日新增....
+     * 構建表格數據:每日新增....
      */
     buildTable(data) {
       var data = data.data;
       let data1 = {
-        name: "现存确诊",
+        name: "現存確診",
         value: data.econNum,
         yesterday: data.add_daily["addecon_new"]
       };
       let data2 = {
-        name: "累计境外输入",
+        name: "累計境外輸入",
         value: data.jwsrNum,
         yesterday: data.add_daily["addjwsr"]
       };
       let data3 = {
-        name: "现无症状",
+        name: "現無症狀",
         value: data.asymptomNum,
         yesterday: data.add_daily["addasymptom"]
       };
       let data4 = {
-        name: "现存确诊重症",
+        name: "現存確診重症",
         value: data.heconNum,
         yesterday: data.add_daily["addhecon_new"]
       };
       let data5 = {
-        name: "累计确诊",
+        name: "累計確診",
         value: data.gntotal,
         yesterday: data.add_daily["addcon_new"]
       };
       let data6 = {
-        name: "累计死亡",
+        name: "累計死亡",
         value: data.deathtotal,
         yesterday: data.add_daily["adddeath_new"]
       };
       let data7 = {
-        name: "累计治愈",
+        name: "累計治癒",
         value: data.curetotal,
         yesterday: data.add_daily["addcure_new"]
       };
       let data8 = {
-        name: "现存疑似",
+        name: "現存疑似",
         value: data.sustotal,
         yesterday: data.add_daily["wjw_addsus_new"]
       };

@@ -1,9 +1,9 @@
 <template>
     <div class="health">
-        <!--       面包屑导航-->
+        <!--       面包屑導航-->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>健康报备</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+            <el-breadcrumb-item>健康報備</el-breadcrumb-item>
             <el-breadcrumb-item>每日打卡</el-breadcrumb-item>
         </el-breadcrumb>
         <!--       打卡部分 style="height: 590px;"-->
@@ -13,16 +13,16 @@
                     style="margin-bottom: 20px;"
                     v-if="reported"
                     show-icon
-                    :title="'今日已成功打卡,勤洗手,戴口罩,不群聚,打卡时间:['+ruleForm.createTime+']'"
+                    :title="'今日已成功打卡,勤洗手,戴口罩,不群聚,打卡時間:['+ruleForm.createTime+']'"
                     type="success">
             </el-alert>
             <h5 style="margin: 0px;padding: 0px;">基本信息  <div style="float: right;margin-bottom: 10px;vertical-align: center;">
-            <el-button @click="OpenHistory"   size="small" type="warning">签到记录</el-button>
+            <el-button @click="OpenHistory"   size="small" type="warning">簽到記錄</el-button>
                 <el-button style="margin-top: 5px;" type="primary"   size="small" @click="onSubmit" v-if="!reported">立即打卡</el-button>
                 <el-button @click="reset"  size="small" v-if="!reported">重置</el-button>
             </div></h5>
 
-            <!--            抽屉-->
+            <!--            抽屜-->
             <el-drawer
                     :with-header="false"
                     :visible.sync="drawer"
@@ -34,17 +34,17 @@
                          <ul>
                              <li>打卡人:{{userInfo.username}}</li>
                              <li>打卡位置:{{item.address}}</li>
-                             <li>打卡时间:{{item.createTime}}</li>
-                             <li>健康状况:
+                             <li>打卡時間:{{item.createTime}}</li>
+                             <li>健康狀况:
                                  <div style="float: right">
                                        <el-tag v-if="item.situation===0" size="small" effect="dark" type="success">健康</el-tag>
-                                <el-tag v-else-if="item.situation===1" size="small" effect="dark" type="danger">发热</el-tag>
+                                <el-tag v-else-if="item.situation===1" size="small" effect="dark" type="danger">發熱</el-tag>
                                 <el-tag v-else-if="item.situation===2"  size="small" effect="dark"  type="warning">其他情况</el-tag>
                                  </div>
                              </li>
                          </ul>
                       </div>
-<!--                        分页-->
+<!--                        分頁-->
 
                     </el-card>
                      <el-pagination
@@ -73,12 +73,12 @@
                     <el-col :span="8">
                         <div class="grid-content bg-purple">
                             <div class="grid-content bg-purple">
-                                <el-form-item label="打卡时间">
+                                <el-form-item label="打卡時間">
                                     <el-date-picker
                                             disabled
                                             v-model="nowTime"
                                             type="datetime"
-                                            placeholder="选择日期时间">
+                                            placeholder="選擇日期時間">
                                     </el-date-picker>
 
                                 </el-form-item>
@@ -88,7 +88,7 @@
                     <el-col :span="8">
                         <div class="grid-content bg-purple">
                             <div class="grid-content bg-purple">
-                                <el-form-item label="所属部门">
+                                <el-form-item label="所屬公司">
                                     <el-input v-model="userInfo.department" disabled></el-input>
                                 </el-form-item>
                             </div>
@@ -108,7 +108,7 @@
                                 <el-select
                                         :disabled="reported"
                                         v-model="ruleForm.valueProvince"
-                                        placeholder="请选择省"
+                                        placeholder="請選擇省"
                                         @change="changeProvince"
                                 >
                                     <el-option
@@ -127,7 +127,7 @@
                             <el-select
                                     :disabled="reported"
                                     v-model="ruleForm.valueCity"
-                                    placeholder="请选择市"
+                                    placeholder="請選擇市"
                                     @change="changeCity"
                             >
                                 <el-option
@@ -142,11 +142,11 @@
                     </el-col>
                     <el-col :span="6">
                         <div class="grid-content bg-purple">
-                            <el-form-item label="区县" prop="valueOrigin">
+                            <el-form-item label="區縣" prop="valueOrigin">
                                 <el-select
                                         :disabled="reported"
                                         v-model="ruleForm.valueOrigin"
-                                        placeholder="请选择区"
+                                        placeholder="請選擇區"
                                         @change="changeOrigin"
                                 >
                                     <el-option
@@ -173,10 +173,10 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <div class="grid-content bg-purple">
-                            <el-form-item label="目前健康状况" prop="situation">
+                            <el-form-item label="目前健康狀况" prop="situation">
                                 <el-radio-group :disabled="reported" v-model="ruleForm.situation">
                                     <el-radio :label="0">健康</el-radio>
-                                    <el-radio :label="1">有咳嗽发热症状</el-radio>
+                                    <el-radio :label="1">有咳嗽發熱症狀</el-radio>
                                     <el-radio :label="2">其他情况</el-radio>
                                 </el-radio-group>
                             </el-form-item>
@@ -184,7 +184,7 @@
                     </el-col>
                     <el-col :span="12">
                         <div class="grid-content bg-purple">
-                            <el-form-item label="接触的人是否有疑似症状?  (冠状病毒检测结果为阳性或尚在等待检测结构)" prop="touch">
+                            <el-form-item label="接觸的人是否有疑似症狀?  (冠狀病毒檢測结果為陽性或尚在等待檢測结構)" prop="touch">
                                 <el-radio-group :disabled="reported" v-model="ruleForm.touch">
                                     <el-radio :label="1">是</el-radio>
                                     <el-radio :label="0">否</el-radio>
@@ -196,7 +196,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <div class="grid-content bg-purple">
-                            <el-form-item label="自2020年1月1日起,是否在湖北省停留过 (保存转车路过)" prop="passby">
+                            <el-form-item label="自2020年1月1日起,是否在湖北省停留過 (保存轉車路過)" prop="passby">
                                 <el-radio-group :disabled="reported" v-model="ruleForm.passby">
                                     <el-radio :label="1">是</el-radio>
                                     <el-radio :label="0">否</el-radio>
@@ -206,7 +206,7 @@
                     </el-col>
                     <el-col :span="12">
                         <div class="grid-content bg-purple">
-                            <el-form-item label="自2020年1月1日起,是否有接待过来自湖北的客户,亲戚或朋友)" prop="reception">
+                            <el-form-item label="自2020年1月1日起,是否有接待過来自湖北的客戶,親戚或朋友)" prop="reception">
                                 <el-radio-group :disabled="reported" v-model="ruleForm.reception">
                                     <el-radio :label="1">是</el-radio>
                                     <el-radio :label="0">否</el-radio>
@@ -235,32 +235,32 @@
                 historyTotal:0,
                 provinceList: [], // 省列表
                 cityList: [], // 市列表
-                originList: [], // 区列表
-                cityOptions: [], // 市下拉框数据
-                originOptions: [] // 区下拉框数据
+                originList: [], // 區列表
+                cityOptions: [], // 市下拉框數據
+                originOptions: [] // 區下拉框數據
                 ,
                 ruleForm: {},
                 nowTime: new Date(),
                 userInfo: {},
                 rules: {
                     situation: [
-                        {required: true, message: "请选择当前情况", trigger: "blur"},
+                        {required: true, message: "請選擇當前情况", trigger: "blur"},
                     ],
                     touch: [
-                        {required: true, message: "请选择是否接触", trigger: "blur"},
+                        {required: true, message: "請選擇是否接觸", trigger: "blur"},
                     ],
                     passby: [
-                        {required: true, message: "请选择是否路过", trigger: "blur"},
+                        {required: true, message: "請選擇是否路過", trigger: "blur"},
                     ],
                     reception: [
-                        {required: true, message: "请选择是否招待", trigger: "blur"},
+                        {required: true, message: "請選擇是否招待", trigger: "blur"},
                     ],
                     valueProvince: [
-                        { required: true, message: "请输入省份", trigger: "blur" }
+                        { required: true, message: "請輸入省份", trigger: "blur" }
                     ],
-                    valueCity: [{ required: true, message: "请输入城市", trigger: "blur" }],
+                    valueCity: [{ required: true, message: "請輸入城市", trigger: "blur" }],
                     valueOrigin: [
-                        { required: true, message: "请输入区县", trigger: "blur" }
+                        { required: true, message: "請輸入區縣", trigger: "blur" }
                     ],
                 },
             }
@@ -271,30 +271,30 @@
                 this.reportHistory();
             },
             /**
-             * 翻页
+             * 翻頁
              */
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
                 this.reportHistory();
             },
 
-            //打卡历史记录
+            //打卡歷史記錄
             async reportHistory(){
                 const { data: res } = await this.$http.get("business/health/history",{
                     params: this.queryMap
                 });
                 if(!res.success){
-                    return this.$message.error("历史记录获取失败:" + res.msg);
+                    return this.$message.error("歷史記錄獲取失敗:" + res.msg);
                 }else {
                     this.historyTable=res.data.rows;
                     this.historyTotal=res.data.total;
                 }
             },
-            //今日是否已签到
+            //今日是否已簽到
             async isReport(){
                 const { data: res } = await this.$http.get("business/health/isReport");
                 if(!res.success){
-                    return this.$message.error("今日健康报备检查错误:" + res.msg);
+                    return this.$message.error("今日健康報備檢查錯誤:" + res.msg);
                 }else {
                     if(res.data){
                         this.reported=true;
@@ -303,7 +303,7 @@
                         this.reported=false;
                         this.$notify.warning({
                             title: '温馨提示',
-                            message: '您今日还未打卡,别忘记了哟~'
+                            message: '您今日還未打卡,別忘記了哟~'
                         });
                     }
                 }
@@ -327,15 +327,15 @@
                         if (res.success) {
                             this.reported=true;
                             this.ruleForm.createTime=this.nowTime;
-                            this.$message.success("健康报备成功");
+                            this.$message.success("健康報備成功");
                         } else {
-                            return this.$message.error("健康报备失败:" + res.msg);
+                            return this.$message.error("健康報備失敗:" + res.msg);
                         }
                     }
                 });
             },
 
-            //重置打卡表单
+            //重置打卡表單
             reset(){
                 this.$refs.ruleFormRef.clearValidate();
                 this.ruleForm={};
@@ -347,19 +347,19 @@
                 this.nowTime = new Date();
 
             },
-            // 选择省
+            // 選擇省
             changeProvince(val) {
                 this.provinceList.forEach((province, index) => {
                     if (val.toString() === this.provinceList[index].value) {
                         this.cityOptions = this.provinceList[index].children;
                         this.ruleForm.valueCity = this.provinceList[
                             index
-                            ].children[0].value; //设置市的值
+                            ].children[0].value; //設置市的值
                         this.ruleForm.city = this.provinceList[index].children[0].label;
 
                         this.ruleForm.valueOrigin = this.provinceList[
                             index
-                            ].children[0].children[0].value; //设置县的值
+                            ].children[0].children[0].value; //設置縣的值
                         this.ruleForm.origin = this.provinceList[
                             index
                             ].children[0].children[0].label;
@@ -370,18 +370,18 @@
                     }
                 });
             },
-            // 选择市
+            // 選擇市
             changeCity(val) {
                 this.cityList.forEach((city, index) => {
                     if (val.toString() === this.cityList[index].value) {
                         this.originOptions = this.cityList[index].children;
-                        this.ruleForm.valueOrigin = this.cityList[index].children[0].value; //设置县的值;
+                        this.ruleForm.valueOrigin = this.cityList[index].children[0].value; //設置縣的值;
                         //set value
                         this.ruleForm.city = this.cityList[index].label;
                     }
                 });
             },
-            // 选择区
+            // 選擇區
             changeOrigin(val) {
                 this.ruleForm.valueOrigin = val;
 
@@ -391,7 +391,7 @@
                         this.ruleForm.origin = this.originList[index].label;
                     }
                 });
-                //添加this.$forceUpdate();进行强制渲染，效果实现。搜索资料得出结果：因为数据层次太多，render函数没有自动更新，需手动强制刷新。
+                //添加this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
                 this.$forceUpdate();
             },
 
@@ -451,10 +451,10 @@
         mounted() {
             this.currentTime();
         },
-        // 销毁定时器
+        // 銷毁定時器
         beforeDestroy: function () {
             if (this.getDate) {
-                clearInterval(this.getDate); // 在Vue实例销毁前，清除时间定时器
+                clearInterval(this.getDate); // 在Vue實例銷毁前，清除時間定時器
             }
         }
 

@@ -1,13 +1,13 @@
 <template>
     <div id="departments">
-        <!-- 面包导航 -->
+        <!-- 面包導航 -->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
             <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-            <el-breadcrumb-item>部门管理</el-breadcrumb-item>
+            <el-breadcrumb-item>公司管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <!-- 右侧卡片区域 -->
-        <!-- 用户列表卡片区 -->
+        <!-- 右側卡片區域 -->
+        <!-- 用戶列表卡片區 -->
         <el-card class="box-card">
             <el-row :gutter="20">
                 <el-col :span="8">
@@ -15,7 +15,7 @@
                             size="small"
                             clearable
                             v-model="queryMap.name"
-                            placeholder="请输入部门查询"
+                            placeholder="請輸入公司查詢"
                             @clear="search"
                             class="input-with-select"
                     >
@@ -37,10 +37,10 @@
                             icon="el-icon-download"
                             v-hasPermission="'department:export'"
                             @click="downExcel"
-                    >导出</el-button>
+                    >導出</el-button>
                 </el-col>
             </el-row>
-            <!-- 表格区域 -->
+            <!-- 表格區域 -->
             <template>
                 <el-table
                         border
@@ -52,16 +52,16 @@
                         height="460"
                 >
                     <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
-                    <el-table-column prop="phone" label="办公电话" width="180"></el-table-column>
-                    <el-table-column prop="name" label="部门名" width="120"></el-table-column>
-                    <el-table-column prop="total" label="人数" sortable width="100">
+                    <el-table-column prop="phone" label="辦公電話" width="180"></el-table-column>
+                    <el-table-column prop="name" label="公司名" width="120"></el-table-column>
+                    <el-table-column prop="total" label="人數" sortable width="100">
                         <template slot-scope="scope">
                             <el-tag effect="plain" v-text="scope.row.total+'人'" size="small">
                             </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="createTime" label="创建时间" sortable></el-table-column>
-                    <el-table-column prop="modifiedTime" label="修改时间" sortable></el-table-column>
+                    <el-table-column prop="createTime" label="創建時間" sortable></el-table-column>
+                    <el-table-column prop="modifiedTime" label="修改時間" sortable></el-table-column>
                     <el-table-column prop="address" label="地址"></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
@@ -71,7 +71,7 @@
                                     size="small"
                                     icon="el-icon-edit"
                                     @click="edit(scope.row.id)"
-                            >编辑</el-button>
+                            >編輯</el-button>
 
                             <el-button
                                     v-hasPermission="'department:delete'"
@@ -84,7 +84,7 @@
                     </el-table-column>
                 </el-table>
             </template>
-            <!-- 分页 -->
+            <!-- 分頁 -->
             <el-pagination
                     style="margin-top:10px;"
                     background
@@ -96,8 +96,8 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total"
             ></el-pagination>
-            <!-- 部门别添加弹出框 -->
-            <el-dialog title="添加部门" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
+            <!-- 公司別添加彈出框 -->
+            <el-dialog title="添加公司" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
         <span>
           <el-form
                   :model="addRuleForm"
@@ -106,26 +106,26 @@
                   label-width="100px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="部门名称" prop="name">
+            <el-form-item label="公司名稱" prop="name">
               <el-input v-model="addRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="办公电话" prop="phone">
+            <el-form-item label="辦公電話" prop="phone">
               <el-input v-model="addRuleForm.phone"></el-input>
             </el-form-item>
-            <el-form-item label="办公地址" prop="address">
+            <el-form-item label="辦公地址" prop="address">
               <el-input type="textarea" v-model="addRuleForm.address"></el-input>
             </el-form-item>
           </el-form>
         </span>
                 <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="add" :disabled="btnDisabled" :loading="btnLoading">确 定</el-button>
+          <el-button type="primary" @click="add" :disabled="btnDisabled" :loading="btnLoading">確 定</el-button>
         </span>
             </el-dialog>
 
-            <!-- 部门别编辑弹出框 -->
+            <!-- 公司別編輯彈出框 -->
             <el-dialog
-                    title="更新部门"
+                    title="更新公司"
                     :visible.sync="editDialogVisible"
                     width="50%"
                     @close="closeEditDialog"
@@ -138,13 +138,13 @@
                   label-width="100px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="部门名称" prop="name">
+            <el-form-item label="公司名稱" prop="name">
               <el-input v-model="editRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="办公电话" prop="phone">
+            <el-form-item label="辦公電話" prop="phone">
               <el-input v-model="editRuleForm.phone"></el-input>
             </el-form-item>
-            <el-form-item label="办公地址" prop="address">
+            <el-form-item label="辦公地址" prop="address">
               <el-input type="textarea" v-model="editRuleForm.address"></el-input>
             </el-form-item>
           </el-form>
@@ -156,7 +156,7 @@
                   @click="update"
                   :disabled="btnDisabled"
                   :loading="btnLoading"
-          >确 定</el-button>
+          >確 定</el-button>
         </span>
             </el-dialog>
         </el-card>
@@ -167,57 +167,58 @@
     import axios from "axios";
     export default {
         data() {
-            const checkPhone = (rule, value, callback) => {
-                const phoneReg = /^1[34578]\d{9}$$/;
-                if (!value) {
-                    return callback(new Error("电话号码不能为空"));
-                }
-                setTimeout(() => {
-                    if (!Number.isInteger(+value)) {
-                        callback(new Error("请输入数字值"));
-                    } else {
-                        if (phoneReg.test(value)) {
-                            callback();
-                        } else {
-                            callback(new Error("电话号码格式不正确"));
-                        }
-                    }
-                }, 100);
-            };
+            // const checkPhone = (rule, value, callback) => {
+            //     // const phoneReg = /^1[34578]\d{9}$$/;
+            //     if (!value) {
+            //         return callback(new Error("電話號碼不能為空"));
+            //     }
+            //     setTimeout(() => {
+            //         if (!Number.isInteger(+value)) {
+            //             callback(new Error("請輸入數字值"));
+            //         } else {
+            //             callback();
+            //             // if (phoneReg.test(value)) {
+            //             //     callback();
+            //             // } else {
+            //             //     callback(new Error("電話號碼格式不正確"));
+            //             // }
+            //         }
+            //     }, 100);
+            // };
             return {
                 btnLoading: false,
                 btnDisabled: false,
                 loading: true,
                 editDialogVisible: false,
-                addDialogVisible: false, //添加弹框是否显示
-                total: 0, //总共多少条数据
-                departmentData: [], //表格数据
-                queryMap: { pageNum: 1, pageSize: 7, name: "" }, //查询对象
-                addRuleForm: {}, //添加表单数据
-                editRuleForm: {}, //修改表单数据
+                addDialogVisible: false, //添加彈框是否顯示
+                total: 0, //總共多少條數據
+                departmentData: [], //表格數據
+                queryMap: { pageNum: 1, pageSize: 7, name: "" }, //查詢對象
+                addRuleForm: {}, //添加表單數據
+                editRuleForm: {}, //修改表單數據
                 addRules: {
                     name: [
-                        { required: true, message: "请输入部门名称", trigger: "blur" },
-                        { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入公司名稱", trigger: "blur" },
+                        { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
                     ],
                     address: [
-                        { required: true, message: "请输入办公地址", trigger: "blur" },
-                        { min: 4, max: 12, message: "长度在 4 到 12 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入辦公地址", trigger: "blur" },
+                        { min: 4, max: 12, message: "長度在 4 到 12 個字符", trigger: "blur" }
                     ],
                     phone: [
                         {
                             required: true,
-                            message: "请输入联部门方式",
-                            validator: checkPhone,
+                            message: "請輸入公司聯絡方式",
+                            // validator: checkPhone,
                             trigger: "blur"
                         }
                     ]
-                } //添加验证
+                } //添加驗證
             };
         },
         methods: {
             /**
-             * 加载部门表格
+             * 加載公司表格
              */
             downExcel() {
                 const $this = this;
@@ -234,31 +235,31 @@
                             );
                         }
                         const data = res.data;
-                        let url = window.URL.createObjectURL(data); // 将二进制文件转化为可访问的url
+                        let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
                         var a = document.createElement("a");
                         document.body.appendChild(a);
                         a.href = url;
-                        a.download = "部门列表.xls";
+                        a.download = "公司列表.xls";
                         a.click();
                         window.URL.revokeObjectURL(url);
                     });
             },
             /**
-             * 搜索部门
+             * 搜索公司
              */
             search() {
                 this.queryMap.pageNum = 1;
                 this.getDepartmentList();
             },
             /**
-             * 删除部门
+             * 删除公司
              */
             del: async function (id) {
                 let res = await this.$confirm(
-                    "此操作将永久删除该用户, 是否继续?",
+                    "此操作將永久删除該用戶, 是否繼續?",
                     "提示",
                     {
-                        confirmButtonText: "确定",
+                        confirmButtonText: "確定",
                         cancelButtonText: "取消",
                         type: "warning"
                     }
@@ -273,7 +274,7 @@
                         "system/department/delete/" + id
                     );
                     if (res.success) {
-                        this.$message.success("部门删除成功");
+                        this.$message.success("公司删除成功");
                         await this.getDepartmentList();
                     } else {
                         this.$message.error(res.data.errorMsg);
@@ -281,7 +282,7 @@
                 }
             },
             /**
-             * 更新用户
+             * 更新用戶
              */
             update: async function () {
                 this.$refs.editRuleFormRef.validate(async valid => {
@@ -293,15 +294,15 @@
                             "system/department/update/" + this.editRuleForm.id,
                             this.editRuleForm
                         );
-                        if (res.code === 200) {
+                        if (res.success) {
                             this.$notify({
                                 title: "成功",
-                                message: "部门信息更新",
+                                message: "公司信息更新",
                                 type: "success"
                             });
                             await this.getDepartmentList();
                         } else {
-                            this.$message.error("部门信息更新失败:" + res.data.errorMsg);
+                            this.$message.error("公司信息更新失敗");
                         }
                         this.editRuleForm = {};
                         this.btnDisabled = false;
@@ -311,7 +312,7 @@
                 });
             },
             /**
-             * 编辑
+             * 編輯
              * @param {Object} id
              */
             edit: async function (id) {
@@ -319,7 +320,7 @@
                 if (res.success) {
                     this.editRuleForm = res.data;
                 } else {
-                    return this.$message.error("部门信息编辑失败" + res.data.errorMsg);
+                    return this.$message.error("公司信息編輯失敗" + res.data.errorMsg);
                 }
                 this.editDialogVisible = true;
             },
@@ -335,18 +336,18 @@
                             this.addRuleForm
                         );
                         if (res.success) {
-                            this.$message.success("部门添加成功");
+                            this.$message.success("公司添加成功");
                             this.addRuleForm = {};
                             await this.getDepartmentList();
                         } else {
-                            return this.$message.error("部门添加失败:" + res.data.errorMsg);
+                            return this.$message.error("公司添加失敗:" + res.data.errorMsg);
                         }
                         this.addDialogVisible = false;
                         (this.btnLoading = false), (this.btnDisabled = false);
                     }
                 });
             },
-            //加载部门别列表
+            //加載公司別列表
             async getDepartmentList() {
                 const { data: res } = await this.$http.get(
                     "system/department/findDepartmentList",
@@ -355,28 +356,28 @@
                     }
                 );
                 if (!res.success) {
-                    return this.$message.error("获取用户列表失败:"+res.data.errorMsg);
+                    return this.$message.error("獲取用戶列表失敗:"+res.data.errorMsg);
                 } else {
                     this.total = res.data.total;
                     this.departmentData = res.data.rows;
                 }
             },
-            //改变页码
+            //改變頁碼
             handleSizeChange(newSize) {
                 this.queryMap.pageSize = newSize;
                 this.getDepartmentList();
             },
-            //翻页
+            //翻頁
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
                 this.getDepartmentList();
             },
-            //关闭弹出框
+            //關閉彈出框
             closeAddDialog() {
                 this.$refs.addRuleFormRef.clearValidate();
                 this.addRuleForm = {};
             },
-            //关闭弹出框
+            //關閉彈出框
             closeEditDialog() {
                 this.$refs.editRuleFormRef.clearValidate();
                 this.editRuleForm = {};

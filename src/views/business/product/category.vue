@@ -1,10 +1,10 @@
 <template>
     <div id="category">
-        <!-- 面包导航 -->
+        <!-- 面包導航 -->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>物资管理</el-breadcrumb-item>
-            <el-breadcrumb-item>物资分类</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+            <el-breadcrumb-item>廢棄物管理</el-breadcrumb-item>
+            <el-breadcrumb-item>廢棄物分類</el-breadcrumb-item>
         </el-breadcrumb>
         <el-card class="box-card">
             <el-row :gutter="20">
@@ -25,11 +25,11 @@
                     :data="categorys"
                     :columns="columns"
             >
-                <!-- 层级 -->
+                <!-- 層級 -->
                 <template slot="lev" slot-scope="scope">
-                    <el-tag v-if="scope.row.lev===1">一级分类</el-tag>
-                    <el-tag type="success" v-else-if="scope.row.lev===2">二级分类</el-tag>
-                    <el-tag type="danger" v-else>三级分类</el-tag>
+                    <el-tag v-if="scope.row.lev===1">一級分類</el-tag>
+                    <el-tag type="success" v-else-if="scope.row.lev===2">二級分類</el-tag>
+                    <el-tag type="danger" v-else>三級分類</el-tag>
                 </template>
                 <!-- 操作 -->
                 <template slot="caozuo" slot-scope="scope">
@@ -37,7 +37,7 @@
                     <el-button v-hasPermission="'productCategory:delete'" type="danger" size="mini" icon="el-icon-delete" @click="del(scope.row.id)"></el-button>
                 </template>
             </zk-table>
-            <!-- 分页 -->
+            <!-- 分頁 -->
             <el-pagination
                     style="margin-top:10px;"
                     background
@@ -51,15 +51,16 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total"
             ></el-pagination>
-            <!-- 添加弹出框 -->
-            <el-dialog title="添加分类" :visible.sync="addDialogVisible" @close="addCloseDialog" width="50%">
+            <!-- 添加彈出框 -->
+            <el-dialog title="添加分類" :visible.sync="addDialogVisible" @close="addCloseDialog" width="50%">
         <span>
           <el-form  :model="addRuleForm" :rules="addRules" ref="addRuleFormRef" label-width="100px">
-            <el-form-item label="分类名称" prop="name">
+            <el-form-item label="分類名稱" prop="name">
               <el-input v-model="addRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="父分类" prop="pid">
+            <el-form-item label="父分類" prop="pid">
               <el-cascader
+                      placeholder="請選擇"
                       @change="selectParentChange"
                       @clear="clearParent"
                       :change-on-select="true"
@@ -71,7 +72,7 @@
                       v-model="pKeys"
               ></el-cascader>
             </el-form-item>
-            <el-form-item label="备注" prop="remark">
+            <el-form-item label="備註" prop="remark">
               <el-input type="textarea" v-model="addRuleForm.remark"></el-input>
             </el-form-item>
             <el-form-item label="排序" prop="sort">
@@ -81,18 +82,18 @@
         </span>
                 <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="add" :disabled="btnDisabled" :loading="btnLoading">确 定</el-button>
+          <el-button type="primary" @click="add" :disabled="btnDisabled" :loading="btnLoading">確 定</el-button>
         </span>
             </el-dialog>
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑分类" :visible.sync="editDialogVisible" @close="editCloseDialog" width="50%">
+            <!-- 編輯彈出框 -->
+            <el-dialog title="編輯分類" :visible.sync="editDialogVisible" @close="editCloseDialog" width="50%">
         <span>
           <el-form :model="editRuleForm" :rules="addRules" ref="editRuleFormRef" label-width="100px">
-            <el-form-item label="分类名称" prop="name">
+            <el-form-item label="分類名稱" prop="name">
               <el-input v-model="editRuleForm.name"></el-input>
             </el-form-item>
 
-            <el-form-item label="备注" prop="remark">
+            <el-form-item label="備註" prop="remark">
               <el-input type="textarea" v-model="editRuleForm.remark"></el-input>
             </el-form-item>
             <el-form-item label="排序" prop="sort">
@@ -102,7 +103,7 @@
         </span>
                 <span slot="footer" class="dialog-footer">
           <el-button @click="editDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="update" :disabled="btnDisabled" :loading="btnLoading">确 定</el-button>
+          <el-button type="primary" @click="update" :disabled="btnDisabled" :loading="btnLoading">確 定</el-button>
         </span>
             </el-dialog>
         </el-card>
@@ -120,16 +121,16 @@
                 addDialogVisible: false,
                 editDialogVisible: false,
                 editRuleForm:[],
-                addRuleForm: { pid: "0", name: "", remark: "", sort: "" }, //添加表单
+                addRuleForm: { pid: "0", name: "", remark: "", sort: "" }, //添加表單
                 addRules: {
                     name: [
-                        { required: true, message: "请输入分类名", trigger: "blur" },
-                        { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入分類名", trigger: "blur" },
+                        { min: 2, max: 10, message: "長度在 2 到 10 個字符", trigger: "blur" }
                     ],
                     remark: [
-                        { required: true, message: "请输入备注信息", trigger: "blur" }
+                        { required: true, message: "請輸入備註信息", trigger: "blur" }
                     ],
-                    sort: [{ required: true, message: "请输入排序号", trigger: "blur" }]
+                    sort: [{ required: true, message: "請輸入排序號", trigger: "blur" }]
                 },
                 total: 0,
                 queryMap: { pageNum: 1, pageSize: 5 },
@@ -140,10 +141,10 @@
                     value: "id",
                     label: "name",
                     children: "children"
-                }, //级联选择器配置项
+                }, //級聯選擇器配置项
                 columns: [
                     {
-                        label: "分类名称",
+                        label: "分類名稱",
                         prop: "name"
                     },
                     {
@@ -151,19 +152,19 @@
                         prop: "sort"
                     },
                     {
-                        label: "创建时间",
+                        label: "創建時間",
                         prop: "createTime"
                     },
                     {
-                        label: "修改时间",
+                        label: "修改時間",
                         prop: "modifiedTime"
                     },
                     {
-                        label: "备注",
+                        label: "備註",
                         prop: "remark"
                     },
                     {
-                        label: "层级",
+                        label: "層級",
                         prop: "lev",
                         type: "template",
                         template: "lev"
@@ -191,12 +192,12 @@
                         if (res.success) {
                             this.$notify({
                                 title: "成功",
-                                message: "分类信息更新",
+                                message: "分類信息更新",
                                 type: "success"
                             });
                             await this.getCategoryList();
                         } else {
-                            this.$message.error("分类信息更新失败:" + res.data.errorMsg);
+                            this.$message.error("分類信息更新失敗:" + res.data.errorMsg);
                         }
                         this.btnLoading = false;
                         this.btnDisabled = false;
@@ -210,17 +211,17 @@
                 if (res.success) {
                     this.editRuleForm = res.data;
                 } else {
-                    return this.$message.error("分类信息编辑失败"+res.data.errorMsg);
+                    return this.$message.error("分類信息編輯失敗"+res.data.errorMsg);
                 }
                 this.editDialogVisible = true;
             },
-            //删除分类
+            //删除分類
             async del(id) {
                 const res = await this.$confirm(
-                    "此操作将永久删除该分类, 是否继续?",
+                    "此操作將永久删除該分類, 是否繼續?",
                     "提示",
                     {
-                        confirmButtonText: "确定",
+                        confirmButtonText: "確定",
                         cancelButtonText: "取消",
                         type: "warning"
                     }
@@ -236,7 +237,7 @@
                     );
                     console.log(res);
                     if (res.success) {
-                        this.$message.success("分类删除成功");
+                        this.$message.success("分類删除成功");
                         await this.getCategoryList();
                     } else {
                         this.$message.error(res.data.errorMsg);
@@ -244,7 +245,7 @@
                 }
             },
 
-            //父级分类中改变
+            //父級分類中改變
             selectParentChange() {
                 const len = this.pKeys.length;
                 if (len > 0) {
@@ -253,7 +254,7 @@
                     this.addRuleForm.pid=0;
                 }
             },
-            //加载分类数据
+            //加載分類數據
             async getCategoryList() {
                 const { data: res } = await this.$http.get(
                     "business/productCategory/categoryTree",
@@ -261,19 +262,19 @@
                         params: this.queryMap
                     }
                 );
-                if (!res.success) return this.$message.error("分类列表失败");
+                if (!res.success) return this.$message.error("分類列表失敗");
                 this.categorys = res.data.rows;
                 this.total = res.data.total;
             },
-            //加载父级分类数据
+            //加載父級分類數據
             async getParentCategoryList() {
                 const { data: res } = await this.$http.get(
                     "business/productCategory/getParentCategoryTree"
                 );
-                if (!res.success) return this.$message.error("父级分类列表失败:"+res.data.errorMsg);
+                if (!res.success) return this.$message.error("父級分類列表失敗:"+res.data.errorMsg);
                 this.parentCategorys = res.data;
             },
-            //添加分类
+            //添加分類
             async add() {
                 this.$refs.addRuleFormRef.validate(async valid => {
                     if (!valid) {
@@ -289,10 +290,10 @@
                             this.addRuleForm
                         );
                         if (res.success) {
-                            this.$message.success("分类添加成功");
+                            this.$message.success("分類添加成功");
                             await this.getCategoryList();
                         } else {
-                            return this.$message.error("分类添加失败:" + res.data.errorMsg);
+                            return this.$message.error("分類添加失敗:" + res.data.errorMsg);
                         }
                         this.addDialogVisible = false;
                         this.btnLoading=false;
@@ -300,22 +301,22 @@
                     }
                 });
             },
-            //改变页码
+            //改變頁碼
             handleSizeChange(newSize) {
                 this.queryMap.pageSize = newSize;
                 this.getCategoryList();
             },
-            //翻页
+            //翻頁
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
                 this.getCategoryList();
             },
-            //打开添加
+            //打開添加
             openAdd() {
                 this.addDialogVisible = true;
                 this.getParentCategoryList();
             },
-            //关闭弹出框
+            //關閉彈出框
             addCloseDialog() {
                 this.$refs.addRuleFormRef.clearValidate();
                 this.addRuleForm = {};

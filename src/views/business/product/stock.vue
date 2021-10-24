@@ -1,20 +1,20 @@
 <template>
   <div id="stocks">
-    <!-- 面包导航 -->
+    <!-- 面包導航 -->
     <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>物资管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+      <el-breadcrumb-item>廢棄物管理</el-breadcrumb-item>
       <el-breadcrumb-item>库存维护</el-breadcrumb-item>
     </el-breadcrumb>
     <el-row :gutter="20">
       <el-col :span="13">
         <div class="grid-content bg-purple-dark">
           <el-card class="box-card">
-            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+            <!-- 為 ECharts 准備一個具備大小（寬高）的 DOM -->
             <div id="tianxing" style="width: 650px;height:350px;"></div>
           </el-card>
           <el-card class="box-card" style="margin-top:10px;">
-            <!-- 库存饼图 -->
+            <!-- 库存饼圖 -->
             <div id="bingtu" style="width: 590px;height:225px;"></div>
           </el-card>
         </div>
@@ -25,7 +25,7 @@
             <el-form size="mini" :inline="true" :model="queryMap" class="demo-form-inline">
               <el-form-item>
                 <el-cascader
-                        placeholder="请选择分类查询"
+                        placeholder="請選擇分類查詢"
                         :change-on-select="true"
                         @change="selectChange"
                         v-model="categorykeys"
@@ -36,15 +36,15 @@
               </el-form-item>
 
               <el-form-item>
-                <el-input clearable @clear="search" v-model="queryMap.name" placeholder="物资名称" ></el-input>
+                <el-input clearable @clear="search" v-model="queryMap.name" placeholder="廢棄物名稱" ></el-input>
               </el-form-item>
 
               <el-form-item>
-                <el-button size="mini" type="primary" @click="search" icon="el-icon-search">查询</el-button>
+                <el-button size="mini" type="primary" @click="search" icon="el-icon-search">查詢</el-button>
               </el-form-item>
             </el-form>
             <el-table height="530" border :data="tableData" style="width: 100%">
-              <el-table-column prop="imageUrl" label="图片" align="center" width="80" padding="0px">
+              <el-table-column prop="imageUrl" label="圖片" align="center" width="80" padding="0px">
                 <!--            <template slot-scope="scope">-->
                 <!--              <img-->
                 <!--                slot="error"-->
@@ -60,16 +60,16 @@
                   </el-popover>
                 </template>
               </el-table-column>
-              <el-table-column prop="name" label="名称" width="140"></el-table-column>
-              <el-table-column prop="model" label="规格" width="120"></el-table-column>
+              <el-table-column prop="name" label="名稱" width="140"></el-table-column>
+              <el-table-column prop="model" label="規格" width="120"></el-table-column>
               <el-table-column prop="stock" label="库存">
                   <template slot-scope="scope">
                       <el-tag size="mini" closable>{{scope.row.stock}}</el-tag>
                   </template>
               </el-table-column>
-              <el-table-column prop="unit" label="单位"></el-table-column>
+              <el-table-column prop="unit" label="單位"></el-table-column>
             </el-table>
-            <!-- 分页 -->
+            <!-- 分頁 -->
             <el-pagination
               style="margin-top:20px;"
               background
@@ -92,23 +92,23 @@ import echarts from "echarts";
 export default {
   data() {
     return {
-      catetorys: [], //类别选择
+      catetorys: [], //類別選擇
       searchSelectProps: {
         expandTrigger: "hover",
         value: "id",
         label: "name",
         children: "children",
         checkStrictly: true
-      }, //级联搜索选择器配置项
+      }, //級聯搜索選擇器配置项
       categorykeys: [] ,
       total: 0,
       tableData: [],
       queryMap: { pageSize: 9, pageNum: 1 },
       xData: [],
       yData: [],
-      legendData: [], //饼图存放物资名称
-      selected: {}, //存放选择的数据
-      seriesData: [{ name: "", value: "" }] //饼图数据
+      legendData: [], //饼圖存放廢棄物名稱
+      selected: {}, //存放選擇的數據
+      seriesData: [{ name: "", value: "" }] //饼圖數據
     };
   },
   methods: {
@@ -120,14 +120,14 @@ export default {
       this.getStockList();
     },
     /**
-     * 加载库存信息
+     * 加載库存信息
      */
     async getStockList() {
       const { data: res } = await this.$http.get("business/product/findProductStocks", {
         params: this.queryMap
       });
       if (!res.success) {
-        return this.$message.error("获取物资库存列表失败:"+res.data.errorMsg);
+        return this.$message.error("獲取廢棄物库存列表失敗:"+res.data.errorMsg);
       } else {
         this.total = res.data.total;
         this.tableData = res.data.rows;
@@ -135,7 +135,7 @@ export default {
         this.yData = [];
         this.selected = {};
         const $this = this;
-        //构建表格条形统计图的数据
+        //構建表格條形统計圖的數據
         this.tableData.forEach(function(e) {
           console.log(e)
           $this.xData.push(e.name);
@@ -143,30 +143,30 @@ export default {
         });
         //重新绘制表格
         this.draw();
-        //饼图
+        //饼圖
         this.findAllProductStocks();
       }
     },
 
-    //改变页码
+    //改變頁碼
     handleSizeChange(newSize) {
       this.queryMap.pageSize = newSize;
       this.getStockList();
     },
-    //翻页
+    //翻頁
     handleCurrentChange(current) {
       this.queryMap.pageNum = current;
       this.getStockList();
     },
     /**
-     * 绘制条形统计图
+     * 绘制條形统計圖
      */
     draw() {
       var myChart = echarts.init(document.getElementById("tianxing"));
-      // 指定图表的配置项和数据
+      // 指定圖表的配置项和數據
       var option = {
         title: {
-          text: "库存条形图"
+          text: "库存條形圖"
         },
         toolbox: {
           show: true,
@@ -175,9 +175,9 @@ export default {
               yAxisIndex: "none"
             },
             dataView: { readOnly: false }, //  缩放
-            magicType: { type: ["bar"] }, ///　　折线  直方图切换
+            magicType: { type: ["bar"] }, ///　　折线  直方圖切换
             restore: {}, // 重置
-            saveAsImage: {} // 导出图片
+            saveAsImage: {} // 導出圖片
           }
         },
         tooltip: {},
@@ -196,7 +196,7 @@ export default {
             data: this.yData,
             itemStyle: {
                     normal: {
-　　　　　　　　　　　　　　//好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
+　　　　　　　　　　　　　　//好，這里就是重頭戏了，定义一個list，然後根据所以取得不同的值，這样就實現了，
                         color: function(params) {
                             // build a color map as your need.
                             var colorList = [
@@ -206,7 +206,7 @@ export default {
                             ];
                             return colorList[params.dataIndex]
                         },
-　　　　　　　　　　　　　　//以下为是否显示，显示位置和显示格式的设置了
+　　　　　　　　　　　　　　//以下為是否顯示，顯示位置和顯示格式的設置了
                         label: {
                             show: true,
                             position: 'top',
@@ -220,24 +220,24 @@ export default {
         ]
       };
 
-      // 使用刚指定的配置项和数据显示图表。
+      // 使用刚指定的配置项和數據顯示圖表。
       myChart.setOption(option);
     },
     /**
-     * 绘制饼图
+     * 绘制饼圖
      */
     drawRound() {
       var myChart = echarts.init(document.getElementById("bingtu"));
       var option = {
         title: {
-          text: "库存占比图",
+          text: "库存占比圖",
 
           left: "left"
         },
          toolbox: {
           show: true,
           feature: {
-            saveAsImage: {} // 导出图片
+            saveAsImage: {} // 導出圖片
           }
         },
         tooltip: {
@@ -255,7 +255,7 @@ export default {
         },
         series: [
           {
-            name: "物资名称",
+            name: "廢棄物名稱",
             type: "pie",
             radius: "55%",
             center: ["40%", "50%"],
@@ -274,20 +274,20 @@ export default {
     },
 
     /**
-     * 物资所有的库存信息
+     * 廢棄物所有的库存信息
      */
     async findAllProductStocks() {
       const { data: res } = await this.$http.get("business/product/findAllStocks", {
         params: this.queryMap
       });
       if (!res.success) {
-        return this.$message.error("获取物资所有库存失败:"+res.data.errorMsg);
+        return this.$message.error("獲取廢棄物所有库存失敗:"+res.data.errorMsg);
       } else {
         this.legendData = [];
         this.selected = {};
         this.seriesData = [{}];
         var $this = this;
-        //构建饼图的数据对象
+        //構建饼圖的數據對象
         res.data.forEach(function(e) {
           $this.legendData.push(e.name);
           $this.seriesData.push({ name: e.name, value: e.stock });
@@ -298,7 +298,7 @@ export default {
       }
     },
     /**
-     * 分类搜索改变时
+     * 分類搜索改變時
      */
     selectChange() {
       var str = "";
@@ -309,14 +309,14 @@ export default {
       this.queryMap.categorys = str;
     },
     /**
-     * 加载物资类别
+     * 加載廢棄物類別
      */
     async getCatetorys() {
       const { data: res } = await this.$http.get(
               "business/productCategory/categoryTree"
       );
       if (!res.success) {
-        return this.$message.error("获取物资类别失败:"+res.data.errorMsg);
+        return this.$message.error("獲取廢棄物類別失敗:"+res.data.errorMsg);
       } else {
         this.catetorys = res.data.rows;
       }

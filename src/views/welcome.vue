@@ -1,26 +1,19 @@
 <template>
     <div id="welcome">
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>欢迎</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+            <el-breadcrumb-item>歡迎</el-breadcrumb-item>
         </el-breadcrumb>
         <el-row :gutter="15">
-            <!-- 左边部分 -->
+            <!-- 左邊部分 -->
             <el-col :span="13">
-                <!-- 用户信息表格 -->
+                <!-- 用戶信息表格 -->
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>用户信息</span>
-                        <el-button style="float: right;" size="mini" plain loading type="primary">用户中心</el-button>
-                        <el-button
-                                @click="getPage('https://github.com/zykzhangyukang/Xinguan')"
-                                type="primary"
-                                plain
-                                style="float: right;margin-right: 10px;"
-                                size="mini"
-                        >获取源码</el-button>
+                        <span>用戶信息</span>
+                        <el-button style="float: right;" size="mini" plain loading type="primary">用戶中心</el-button>
                     </div>
-                    <el-tooltip class="item" effect="dark" content="换头像功能还未实现" placement="top-start">
+                    <el-tooltip class="item" effect="dark" content="換頭像功能還未實現" placement="top-start">
                         <el-avatar
                                 shape="square"
                                 :size="80"
@@ -31,10 +24,10 @@
                     </el-tooltip>
                     <div class="right" style="float:right;width:520px;">
                         <el-table :data="tableInfo" border height="100">
-                            <el-table-column prop="username" label="用户账号"></el-table-column>
-                            <el-table-column prop="nickname" label="用户昵称"></el-table-column>
-                            <el-table-column prop="department" label="所属部门"></el-table-column>
-                            <el-table-column fixed="right" prop="roles" label="用户角色" width="150"></el-table-column>
+                            <el-table-column prop="username" label="用戶賬號"></el-table-column>
+                            <el-table-column prop="nickname" label="用戶名稱"></el-table-column>
+                            <el-table-column prop="department" label="所屬公司"></el-table-column>
+                            <el-table-column fixed="right" prop="roles" label="用戶角色" width="150"></el-table-column>
                         </el-table>
                     </div>
                 </el-card>
@@ -51,7 +44,7 @@
                                             style="margin:0px auto; cursor: pointer;margin-left:20px;"
                                     />
                                 </router-link>
-                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">物资资料</div>
+                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物資料</div>
                             </div>
                         </el-col>
                         <el-col :span="6">
@@ -64,7 +57,7 @@
                                             style="cursor: pointer;margin-left:20px;"
                                     />
                                 </router-link>
-                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">物资库存</div>
+                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物庫存</div>
                             </div>
                         </el-col>
 
@@ -79,7 +72,7 @@
                                     />
                                 </router-link>
 
-                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">物资入库</div>
+                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物入庫</div>
                             </div>
                         </el-col>
                         <el-col :span="6">
@@ -92,46 +85,16 @@
                                         style="cursor: pointer;margin-left:20px;"
                                 />
                             </router-link>
-                            <div style="font-size:12px;margin-top:5px;margin-left:25px;">物资发放</div>
+                            <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物發放</div>
                         </el-col>
                     </el-card>
                 </el-row>
                 <el-card class="box-card" style="margin-top:20px;padding:0px;">
-                    <!-- 用户登入报表 -->
+                    <!-- 用戶登入報表 -->
                     <div id="loginReport" style="width: 650px;height:270px;"></div>
                 </el-card>
             </el-col>
-            <!-- 右边部分 -->
-            <el-col :span="11">
-                <div class="grid-content bg-purple">
-                    <el-card style="min-height:650px;">
-                        <el-carousel height="180px">
-                            <el-carousel-item v-for="item in 3" :key="item"></el-carousel-item>
-                        </el-carousel>
-                        <aplayer
-                                style="margin-top:20px;margin-bottom:30px;"
-                                autoplay
-                                :music="{
-                  title: '给我一个理由忘记',
-                  artist: 'A-Lin',
-                  src: 'http://music.163.com/song/media/outer/url?id=25640799.mp3',
-                  pic: 'http://p2.music.126.net/0POVOSSjqgVoOUGc5haWBQ==/109951163392311918.jpg'
-              }"
-                                :list="musicList"
-                        ></aplayer>
-                        <el-divider>其他项目</el-divider>
-                        <el-row :gutter="20">
-                            <el-col :span="6"><div class="grid-content bg-purple"><el-button @click="getPage('http://116.85.25.106/backend/loginPage.do')">通用管理系统</el-button></div></el-col>
-                            <el-col :span="6"><div class="grid-content bg-purple"><el-button @click="getPage('http://www.zykcoderman.xyz/')">社区项目</el-button></div></el-col>
-                            <el-col :span="6"><div class="grid-content bg-purple"><el-button @click="getPage('http://116.85.25.106')">商城项目</el-button></div></el-col>
-                            <el-col :span="6"><div class="grid-content bg-purple"><el-button @click="getPage('https://github.com/zykzhangyukang')">Githhub</el-button></div></el-col>
-                        </el-row>
-                        <el-divider></el-divider>
-
-                    </el-card>
-                    <!-- <el-calendar :v-model="new Date()"></el-calendar> -->
-                </div>
-            </el-col>
+            <!-- 右邊部分 -->
         </el-row>
 
         <!-- <el-card class="box-card">
@@ -144,7 +107,7 @@
     import aplayer from "vue-aplayer";
     export default {
         components: {
-            //别忘了引入组件
+            //別忘了引入组件
             aplayer: aplayer
         },
 
@@ -197,21 +160,21 @@
         },
         methods: {
             /**
-             * 点击获取源码
+             * 點擊獲取源碼
              */
             getPage(url) {
                 const w = window.open("about:blank");
                 w.location.href = url;
             },
             /**
-             * 加载登入报表数据
+             * 加載登入報表數據
              */
             async loginReport(username) {
                 const { data: res } = await this.$http.post("system/loginLog/loginReport", {
                     username: username
                 });
                 if(!res.success){
-                    return this.$message.error("获取登入报表数据失败:" + res.msg);
+                    return this.$message.error("獲取登入報表數據失敗:" + res.msg);
                 } else {
                     const $this = this;
                     this.xData = [];
@@ -239,14 +202,14 @@
             },
 
             /**
-             * 绘制登入报表
+             * 绘制登入報表
              */
             draw() {
                 const myChart = echarts.init(document.getElementById("loginReport"));
-                // 指定图表的配置项和数据
+                // 指定圖表的配置项和數據
                 const option = {
                     title: {
-                        text: "用户登入统计"
+                        text: "用戶登入統計"
                     },
                     toolbox: {
                         show: true,
@@ -255,9 +218,9 @@
                                 yAxisIndex: "none"
                             },
                             dataView: {readOnly: false}, //  缩放
-                            magicType: {type: ["bar", "line"]}, ///　　折线  直方图切换
+                            magicType: {type: ["bar", "line"]}, ///　　折线  直方圖切换
                             restore: {}, // 重置
-                            saveAsImage: {} // 导出图片
+                            saveAsImage: {} // 導出圖片
                         }
                     },
                     tooltip: {
@@ -303,14 +266,14 @@
                         }
                     ]
                 };
-                // 使用刚指定的配置项和数据显示图表。
+                // 使用刚指定的配置项和數據顯示圖表。
                 myChart.setOption(option);
             }
         },
 
         created() {
             this.userInfo = this.$store.state.userInfo;
-            const roles = this.userInfo.isAdmin ? "超级管理员" : this.userInfo.roles;
+            const roles = this.userInfo.isAdmin ? "超級管理員" : this.userInfo.roles;
             this.tableInfo.push({
                 username: this.userInfo.username,
                 nickname: this.userInfo.nickname,

@@ -1,32 +1,32 @@
 <template>
     <div id="productCategroys">
-        <!-- 面包导航 -->
+        <!-- 面包導航 -->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>物资流向</el-breadcrumb-item>
-            <el-breadcrumb-item>物资来源</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+            <el-breadcrumb-item>廢棄物流向</el-breadcrumb-item>
+            <el-breadcrumb-item>廢棄物来源</el-breadcrumb-item>
         </el-breadcrumb>
-        <!-- 右侧卡片区域 -->
-        <!-- 用户列表卡片区 -->
+        <!-- 右側卡片區域 -->
+        <!-- 用戶列表卡片區 -->
         <el-card class="box-card">
             <el-form size="mini" :inline="true" :model="queryMap" class="demo-form-inline">
-                <el-form-item label="省市区县">
-                    <el-input v-model="queryMap.address" clearable @clear="search" placeholder="省市区县"></el-input>
+                <el-form-item label="省市區縣">
+                    <el-input v-model="queryMap.address" clearable @clear="search" placeholder="省市區縣"></el-input>
                 </el-form-item>
-                <el-form-item label="联系人">
-                    <el-input v-model="queryMap.contact" clearable @clear="search" placeholder="联系人"></el-input>
+                <el-form-item label="聯繫人">
+                    <el-input v-model="queryMap.contact" clearable @clear="search" placeholder="聯繫人"></el-input>
                 </el-form-item>
-                <el-form-item label="具体地点">
+                <el-form-item label="具體地點">
                     <el-input
                             clearable
                             v-model="queryMap.name"
-                            placeholder="请具体地点查询"
+                            placeholder="請具體地點查詢"
                             @clear="search"
                             class="input-with-el-select"
                     ></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button icon="el-icon-search" @click="search" type="primary"> 查询</el-button>
+                    <el-button icon="el-icon-search" @click="search" type="primary"> 查詢</el-button>
                     <el-button
                             v-hasPermission="'supplier:add'"
                             type="success"
@@ -41,7 +41,7 @@
 
 
 
-            <!-- 表格区域 -->
+            <!-- 表格區域 -->
             <template>
                 <el-table
                         border
@@ -54,7 +54,7 @@
                 >
                     <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
 
-                    <el-table-column label="物资提供方地址">
+                    <el-table-column label="廢棄物提供方地址">
                         <el-table-column
                                 prop="address"
                                 label="省份"
@@ -73,7 +73,7 @@
                         </el-table-column>
                         <el-table-column
                                 prop="address"
-                                label="区县"
+                                label="區縣"
                                 width="100">
                             <template slot-scope="scope">
                                 <span v-text="scope.row.address.split('/')[2]"></span>
@@ -86,10 +86,10 @@
                         </el-table-column>
                     </el-table-column>
 
-                    <el-table-column prop="createTime" label="创建时间" width="180"></el-table-column>
-                    <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
-                    <el-table-column prop="contact" label="联系人" width="120"></el-table-column>
-                    <el-table-column prop="phone" label="电话" width="120"></el-table-column>
+                    <el-table-column prop="createTime" label="創建時間" width="180"></el-table-column>
+                    <el-table-column prop="email" label="郵箱" width="180"></el-table-column>
+                    <el-table-column prop="contact" label="聯繫人" width="120"></el-table-column>
+                    <el-table-column prop="phone" label="電話" width="120"></el-table-column>
                     <el-table-column prop="sort" label="排序" width="80"></el-table-column>
                     <el-table-column label="操作" fixed="right" width="180">
                         <template slot-scope="scope">
@@ -99,7 +99,7 @@
                                     size="mini"
                                     icon="el-icon-edit"
                                     @click="edit(scope.row.id)"
-                            >编辑</el-button>
+                            >編輯</el-button>
 
                             <el-button
                                     v-hasPermission="'supplier:delete'"
@@ -112,7 +112,7 @@
                     </el-table-column>
                 </el-table>
             </template>
-            <!-- 分页 -->
+            <!-- 分頁 -->
             <el-pagination
                     style="margin-top:10px;"
                     background
@@ -124,7 +124,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total"
             ></el-pagination>
-            <!-- 来源添加弹出框 -->
+            <!-- 来源添加彈出框 -->
             <el-dialog title="添加来源" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
         <span>
           <el-form
@@ -140,7 +140,7 @@
                 <el-form-item label="省份" prop="valueProvince">
                   <el-select
                           v-model="addRuleForm.valueProvince"
-                          placeholder="请选择省"
+                          placeholder="請選擇省"
                           @change="changeProvince"
                   >
                     <el-option
@@ -157,7 +157,7 @@
                   <el-form-item label="城市" prop="valueCity">
                     <el-select
                             v-model="addRuleForm.valueCity"
-                            placeholder="请选择市"
+                            placeholder="請選擇市"
                             @change="changeCity"
                     >
                       <el-option
@@ -172,10 +172,10 @@
               </el-col>
               <el-col :span="8">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="区县" prop="valueOrigin">
+                  <el-form-item label="區縣" prop="valueOrigin">
                     <el-select
                             v-model="addRuleForm.valueOrigin"
-                            placeholder="请选择区"
+                            placeholder="請選擇區"
                             @change="changeOrigin"
                     >
                       <el-option
@@ -189,18 +189,18 @@
                 </div>
               </el-col>
             </el-row>
-            <el-form-item label="来源 名称" prop="name">
+            <el-form-item label="来源 名稱" prop="name">
               <el-input v-model="addRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="联系人" prop="contact">
+            <el-form-item label="聯繫人" prop="contact">
               <el-input v-model="addRuleForm.contact"></el-input>
             </el-form-item>
 
 
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item label="郵箱" prop="email">
               <el-input v-model="addRuleForm.email"></el-input>
             </el-form-item>
-            <el-form-item label="电话" prop="phone">
+            <el-form-item label="電話" prop="phone">
               <el-input v-model="addRuleForm.phone"></el-input>
             </el-form-item>
             <el-form-item label="排序" prop="sort">
@@ -210,11 +210,11 @@
         </span>
                 <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="add">确 定</el-button>
+          <el-button type="primary" @click="add">確 定</el-button>
         </span>
             </el-dialog>
 
-            <!-- 系别编辑弹出框 -->
+            <!-- 系別編輯彈出框 -->
             <el-dialog
                     title="更新来源"
                     :visible.sync="editDialogVisible"
@@ -229,23 +229,23 @@
                   label-width="100px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="省市区县" prop="address">
+            <el-form-item label="省市區縣" prop="address">
               <el-input disabled v-model="editRuleForm.address"></el-input>
             </el-form-item>
 
             <el-form-item label="来源详细地" prop="name">
               <el-input type="textarea" v-model="editRuleForm.name"></el-input>
             </el-form-item>
-             <el-form-item label="联系人" prop="contact">
+             <el-form-item label="聯繫人" prop="contact">
               <el-input v-model="editRuleForm.contact"></el-input>
             </el-form-item>
 
 
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item label="郵箱" prop="email">
               <el-input v-model="editRuleForm.email"></el-input>
             </el-form-item>
 
-            <el-form-item label="电话" prop="phone">
+            <el-form-item label="電話" prop="phone">
               <el-input v-model="editRuleForm.phone"></el-input>
             </el-form-item>
 
@@ -256,7 +256,7 @@
         </span>
                 <span slot="footer" class="dialog-footer">
           <el-button @click="editDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="update">确 定</el-button>
+          <el-button type="primary" @click="update">確 定</el-button>
         </span>
             </el-dialog>
         </el-card>
@@ -269,32 +269,32 @@
             var checkEmail = (rule, value, callback) => {
                 const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
                 if (!value) {
-                    return callback(new Error("邮箱不能为空"));
+                    return callback(new Error("郵箱不能為空"));
                 }
                 setTimeout(() => {
                     if (mailReg.test(value)) {
                         callback();
                     } else {
-                        callback(new Error("请输入正确的邮箱格式"));
+                        callback(new Error("請輸入正確的郵箱格式"));
                     }
                 }, 100);
             };
             var checkPhone = (rule, value, callback) => {
                 const phoneReg = /^1[34578]\d{9}$$/;
                 if (!value) {
-                    return callback(new Error("电话号码不能为空"));
+                    return callback(new Error("電話號碼不能為空"));
                 }
                 setTimeout(() => {
-                    // Number.isInteger是es6验证数字是否为整数的方法,实际输入的数字总是识别成字符串
-                    // 所以在前面加了一个+实现隐式转换
+                    // Number.isInteger是es6驗證數字是否為整數的方法,實际輸入的數字總是识別成字符串
+                    // 所以在前面加了一個+實現隐式轉换
 
                     if (!Number.isInteger(+value)) {
-                        callback(new Error("请输入数字值"));
+                        callback(new Error("請輸入數字值"));
                     } else {
                         if (phoneReg.test(value)) {
                             callback();
                         } else {
-                            callback(new Error("电话号码格式不正确"));
+                            callback(new Error("電話號碼格式不正確"));
                         }
                     }
                 }, 100);
@@ -302,49 +302,49 @@
             return {
                 loading:true,
                 editDialogVisible: false,
-                addDialogVisible: false, //添加弹框是否显示
-                total: 0, //总共多少条数据
-                supplierData: [], //表格数据
-                queryMap: { pageNum: 1, pageSize: 10, name: "" }, //查询对象
-                addRuleForm: {}, //添加表单数据
-                editRuleForm: {}, //修改表单数据
+                addDialogVisible: false, //添加彈框是否顯示
+                total: 0, //總共多少條數據
+                supplierData: [], //表格數據
+                queryMap: { pageNum: 1, pageSize: 10, name: "" }, //查詢對象
+                addRuleForm: {}, //添加表單數據
+                editRuleForm: {}, //修改表單數據
                 deans: [], //所有系主任
                 addRules: {
                     name: [
-                        { required: true, message: "请输入来源名称", trigger: "blur" },
-                        { min: 2, max: 50, message: "长度在 2 到 50 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入来源名稱", trigger: "blur" },
+                        { min: 2, max: 50, message: "長度在 2 到 50 個字符", trigger: "blur" }
                     ],
                     address: [
-                        { required: true, message: "请输入地址信息", trigger: "blur" },
-                        { min: 2, max: 12, message: "长度在 2 到 12 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入地址信息", trigger: "blur" },
+                        { min: 2, max: 12, message: "長度在 2 到 12 個字符", trigger: "blur" }
                     ],
                     email: [{ required: true, validator: checkEmail, trigger: "blur" }],
                     valueProvince: [
-                        { required: true, message: "请输入省份", trigger: "blur" }
+                        { required: true, message: "請輸入省份", trigger: "blur" }
                     ],
-                    valueCity: [{ required: true, message: "请输入城市", trigger: "blur" }],
+                    valueCity: [{ required: true, message: "請輸入城市", trigger: "blur" }],
                     valueOrigin: [
-                        { required: true, message: "请输入区县", trigger: "blur" }
+                        { required: true, message: "請輸入區縣", trigger: "blur" }
                     ],
                     sort: [
-                        { required: true, message: "请输入排序号", trigger: "blur" }
+                        { required: true, message: "請輸入排序號", trigger: "blur" }
                     ],
-                    contact: [{ required: true, message: "请输入联系人", trigger: "blur" }],
+                    contact: [{ required: true, message: "請輸入聯繫人", trigger: "blur" }],
                     phone: [
                         {
                             required: true,
-                            message: "请输入联系方式",
+                            message: "請輸入聯繫方式",
                             validator: checkPhone,
                             trigger: "blur"
                         }
                     ]
-                } //添加验证
+                } //添加驗證
                 ,
                 provinceList: [], // 省列表
                 cityList: [], // 市列表
-                originList: [], // 区列表
-                cityOptions: [], // 市下拉框数据
-                originOptions: [] // 区下拉框数据
+                originList: [], // 區列表
+                cityOptions: [], // 市下拉框數據
+                originOptions: [] // 區下拉框數據
             };
         },
         methods: {
@@ -356,10 +356,10 @@
             //删除来源
             async del(id) {
                 const res = await this.$confirm(
-                    "此操作将永久删除该用户, 是否继续?",
+                    "此操作將永久删除該用戶, 是否繼續?",
                     "提示",
                     {
-                        confirmButtonText: "确定",
+                        confirmButtonText: "確定",
                         cancelButtonText: "取消",
                         type: "warning"
                     }
@@ -379,7 +379,7 @@
                     }
                 }
             },
-            //更新用户
+            //更新用戶
             async update() {
                 this.$refs.editRuleFormRef.validate(async valid => {
                     if (!valid) {
@@ -399,20 +399,20 @@
                             this.editRuleForm = {};
                             await this.getSupplierList();
                         } else {
-                            this.$message.error("来源信息更新失败:" + res.data.errorMsg);
+                            this.$message.error("来源信息更新失敗:" + res.data.errorMsg);
                         }
 
                         this.editDialogVisible = false;
                     }
                 });
             },
-            //编辑
+            //編輯
             async edit(id) {
                 const { data: res } = await this.$http.get("business/supplier/edit/" + id);
                 if (res.success) {
                     this.editRuleForm = res.data;
                 } else {
-                    return this.$message.error("来源信息编辑失败" + res.data.errorMsg);
+                    return this.$message.error("来源信息編輯失敗" + res.data.errorMsg);
                 }
                 this.editDialogVisible = true;
             },
@@ -437,58 +437,58 @@
                             this.addRuleForm = {};
                             await this.getSupplierList();
                         } else {
-                            return this.$message.error("来源添加失败:" + res.data.errorMsg);
+                            return this.$message.error("来源添加失敗:" + res.data.errorMsg);
                         }
                         this.addDialogVisible = false;
                     }
                 });
             },
-            //加载系别列表
+            //加載系別列表
             async getSupplierList() {
                 const { data: res } = await this.$http.get("business/supplier/findSupplierList", {
                     params: this.queryMap
                 });
                 if (!res.success) {
-                    return this.$message.error("获取用户列表失败:"+res.data.errorMsg);
+                    return this.$message.error("獲取用戶列表失敗:"+res.data.errorMsg);
                 } else {
                     this.total = res.data.total;
                     this.supplierData = res.data.rows;
                 }
             },
 
-            //改变页码
+            //改變頁碼
             handleSizeChange(newSize) {
                 this.queryMap.pageSize = newSize;
                 this.getSupplierList();
             },
-            //翻页
+            //翻頁
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
                 this.getSupplierList();
             },
-            //关闭弹出框
+            //關閉彈出框
             closeAddDialog() {
                 this.$refs.addRuleFormRef.clearValidate();
                 this.addRuleForm = {};
             },
-            //关闭弹出框
+            //關閉彈出框
             closeEditDialog() {
                 this.$refs.editRuleFormRef.clearValidate();
                 this.editRuleForm = {};
             },
-            // 选择省
+            // 選擇省
             changeProvince(val) {
                 this.provinceList.forEach((province, index) => {
                     if (val.toString() === this.provinceList[index].value) {
                         this.cityOptions = this.provinceList[index].children;
                         this.addRuleForm.valueCity = this.provinceList[
                             index
-                            ].children[0].value; //设置市的值
+                            ].children[0].value; //設置市的值
                         this.addRuleForm.city = this.provinceList[index].children[0].label;
 
                         this.addRuleForm.valueOrigin = this.provinceList[
                             index
-                            ].children[0].children[0].value; //设置县的值
+                            ].children[0].children[0].value; //設置縣的值
                         this.addRuleForm.origin = this.provinceList[
                             index
                             ].children[0].children[0].label;
@@ -499,18 +499,18 @@
                     }
                 });
             },
-            // 选择市
+            // 選擇市
             changeCity(val) {
                 this.cityList.forEach((city, index) => {
                     if (val.toString() === this.cityList[index].value) {
                         this.originOptions = this.cityList[index].children;
-                        this.addRuleForm.valueOrigin = this.cityList[index].children[0].value; //设置县的值;
+                        this.addRuleForm.valueOrigin = this.cityList[index].children[0].value; //設置縣的值;
                         //set value
                         this.addRuleForm.city = this.cityList[index].label;
                     }
                 });
             },
-            // 选择区
+            // 選擇區
             changeOrigin(val) {
                 this.addRuleForm.valueOrigin = val;
 
@@ -520,7 +520,7 @@
                         this.addRuleForm.origin = this.originList[index].label;
                     }
                 });
-                //添加this.$forceUpdate();进行强制渲染，效果实现。搜索资料得出结果：因为数据层次太多，render函数没有自动更新，需手动强制刷新。
+                //添加this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
                 this.$forceUpdate();
             },
 

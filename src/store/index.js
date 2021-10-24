@@ -9,8 +9,8 @@ const store= new Vuex.Store({
   },
   mutations:{
     setUserInfo(state,userInfo){
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));//将传递的数据先保存到localStorage中
-      state.userInfo = userInfo;// 之后才是修改state中的状态
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));//將傳递的數據先保存到localStorage中
+      state.userInfo = userInfo;// 之後才是修改state中的狀態
     }
   },
   actions:{},

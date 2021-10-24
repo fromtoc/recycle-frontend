@@ -35,7 +35,7 @@
 </style>
 <script>
 export default {
-  name: "MenuTree", //模板名称
+  name: "MenuTree", //模板名稱
   data() {
     return {
 
@@ -44,7 +44,7 @@ export default {
   beforeMount() {},
   props: ["menuList","tagList"],
   methods:{
-     //保存激活路径
+     //保存激活路徑
     savePath(path) {
       window.sessionStorage.setItem("activePath", path);
       this.activePath = path;

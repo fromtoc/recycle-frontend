@@ -1,13 +1,13 @@
 <template>
   <div id="Logs">
-    <!-- 面包导航 -->
+    <!-- 面包導航 -->
     <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>日志管理</el-breadcrumb-item>
-      <el-breadcrumb-item>系统日志</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+      <el-breadcrumb-item>日誌管理</el-breadcrumb-item>
+      <el-breadcrumb-item>系統日誌</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 右侧卡片区域 -->
-    <!-- 用户列表卡片区 -->
+    <!-- 右側卡片區域 -->
+    <!-- 用戶列表卡片區 -->
     <el-card class="box-card">
 
     <el-form :inline="true" size="mini" :model="queryMap" class="demo-form-inline">
@@ -22,14 +22,14 @@
            <el-input   @keyup.enter.native="search"  clearable  @clear="search" v-model="queryMap.location" placeholder="操作位置"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary"  @click="search" icon="el-icon-search">查询</el-button>
+          <el-button type="primary"  @click="search" icon="el-icon-search">查詢</el-button>
         </el-form-item>
         <el-form-item>
           <el-button  @click="deleteFileOrDirectory(sels)" :disabled="this.sels.length === 0" class="el-icon-delete">批量</el-button>
         </el-form-item>
       </el-form>
 
-      <!-- 表格区域 -->
+      <!-- 表格區域 -->
       <template>
         <el-table
                 size="mini"
@@ -47,13 +47,13 @@
 
           </el-table-column>
 
-          <el-table-column :show-overflow-tooltip="true" prop="params"  label="参数" width="100">
+          <el-table-column :show-overflow-tooltip="true" prop="params"  label="参數" width="100">
             <template slot-scope="scope">
                   <span>{{ scope.row.params }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column prop="time" label="耗时" width="120" sortable>
+          <el-table-column prop="time" label="耗時" width="120" sortable>
               <template slot-scope="scope">
                   <el-tag v-if="scope.row.time>=2000" size="mini" type="danger" >
                    {{scope.row.time+'毫秒'}}
@@ -66,10 +66,10 @@
                   </el-tag>
               </template>
           </el-table-column>
-            <el-table-column prop="location" label="操作地点" width="240"></el-table-column>
+            <el-table-column prop="location" label="操作地點" width="240"></el-table-column>
             <el-table-column prop="ip" label="IP地址" width="160"></el-table-column>
           <el-table-column prop="username" label="操作人" width="150" ></el-table-column>
-            <el-table-column prop="createTime" label="时间" sortable width="180"></el-table-column>
+            <el-table-column prop="createTime" label="時間" sortable width="180"></el-table-column>
 
 
           <el-table-column label="操作" width="100px;" fixed="right">
@@ -79,7 +79,7 @@
           </el-table-column>
         </el-table>
       </template>
-      <!-- 分页 -->
+      <!-- 分頁 -->
       <el-pagination
         style="margin-top:10px;"
         background
@@ -99,20 +99,20 @@
 export default {
   data() {
     return {
-      sels: [], //选中的值显示
+      sels: [], //選中的值顯示
       LogData: [],
-      total: 0, //总共多少条数据
-      queryMap: { pageNum: 1, pageSize: 10, location: "" } //查询对象
+      total: 0, //總共多少條數據
+      queryMap: { pageNum: 1, pageSize: 10, location: "" } //查詢對象
     };
   },
   methods: {
     async deleteFileOrDirectory() {
-        const ids = this.sels.map(item => item.id).join(); //获取所有选中行的id组成的字符串，以逗号分隔
+        const ids = this.sels.map(item => item.id).join(); //獲取所有選中行的id组成的字符串，以逗號分隔
         const res = await this.$confirm(
-            "此操作将永久批量删除系统日志, 是否继续?",
+            "此操作將永久批量删除系統日誌, 是否繼續?",
             "提示",
             {
-                confirmButtonText: "确定",
+                confirmButtonText: "確定",
                 cancelButtonText: "取消",
                 type: "warning"
             }
@@ -125,7 +125,7 @@ export default {
         if (res === "confirm") {
         const { data: res } = await this.$http.delete("system/log/batchDelete/" + ids);
         if (res.success) {
-          this.$message.success("系统日志删除成功");
+          this.$message.success("系統日誌删除成功");
           await this.getLogList();
         } else {
           this.$message.error(res.data.errorMsg);
@@ -141,25 +141,25 @@ export default {
       this.getLogList();
     },
 
-    //加载系统日志列表
+    //加載系統日誌列表
     async getLogList() {
       const { data: res } = await this.$http.get("system/log/findLogList", {
         params: this.queryMap
       });
       if (!res.success) {
-        return this.$message.error("获取列表失败");
+        return this.$message.error("獲取列表失敗");
       } else {
         this.total = res.data.total;
         this.LogData = res.data.rows;
       }
     },
-    //删除系统日志
+    //删除系統日誌
     async del(id) {
         let res = await this.$confirm(
-            "此操作将永久删除该系统日志, 是否继续?",
+            "此操作將永久删除該系統日誌, 是否繼續?",
             "提示",
             {
-                confirmButtonText: "确定",
+                confirmButtonText: "確定",
                 cancelButtonText: "取消",
                 type: "warning"
             }
@@ -172,7 +172,7 @@ export default {
         if (res === "confirm") {
         const { data: res } = await this.$http.delete("system/log/delete/" + id);
         if (res.success) {
-          this.$message.success("系统日志删除成功");
+          this.$message.success("系統日誌删除成功");
           await this.getLogList();
         } else {
           this.$message.error(res.data.errorMsg);
@@ -180,12 +180,12 @@ export default {
       }
     },
 
-    //改变页码
+    //改變頁碼
     handleSizeChange(newSize) {
       this.queryMap.pageSize = newSize;
       this.getLogList();
     },
-    //翻页
+    //翻頁
     handleCurrentChange(current) {
       this.queryMap.pageNum = current;
       this.getLogList();

@@ -1,20 +1,20 @@
 <template>
     <div id="roles">
-        <!-- 面包导航 -->
+        <!-- 面包導航 -->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
             <el-breadcrumb-item>系统管理</el-breadcrumb-item>
             <el-breadcrumb-item>角色管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <!-- 卡片主体 -->
+        <!-- 卡片主體 -->
         <el-card class="box-card">
-            <!-- 上面工具栏 -->
+            <!-- 上面工具欄 -->
             <el-row :gutter="20">
                 <el-col :span="8">
                     <el-input
                             clearable
                             size="small"
-                            placeholder="请输入角色名查询"
+                            placeholder="請輸入角色名查詢"
                             v-model="queryMap.roleName"
                             class="input-with-select"
                             @clear="getRoleList"
@@ -37,10 +37,10 @@
                             v-hasPermission="'role:export'"
                             icon="el-icon-download"
                             @click="downExcel"
-                    >导出</el-button>
+                    >導出</el-button>
                 </el-col>
             </el-row>
-            <!-- 表格区域 -->
+            <!-- 表格區域 -->
             <template>
                 <el-table
                         v-loading="loading"
@@ -52,13 +52,13 @@
                 >
                     <el-table-column prop="id" label="ID" width="180"></el-table-column>
                     <el-table-column prop="roleName" label="角色名" width="180"></el-table-column>
-                    <el-table-column prop="createTime" label="创建时间" width="150"></el-table-column>
+                    <el-table-column prop="createTime" label="創建時間" width="150"></el-table-column>
                     <el-table-column prop="isban" label="是否禁用" width="100">
                         <template slot-scope="scope">
                             <el-switch v-model="scope.row.status" @change="changRoleStatus(scope.row)"></el-switch>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="remark" label="备注"></el-table-column>
+                    <el-table-column prop="remark" label="備註"></el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
                         <template slot-scope="scope">
                             <el-button
@@ -67,8 +67,8 @@
                                     type="text"
                                     icon="el-icon-present"
                                     size="small"
-                            >授权</el-button>
-                            <el-button @click="edit(scope.row.id)" v-hasPermission="'role:edit'" type="text" icon="el-icon-edit" size="small">编辑</el-button>
+                            >授權</el-button>
+                            <el-button @click="edit(scope.row.id)" v-hasPermission="'role:edit'" type="text" icon="el-icon-edit" size="small">編輯</el-button>
                             <el-button
                                     v-hasPermission="'role:delete'"
                                     @click="del(scope.row.id)"
@@ -80,7 +80,7 @@
                     </el-table-column>
                 </el-table>
             </template>
-            <!-- 分页部分 -->
+            <!-- 分頁部分 -->
             <el-pagination
                     background
                     style="margin-top:10px;"
@@ -92,10 +92,10 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total"
             ></el-pagination>
-            <!-- 添加弹框 -->
+            <!-- 添加彈框 -->
             <el-dialog title="添加角色" :visible.sync="addDialogVisible" width="50%" @close="closeAdd">
                 <el-form ref="addFormRef" :model="addForm" label-width="80px" :rules="addFormRoles">
-                    <el-form-item label="角色名称" prop="roleName">
+                    <el-form-item label="角色名稱" prop="roleName">
                         <el-input v-model="addForm.roleName"></el-input>
                     </el-form-item>
                     <el-form-item label="描述信息" prop="remark">
@@ -109,13 +109,13 @@
                   @click="addRole"
                   :loading="btnLoading"
                   :disabled="btnDisabled"
-          >确 定</el-button>
+          >確 定</el-button>
         </span>
             </el-dialog>
-            <!-- 编辑弹框 -->
-            <el-dialog title="编辑角色" :visible.sync="editDialogVisible" width="50%" @close="closeEdit">
+            <!-- 編輯彈框 -->
+            <el-dialog title="編輯角色" :visible.sync="editDialogVisible" width="50%" @close="closeEdit">
                 <el-form ref="editFormRef" :model="editForm" label-width="80px" :rules="addFormRoles">
-                    <el-form-item label="角色名称" prop="roleName">
+                    <el-form-item label="角色名稱" prop="roleName">
                         <el-input v-model="editForm.roleName"></el-input>
                     </el-form-item>
                     <el-form-item label="描述信息" prop="remark">
@@ -129,11 +129,11 @@
                   @click="updateRole"
                   :loading="btnLoading"
                   :disabled="btnDisabled"
-          >确 定</el-button>
+          >確 定</el-button>
         </span>
             </el-dialog>
-            <!-- 角色授权弹出框 -->
-            <el-dialog title="分配菜单权限" :visible.sync="grantDialogVisible" width="38%">
+            <!-- 角色授權彈出框 -->
+            <el-dialog title="分配選單權限" :visible.sync="grantDialogVisible" width="38%">
         <span>
           <el-tree
                   :auto-expand-parent="false"
@@ -156,7 +156,7 @@
                   @click="authority"
                   :loading="btnLoading"
                   :disabled="btnDisabled"
-          >授 权</el-button>
+          >授 權</el-button>
         </span>
             </el-dialog>
         </el-card>
@@ -172,15 +172,15 @@
                 btnDisabled: false,
                 loading: true,
                 total: 0,
-                queryMap: { roleName: "", pageNum: 1, pageSize: 8 }, //查询条件
-                roleData: [], //角色表格数据
-                addForm: {}, //添加数据
-                editForm: {}, //编辑数据
-                addDialogVisible: false, //添加弹框的显示
-                editDialogVisible: false, //编辑弹框
-                grantDialogVisible: false, //授权弹出框
+                queryMap: { roleName: "", pageNum: 1, pageSize: 8 }, //查詢條件
+                roleData: [], //角色表格數據
+                addForm: {}, //添加數據
+                editForm: {}, //編輯數據
+                addDialogVisible: false, //添加彈框的顯示
+                editDialogVisible: false, //編輯彈框
+                grantDialogVisible: false, //授權彈出框
                 data: [],
-                open: [], //展开
+                open: [], //展開
                 grantId: "",
                 defaultProps: {
                     children: "children",
@@ -188,20 +188,20 @@
                 },
                 addFormRoles: {
                     roleName: [
-                        { required: true, message: "请输入角色名称", trigger: "blur" },
-                        { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入角色名稱", trigger: "blur" },
+                        { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
                     ],
                     remark: [
-                        { required: true, message: "请输入角色描述信息", trigger: "blur" },
-                        { min: 5, max: 20, message: "长度在 5 到 20 个字符", trigger: "blur" }
+                        { required: true, message: "請輸入角色描述信息", trigger: "blur" },
+                        { min: 5, max: 20, message: "長度在 5 到 20 個字符", trigger: "blur" }
                     ]
-                } //添加验证规则
+                } //添加驗證規則
             };
         },
         methods: {
 
             /**
-             * 加载菜单表格
+             * 加載選單表格
              */
             downExcel() {
                 const $this = this;
@@ -215,7 +215,7 @@
                             return $this.$message.error("Subject does not have permission [role:export]");
                         }
                         const data = res.data;
-                        let url = window.URL.createObjectURL(data); // 将二进制文件转化为可访问的url
+                        let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
                         const a = document.createElement("a");
                         document.body.appendChild(a);
                         a.href = url;
@@ -225,7 +225,7 @@
                     });
             },
 
-            //获取选中的节点
+            //獲取選中的節點
             async authority() {
                 this.btnDisabled = true;
                 this.btnLoading = true;
@@ -237,21 +237,21 @@
                     )
                 );
                 if (res.success) {
-                    this.$message.success("角色授权成功");
+                    this.$message.success("角色授權成功");
                 } else {
-                    this.$message.error("角色授权失败:" + res.data.errorMsg);
+                    this.$message.error("角色授權失敗:" + res.data.errorMsg);
                 }
                 this.btnDisabled = false;
                 this.btnLoading = false;
                 this.grantDialogVisible = false;
             },
 
-            //用户授权
+            //用戶授權
             async grant(id) {
-                //加载所有菜单以及用户拥有的菜单权限id
+                //加載所有選單以及用戶擁有的選單權限id
                 const { data: res } = await this.$http.get("system/role/findRoleMenu/" + id);
                 if (res.success) {
-                    //默认选中的树的数据
+                    //默認選中的樹的數據
                     let that = this;
                     setTimeout(function() {
                         res.data.mids.forEach(value => {
@@ -260,11 +260,11 @@
                     }, 100);
                     this.data = res.data.tree;
                     this.open = res.data.open;
-                    this.grantId = id; //需要授权的id
+                    this.grantId = id; //需要授權的id
                 }
                 this.grantDialogVisible = true;
             },
-            //加载用户列表
+            //加載用戶列表
             async getRoleList() {
                 const { data: res } = await this.$http.get("system/role/findRoleList", {
                     params: this.queryMap
@@ -279,7 +279,7 @@
                 this.queryMap.pageNum = 1;
                 this.getRoleList();
             },
-            //关闭添加弹框
+            //關閉添加彈框
             closeAdd() {
                 this.$refs.addFormRef.clearValidate();
                 this.addForm = {};
@@ -305,22 +305,22 @@
                             this.addForm = {};
                             await this.getRoleList();
                         } else {
-                            return this.$message.error("角色添加失败:" + res.data.errorMsg);
+                            return this.$message.error("角色添加失敗:" + res.data.errorMsg);
                         }
                     }
                 });
             },
-            //编辑
+            //編輯
             async edit(id) {
                 const { data: res } = await this.$http.get("system/role/edit/" + id);
                 if (res.success) {
                     this.editForm = res.data;
                     this.editDialogVisible = true;
                 } else {
-                    return this.$message.error("角色编辑失败:" + res.data.errorMsg);
+                    return this.$message.error("角色編輯失敗:" + res.data.errorMsg);
                 }
             },
-            //更新用户
+            //更新用戶
             async updateRole() {
                 this.$refs.editFormRef.validate(async valid => {
                     if (!valid) {
@@ -340,7 +340,7 @@
                             });
                             await this.getRoleList();
                         } else {
-                            this.$message.error("角色信息更新失败:" + res.data.errorMsg);
+                            this.$message.error("角色信息更新失敗:" + res.data.errorMsg);
                         }
 
                         this.editDialogVisible = false;
@@ -354,10 +354,10 @@
             //删除
             async del(id) {
                 var res = await this.$confirm(
-                    "此操作将永久删除该角色, 是否继续?",
+                    "此操作將永久删除該角色, 是否繼續?",
                     "提示",
                     {
-                        confirmButtonText: "确定",
+                        confirmButtonText: "確定",
                         cancelButtonText: "取消",
                         type: "warning"
                     }
@@ -374,28 +374,28 @@
                         this.$message.success("删除成功");
                         await this.getRoleList();
                     } else {
-                        this.$message.error("删除失败:" + res.data.errorMsg);
+                        this.$message.error("删除失敗:" + res.data.errorMsg);
                     }
                 }
             },
-            //改变用户禁用状态
+            //改變用戶禁用狀態
             async changRoleStatus(row) {
                 const { data: res } = await this.$http.put(
                     "system/role/updateStatus/" + row.id + "/" + row.status
                 );
                 if (!res.success) {
-                    this.$message.error("更新状态失败:" + res.data.errorMsg);
+                    this.$message.error("更新狀態失敗:" + res.data.errorMsg);
                     row.status = !row.status;
                 } else {
-                    this.$message.success("更新状态成功");
+                    this.$message.success("更新狀態成功");
                 }
             },
-            //改变页码
+            //改變頁碼
             handleSizeChange(newSize) {
                 this.queryMap.pageSize = newSize;
                 this.getRoleList();
             },
-            //翻页
+            //翻頁
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
                 this.getRoleList();

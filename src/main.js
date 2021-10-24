@@ -27,7 +27,7 @@ Vue.prototype.$http = axios
 Vue.prototype.BASE_API_URL=BASE_API_URL
 axios.defaults.baseURL = BASE_API_URL
 
-//请求拦截器
+//請求拦截器
 axios.interceptors.request.use(config => {
         NProgress.start()
         config.headers.Authorization = LocalStorage.get(LOCAL_KEY_XINGUAN_ACCESS_TOKEN);
@@ -37,7 +37,7 @@ axios.interceptors.request.use(config => {
         return Promise.reject(error)
     });
 
-//响应拦截器
+//响應拦截器
 axios.interceptors.response.use(
     function (response) {
         NProgress.done();
@@ -59,7 +59,7 @@ axios.interceptors.response.use(
 
 
 /**
- * 自定义权限指令
+ * 自定义權限指令
  */
 Vue.config.productionTip = false
 Vue.use(ElementUI)
