@@ -17,7 +17,7 @@
                         @keyup.enter.native="handleSubmit"
                         v-model="userLoginForm.username"
                         auto-complete="off"
-                        placeholder="用戶名"
+                        placeholder="帳號"
                         prefix-icon="iconfont el-icon-user"
                 ></el-input>
             </el-form-item>
@@ -85,7 +85,7 @@
                 //驗證規則
                 loginRules: {
                     username: [
-                        {required: true, message: "請輸入用戶名", trigger: "blur"},
+                        {required: true, message: "請輸入帳號", trigger: "blur"},
                         {min: 3, max: 12, message: "長度在 3 到 12 個字符", trigger: "blur"}
                     ],
                     password: [

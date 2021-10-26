@@ -31,13 +31,13 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="用戶名">
+                <el-form-item label="帳號">
                     <el-input
                             @keyup.enter.native="searchUser"
                             @clear="searchUser"
                             clearable
                             v-model="queryMap.username"
-                            placeholder="請輸入用戶名查詢"
+                            placeholder="請輸入帳號查詢"
                     ></el-input>
                 </el-form-item>
 
@@ -90,7 +90,8 @@
             <el-table v-loading="loading" size="small" :data="userList" border style="width: 100%;" height="420">
                 <!-- <el-table-column type="selection" width="40"></el-table-column> -->
                 <el-table-column label="#" prop="id" width="50"></el-table-column>
-                <el-table-column prop="username" label="用戶名" width="110"></el-table-column>
+                <el-table-column prop="username" label="帳號" width="110"></el-table-column>
+                <el-table-column prop="nickname" label="名稱" width="110"></el-table-column>
                 <el-table-column prop="sex" :formatter="showSex" label="性別" width="100">
                     <template slot-scope="scope">
                         <el-tag size="small" type="success" v-if="scope.row.sex===1">帥哥</el-tag>
@@ -98,7 +99,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="departmentName" label="所屬公司" width="180" sortable></el-table-column>
-                <el-table-column prop="birth" label="生日" width="180" sortable></el-table-column>
+                <!-- <el-table-column prop="birth" label="生日" width="180" sortable></el-table-column> -->
                 <el-table-column prop="email" label="郵箱" width="180"></el-table-column>
                 <el-table-column prop="phoneNumber" label="電話" width="150"></el-table-column>
                 <el-table-column prop="isban" label="是否禁用" width="100">
@@ -120,7 +121,37 @@
                             <el-button
                                     type="warning"
                                     size="small"
-                                    icon="el-icon-s-tools"
+                                    icon="el-icon-user-solid"
+                                    @click="assignRoles(scope.row.id)"
+                            ></el-button>
+                        </el-tooltip>
+                        <!-- todo -->
+                        <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="卡片創建"
+                                placement="top"
+                                :enterable="false"
+                        >
+                            <el-button
+                                    type="success"
+                                    size="small"
+                                    icon="el-icon-bank-card"
+                                    @click="assignRoles(scope.row.id)"
+                            ></el-button>
+                        </el-tooltip>
+                        <!-- todo -->
+                        <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="重設密碼"
+                                placement="top"
+                                :enterable="false"
+                        >
+                            <el-button
+                                    type="info"
+                                    size="small"
+                                    icon="el-icon-setting"
                                     @click="assignRoles(scope.row.id)"
                             ></el-button>
                         </el-tooltip>
@@ -155,7 +186,7 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="用戶名" prop="username">
+                  <el-form-item label="帳號" prop="username">
                     <el-input v-model="addForm.username"></el-input>
                   </el-form-item>
                 </div>
@@ -240,7 +271,7 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="用戶名" prop="username">
+                  <el-form-item label="帳號" prop="username">
                     <el-input v-model="editForm.username" :disabled="true"></el-input>
                     <el-input
                             type="hidden"
@@ -412,7 +443,7 @@
                 editForm: {}, //更新表單
                 addFormRules: {
                     username: [
-                        { required: true, message: "請輸入用戶名", trigger: "blur" },
+                        { required: true, message: "請輸入帳號", trigger: "blur" },
                         { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
                     ],
                     password: [

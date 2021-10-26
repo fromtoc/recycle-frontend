@@ -5,42 +5,100 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '/',
-        redirect: '/login'
+        path: '/weight',
+        name: 'Weight',
+        component: () => import( '../views/weight.vue'), //秤重頁面
     },
+    // {
+    //     path: '/',
+    //     redirect: '/login'
+    // },
     {
         path: '/login',
         name: 'Login',
         component: () => import( '../views/login.vue'), //登入頁面
     },
-
     {
         path: '/home',
         component: () => import( '../views/home.vue'), //後台主體框架
         redirect: '/system/welcome',
         children: [
+            /**********************************一般設定的路由******************************/
+            {
+                path: '/system/departmentCategories',
+                name: 'DepartmentCategories',
+                component: () => import( '../views/system/departmentCategories.vue'), //公司類型設定
+            },
+            {
+                path: '/system/region',
+                name: 'RegionCategories',
+                component: () => import( '../views/system/region.vue'), //樓層區域設定
+            },
+            {
+                path: '/business/product/costCenter',
+                name: 'CostCenter',
+                component: () => import( '../views/business/product/costCenter.vue'), //成本中心設定
+            },
+            {
+                path: '/business/product/categories',
+                name: 'ProductCategories',
+                component: () => import( '../views/business/product/category'), //廢棄物類型設定
+            },
+            {
+                path: '/system/runText',
+                name: 'RunText',
+                component: () => import( '../views/system/runText.vue'), //跑馬燈設定
+            },
+            /**********************************基本資料的路由******************************/
+            {
+                path: '/system/departments',
+                name: 'Departments',
+                component: () => import( '../views/system/dept.vue'), // 公司管理
+            },
+            {
+                path: '/system/users',
+                name: 'Users',
+                component: () => import( '../views/system/user.vue'), //用戶管理
+            },
+            {
+                path: '/business/product/list',
+                name: 'ProductList',
+                component: () => import( '../views/business/product/list.vue'), //廢棄物列表
+            },
+            /**********************************秤重管理的路由******************************/
+            {
+                path: '/business/weight/list',
+                name: 'WeightList',
+                component: () => import( '../views/business/weight/list.vue'), //秤重明細查詢
+            },
+            {
+                path: '/business/weight/refill',
+                name: 'Refill',
+                component: () => import( '../views/business/weight/refill.vue'), //相關資料補登
+            },
+            /**********************************報表查詢的路由******************************/
+            /**********************************權限管理的路由******************************/
+            {
+                path: '/system/menus',
+                name: 'Menus',
+                component: () => import( '../views/system/menu.vue'), //選單管理
+            },
+            {
+                path: '/system/roles',
+                name: 'Roles',
+                component: () => import( '../views/system/role.vue'), //角色管理
+            }, 
+            /**********************************後台功能的路由******************************/
+            {
+                path: '/monitor/logs',
+                name: 'Logs',
+                component: () => import( '../views/monitor/log'),     //操作日誌
+            },
+            /**********************************參考資料的路由******************************/
             {
                 path: '/system/welcome',
                 name: 'Welcome',
                 component: () => import( '../views/welcome.vue'), //系统欢迎頁
-            }, {
-                path: '/system/users',
-                name: 'Users',
-                component: () => import( '../views/system/user.vue'), //用戶管理
-            }, {
-                path: '/system/roles',
-                name: 'Roles',
-                component: () => import( '../views/system/role.vue'), //角色管理
-            }
-            , {
-                path: '/system/menus',
-                name: 'Menus',
-                component: () => import( '../views/system/menu.vue'), //選單管理
-            }
-            , {
-                path: '/system/departments',
-                name: 'Departments',
-                component: () => import( '../views/system/dept.vue'), // 公司管理
             },
             {
                 path: '/system/files',
@@ -51,14 +109,7 @@ const routes = [
                 path: '/system/icon',
                 name: 'Icons',
                 component: () => import('../views/system/icon'),  //系统圖標
-            }
-            /**********************************业務模塊的路由******************************/
-            , {
-                path: '/business/product/list',
-                name: 'ProductList',
-                component: () => import( '../views/business/product/list.vue'), //廢棄物列表
-            }
-            , {
+            }, {
                 path: '/business/product/in-stocks',
                 name: 'ProductInStocks',
                 component: () => import( '../views/business/product/in-stock'), //廢棄物入库記錄
@@ -68,11 +119,7 @@ const routes = [
                 name: 'ProductOutStocks',
                 component: () => import( '../views/business/product/out-stock'), //廢棄物發放記錄
             }
-            , {
-                path: '/business/product/categories',
-                name: 'ProductCategories',
-                component: () => import( '../views/business/product/category'), //廢棄物分類
-            },
+            ,
             {
                 path: '/business/product/stocks',
                 name: 'ProductStocks',
@@ -98,12 +145,6 @@ const routes = [
                 name: 'ProductPublish',
                 component: () => import( '../views/business/product/publish'),   //廢棄物發放
             },
-            /**********************************监控模塊的路由******************************/
-            {
-                path: '/monitor/logs',
-                name: 'Logs',
-                component: () => import( '../views/monitor/log'),     //操作日誌
-            },
             {
                 path: '/monitor/login-log',
                 name: 'LoginLogs',
@@ -119,7 +160,6 @@ const routes = [
                 name: 'Druid',
                 component: () => import( '../views/monitor/druid'), //mysql监控
             },
-            /**********************************疫情模塊的路由******************************/
             {
                 path: '/covid19/map',
                 name: 'Covid19Map',
@@ -155,7 +195,6 @@ const whiteList=[
 
 //路由導航守卫
 router.beforeEach((to, from, next) => {
-
     const token = LocalStorage.get(LOCAL_KEY_XINGUAN_ACCESS_TOKEN);
     if (to.path === '/login') {
         if (!token) {
@@ -170,6 +209,9 @@ router.beforeEach((to, from, next) => {
     }
 
     if (!token) {
+        if (to.path === '/weight') {
+            return next('/weight');
+        }
         return next('/login');
     } else {
         //判断是否有訪問該路徑的權限

@@ -3,24 +3,27 @@
     <!-- 面包導航 -->
     <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
       <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
-      <el-breadcrumb-item>日誌管理</el-breadcrumb-item>
-      <el-breadcrumb-item>系統日誌</el-breadcrumb-item>
+      <el-breadcrumb-item>後台功能</el-breadcrumb-item>
+      <el-breadcrumb-item>操作日誌</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 右側卡片區域 -->
     <!-- 用戶列表卡片區 -->
     <el-card class="box-card">
 
     <el-form :inline="true" size="mini" :model="queryMap" class="demo-form-inline">
+      <el-form-item label="操作">
+          <el-input   @keyup.enter.native="search"  clearable  @clear="search" v-model="queryMap.username" placeholder="操作"></el-input>
+        </el-form-item>
         <el-form-item label="操作人">
           <el-input   @keyup.enter.native="search"  clearable  @clear="search" v-model="queryMap.username" placeholder="操作人"></el-input>
         </el-form-item>
-        <el-form-item label="ip地址">
+        <!-- <el-form-item label="ip地址">
            <el-input   @keyup.enter.native="search"  clearable  @clear="search" v-model="queryMap.ip" placeholder="ip地址"></el-input>
         </el-form-item>
 
         <el-form-item label="操作位置">
            <el-input   @keyup.enter.native="search"  clearable  @clear="search" v-model="queryMap.location" placeholder="操作位置"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary"  @click="search" icon="el-icon-search">查詢</el-button>
         </el-form-item>
@@ -43,7 +46,7 @@
          <el-table-column type="selection" width="55" align="center"></el-table-column>
           <el-table-column prop="operation" label="操作" width="150"></el-table-column>
 
-       <el-table-column :show-overflow-tooltip="true" prop="method" label="方法" width="180">
+       <!-- <el-table-column :show-overflow-tooltip="true" prop="method" label="方法" width="180">
 
           </el-table-column>
 
@@ -67,16 +70,16 @@
               </template>
           </el-table-column>
             <el-table-column prop="location" label="操作地點" width="240"></el-table-column>
-            <el-table-column prop="ip" label="IP地址" width="160"></el-table-column>
+            <el-table-column prop="ip" label="IP地址" width="160"></el-table-column> -->
           <el-table-column prop="username" label="操作人" width="150" ></el-table-column>
             <el-table-column prop="createTime" label="時間" sortable width="180"></el-table-column>
 
 
-          <el-table-column label="操作" width="100px;" fixed="right">
+          <!-- <el-table-column label="操作" width="100px;" fixed="right">
             <template slot-scope="scope">
               <el-button type="text" size="mini"  v-hasPermission="'log:delete'" icon="el-icon-delete" @click="del(scope.row.id)">删除</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </template>
       <!-- 分頁 -->

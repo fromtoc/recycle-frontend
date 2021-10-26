@@ -275,6 +275,8 @@
                             });
                             this.editForm = {};
                             this.editlogVisible = false;
+                            this.btnLoading=false;
+                            this.btnDisabled = false;
                             await this.getMenuTree();
                         } else {
                             this.btnLoading = false;

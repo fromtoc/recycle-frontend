@@ -24,7 +24,7 @@
                         <span type="danger"  @click="toWelcome"><span class="el-icon-house"></span> &nbsp;系統首頁</span>
                     </el-dropdown-item>
                     <el-dropdown-item>
-                        <span type="danger" @click="getContact"><span class="el-icon-ship"></span> &nbsp;重設密碼</span>
+                        <span type="danger" @click="resetPwdDialogVisable=true"><span class="el-icon-ship"></span> &nbsp;重設密碼</span>
                     </el-dropdown-item>
                     <el-dropdown-item>
                         <span type="danger" @click="logout"><span class="el-icon-switch-button"></span> &nbsp;登出</span>
@@ -32,6 +32,25 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
+        <el-dialog title="重設密碼" :visible.sync="resetPwdDialogVisable" width="50%" @close="closeAddDialog">
+            <span>
+                <el-form
+                        label-width="100px"
+                        class="demo-ruleForm"
+                >
+                    <el-form-item label="請輸入密碼">
+                    <el-input></el-input>
+                    </el-form-item>
+                    <el-form-item label="再次輸入密碼">
+                    <el-input></el-input>
+                    </el-form-item>
+                </el-form>
+            </span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="resetPwdDialogVisable = false">取 消</el-button>
+                <el-button type="primary" @click="add" :disabled="btnDisabled" :loading="btnLoading">確 定</el-button>
+            </span>
+        </el-dialog>
         <!--主體-->
         <el-container style="height: 500px;">
             <!--選單-->
@@ -57,7 +76,9 @@
             </el-main>
         </el-container>
     </el-container>
+    
 </template>
+
 
 <script>
     import MenuTree from "../components/MenuTree"; //引進選單模板
@@ -70,6 +91,7 @@
                 isOpen: false,
                 menuList: {},
                 userInfo: {},
+                resetPwdDialogVisable: false,
             };
         },
         components: {

@@ -38,7 +38,7 @@
                             class="input-with-select"
                     ></el-input>
                 </el-col>
-                <el-col :span="5">
+                <!-- <el-col :span="5">
                     <template>
                         <el-select size="small" v-model="queryMap.status" @click="search" placeholder="請選擇狀態">
                             <el-option label="正常" :value="0"></el-option>
@@ -46,7 +46,7 @@
                             <el-option label="待审核" :value="2"></el-option>
                         </el-select>
                     </template>
-                </el-col>
+                </el-col> -->
                 <el-col :span="8">
                     <el-button size="small" type="primary" icon="el-icon-search" @click="search">查找</el-button>
                     <el-button size="small" icon="el-icon-refresh-right" type="warning" @click="resetForm">重置</el-button>
@@ -421,7 +421,7 @@
                     categorys: [
                         {required: true, message: "請輸入廢棄物分類", trigger: "blur"}
                     ],
-                    sort: [{required: true, message: "請輸入地址信息", trigger: "blur"}],
+                    sort: [{required: true, message: "請輸入排序", trigger: "blur"}],
                     categoryKeys: [
                         {required: true, message: "請選擇廢棄物分類", trigger: "blur"}
                     ]
@@ -563,7 +563,7 @@
                         this.btnDisabled = true;
                         this.btnLoading = true;
                         const {data: res} = await this.$http.post(
-                            "product/add",
+                            "business/product/add",
                             this.addRuleForm
                         );
                         if (res.success) {

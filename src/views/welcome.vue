@@ -25,7 +25,7 @@
                     <div class="right" style="float:right;width:520px;">
                         <el-table :data="tableInfo" border height="100">
                             <el-table-column prop="username" label="用戶賬號"></el-table-column>
-                            <el-table-column prop="nickname" label="用戶名稱"></el-table-column>
+                            <el-table-column prop="nickname" label="帳號稱"></el-table-column>
                             <el-table-column prop="department" label="所屬公司"></el-table-column>
                             <el-table-column fixed="right" prop="roles" label="用戶角色" width="150"></el-table-column>
                         </el-table>

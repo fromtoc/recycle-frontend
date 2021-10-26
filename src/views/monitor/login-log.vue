@@ -10,8 +10,8 @@
     <!-- 用戶列表卡片區 -->
     <el-card class="box-card">
       <el-form size="mini" :inline="true" :model="queryMap" class="demo-form-inline">
-        <el-form-item label="用戶名">
-          <el-input v-model="queryMap.username" placeholder="請輸入用戶名查詢"></el-input>
+        <el-form-item label="帳號">
+          <el-input v-model="queryMap.username" placeholder="請輸入帳號查詢"></el-input>
         </el-form-item>
         <el-form-item label="IP地址">
           <el-input v-model="queryMap.ip" placeholder="請輸入IP查詢"></el-input>
