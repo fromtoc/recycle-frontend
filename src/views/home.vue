@@ -35,20 +35,25 @@
         <el-dialog title="重設密碼" :visible.sync="resetPwdDialogVisable" width="50%" @close="closeAddDialog">
             <span>
                 <el-form
-                        label-width="100px"
+                        label-width="140px"
                         class="demo-ruleForm"
+                        :rules="rules"
+                        :model="resetForm"
                 >
-                    <el-form-item label="請輸入密碼">
-                    <el-input></el-input>
+                    <el-form-item label="輸入舊密碼" prop="oldpassword">
+                    <el-input type="password" v-model="resetForm.oldpassword" auto-complete="new-password"></el-input>
                     </el-form-item>
-                    <el-form-item label="再次輸入密碼">
-                    <el-input></el-input>
+                    <el-form-item label="輸入新密碼" prop="newPassword">
+                    <el-input type="password" v-model="resetForm.newPassword" auto-complete="new-password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="再次輸入新密碼" prop="newPasswordAgain">
+                    <el-input type="password" v-model="resetForm.newPasswordAgain" auto-complete="new-password"></el-input>
                     </el-form-item>
                 </el-form>
             </span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="resetPwdDialogVisable = false">取 消</el-button>
-                <el-button type="primary" @click="add" :disabled="btnDisabled" :loading="btnLoading">確 定</el-button>
+                <el-button type="primary" @click="updatePassword" :disabled="btnDisabled" :loading="btnLoading">確 定</el-button>
             </span>
         </el-dialog>
         <!--主體-->
@@ -92,6 +97,18 @@
                 menuList: {},
                 userInfo: {},
                 resetPwdDialogVisable: false,
+                resetForm: {},
+                rules: {
+                    oldpassword: [
+                        { required: true, message: "請輸入舊密碼", trigger: "blur" }
+                    ],
+                    newPassword: [
+                        { required: true, message: "請輸入新密碼", trigger: "blur" }
+                    ],
+                    newPasswordAgain: [
+                        { required: true, message: "請再次輸入新密碼", trigger: "blur" }
+                    ]
+                } //添加驗證規則
             };
         },
         components: {
@@ -122,7 +139,7 @@
              * 去系统首頁
              */
             toWelcome(){
-                this.$router.push("/welcome");
+                this.$router.push("/home");
             },
             /**
              加載選單數據
@@ -145,6 +162,31 @@
                     this.userInfo = res.data;
                     this.$store.commit("setUserInfo", res.data);
                 }
+            },
+            /**
+             更新用戶密碼
+             */
+            async updatePassword() {
+                if (this.resetForm.newPassword!=this.resetForm.newPasswordAgain){
+                    this.$message.error("新密碼不相同");
+                } else {
+                    const { data: res } = await this.$http.put(
+                    "system/user/updatePassword/" + this.resetForm.oldpassword + "/" + this.resetForm.newPassword
+                    );
+                    if (res.success) {
+                        this.$notify({
+                            title: "成功",
+                            message: "用戶密碼更新",
+                            type: "success"
+                        });
+                        // await this.getRoleList();
+                    } else {
+                        this.$message.error("用戶密碼更新失敗:" + res.data);
+                    }
+                    this.resetPwdDialogVisable = false;
+                    this.resetForm = {}
+                }         
+
             },
             /**
              * 選單伸缩

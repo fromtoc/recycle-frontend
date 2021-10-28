@@ -90,7 +90,7 @@
                     ],
                     password: [
                         {required: true, message: "請輸入用戶密碼", trigger: "blur"},
-                        {min: 6, max: 15, message: "長度在 6 到 15 個字符", trigger: "blur"}
+                        // {min: 6, max: 15, message: "長度在 6 到 15 個字符", trigger: "blur"}
                     ]
                 },
             };

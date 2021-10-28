@@ -21,9 +21,32 @@
                         prefix-icon="iconfont el-icon-user"
                 ></el-input>
             </el-form-item>
+            <div></div>
+            <el-form-item style="width:100%;">
+                <div style="float:right;">
+                    <el-button
+                            type="primary"
+                            class="el-icon-mobile-phone"
+                            @click="handleSubmit"
+                            :loading="loading"
+                    >登入
+                    </el-button>
+                    <el-button class="el-icon-refresh" @click="resetForm">重置</el-button>
+                </div>
+            </el-form-item>
         </el-form>
 
         <!-- 驗證碼 -->
+        <Vcode
+                :show="isShow"
+                @success="success"
+                @close="close"
+                :canvasWidth="500"
+                :canvasHeight="350"
+                :successText="successText"
+                :failText="failText"
+                :sliderText="sliderText"
+        />
     </div>
 </template>
 
@@ -42,12 +65,26 @@
                 //表單用戶登入數據
                 loading: false,
                 userLoginForm: {
-                    username: ""
+                    username: "admin",
+                    password: "123456"
                 },
                 checked: true,
 
                 //驗證規則
+                loginRules: {
+                    username: [
+                        {required: true, message: "請輸入帳號", trigger: "blur"},
+                        {min: 3, max: 12, message: "長度在 3 到 12 個字符", trigger: "blur"}
+                    ],
+                    password: [
+                        {required: true, message: "請輸入用戶密碼", trigger: "blur"},
+                        {min: 6, max: 15, message: "長度在 6 到 15 個字符", trigger: "blur"}
+                    ]
+                },
             };
+        },
+        components: {
+            Vcode
         },
 
         methods: {
