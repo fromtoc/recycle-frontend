@@ -43,7 +43,7 @@
                 <el-button size="mini" type="primary" @click="search" icon="el-icon-search">查詢</el-button>
               </el-form-item>
             </el-form>
-            <el-table height="530" border :data="tableData" style="width: 100%">
+            <el-table empty-text="暫無數據" height="530" border :data="tableData" style="width: 100%">
               <el-table-column prop="imageUrl" label="圖片" align="center" width="80" padding="0px">
                 <!--            <template slot-scope="scope">-->
                 <!--              <img-->

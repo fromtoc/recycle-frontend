@@ -202,7 +202,7 @@
             <el-tooltip
               class="item"
               effect="dark"
-              content="卡片創建"
+              content="卡片管理"
               placement="top"
               :enterable="false"
             >
@@ -210,7 +210,7 @@
                 type="success"
                 size="small"
                 icon="el-icon-bank-card"
-                @click="assignRoles(scope.row.id)"
+                @click="cardManage(scope.row.id)"
               ></el-button>
             </el-tooltip>
             <!-- todo -->
@@ -476,6 +476,98 @@
           >
         </span>
       </el-dialog>
+      <!-- 卡片管理對話框 -->
+      <el-dialog
+        center
+        title="卡片管理"
+        :visible.sync="cardManagementVisible"
+        width="50%"
+      >
+        <el-button
+          type="success"
+          icon="el-icon-plus"
+          @click="addDialogVisible = true"
+          v-hasPermission="'user:add'"
+          >添加</el-button
+        >
+        <!-- 表格區域 -->
+      <el-table
+        v-loading="loading"
+        size="small"
+        :data="userList"
+        border
+        style="width: 100%"
+        height="420"
+      >
+        <!-- <el-table-column type="selection" width="40"></el-table-column> -->
+        <el-table-column label="#" prop="id" width="50"></el-table-column>
+        <el-table-column
+          prop="username"
+          label="卡片號碼"
+          width="300"
+        ></el-table-column>
+        <el-table-column prop="isban" label="是否禁用" width="100">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.status"
+              @change="changUserStatus(scope.row)"
+            ></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+             <el-tooltip
+              v-hasPermission="'user:assign'"
+              class="item"
+              effect="dark"
+              content="分配廢棄物"
+              placement="top"
+              :enterable="false"
+            >
+              <el-button
+                type="warning"
+                size="small"
+                icon="el-icon-setting"
+                @click="assignRoles(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            <el-button
+              v-hasPermission="'user:delete'"
+              type="danger"
+              size="small"
+              icon="el-icon-delete"
+              @click="del(scope.row.id)"
+            ></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+        <!-- <span>
+          <template>
+            <el-transfer
+              filter-placeholder="請輸入搜索內容"
+              filterable
+              :titles="['未擁有', '已擁有']"
+              :button-texts="['到左邊', '到右邊']"
+              v-model="value"
+              :data="roles"
+            ></el-transfer>
+          </template>
+        </span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="assignDialogVisible = false" class="el-icon-close"
+            >取消分配</el-button
+          >
+          <el-button
+            v-hasPermission="'user:assign'"
+            type="primary"
+            @click="doAssignRoles"
+            class="el-icon-check"
+            :loading="btnLoading"
+            :disabled="btnDisabled"
+            >確定分配</el-button
+          >
+        </span> -->
+      </el-dialog>
       <!-- 修改密碼對話框 -->
       <el-dialog
         title="修改密碼"
@@ -541,6 +633,7 @@ export default {
       addDialogVisible: false, //添加對話框,
       editDialogVisible: false, //修改對話框
       assignDialogVisible: false, //分配角色對話框
+      cardManagementVisible: false, //卡片管理對話框
       resetPwdDialogVisable: false, //修改密碼對話框
       labelPosition: "right", //lable對齊方式
       //查詢對象
@@ -922,6 +1015,32 @@ export default {
      */
     showSex(row, column) {
       return row.sex === 1 ? "帥哥" : "美女";
+    },
+    /**
+     * 彈出用戶卡片管理
+     */
+    async cardManage(id) {
+      this.cardManagementVisible = true;
+      // const loading = this.$loading({
+      //   lock: true,
+      //   text: "Loading",
+      //   spinner: "el-icon-loading",
+      //   background: "rgba(0, 0, 0, 0.7)",
+      // });
+      // const { data: res } = await this.$http.get(
+      //   "system/user/" + id + "/roles"
+      // );
+      // if (res.success) {
+      //   this.roles = res.data.roles;
+      //   this.value = res.data.values;
+      //   this.uid = id;
+      //   setTimeout(() => {
+      //     loading.close();
+      //     this.assignDialogVisible = true;
+      //   }, 400);
+      // } else {
+      //   this.$message.error("分配角色失敗:" + res.data.errorMsg);
+      // }
     },
   },
   created() {

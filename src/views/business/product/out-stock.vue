@@ -204,7 +204,7 @@
                 </el-steps>
                 <span>
           <template>
-            <el-table height="260" max-height="350" border :data="detailTable" style="width: 100%">
+            <el-table empty-text="暫無數據"  height="260" max-height="350" border :data="detailTable" style="width: 100%">
               <el-table-column prop="name" label="名稱"></el-table-column>
               <el-table-column :show-overflow-tooltip="true" prop="pnum" label="商品編號"></el-table-column>
                <el-table-column prop="model" label="規格"></el-table-column>

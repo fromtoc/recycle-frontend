@@ -295,7 +295,7 @@
      <el-button size="mini" style="float: right;margin: 10px;"  type="primary" icon="el-icon-remove" :disabled="products.length==0" @click="removeAllItem" >
                       清空
                   </el-button>
-                <el-table height="650" :data="this.products" border>
+                <el-table empty-text="暫無數據" height="650" :data="this.products" border>
                   <el-table-column prop="name" label="名稱" width="120px;"></el-table-column>
                   <el-table-column
                           prop="imageUrl"

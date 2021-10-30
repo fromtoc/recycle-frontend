@@ -1,5 +1,5 @@
 <template>
-    <div id="departments">
+    <div id="costCenter">
         <!-- 面包導航 -->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
             <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
@@ -14,7 +14,7 @@
                     <el-input
                             size="small"
                             clearable
-                            v-model="queryMap.name"
+                            v-model="queryMap.code"
                             placeholder="請輸入成本中心編號查詢"
                             @clear="search"
                             class="input-with-select"
@@ -25,7 +25,7 @@
                     <el-input
                             size="small"
                             clearable
-                            v-model="queryMap.name"
+                            v-model="queryMap.value"
                             placeholder="請輸入成本中心名稱查詢"
                             @clear="search"
                             class="input-with-select"
@@ -43,20 +43,20 @@
                 <el-col :span="2">
                     <el-button
                             size="small"
-                            v-hasPermission="'department:add'"
+                            v-hasPermission="'costCenter:add'"
                             type="success"
                             icon="el-icon-circle-plus-outline"
                             @click="addDialogVisible=true"
                     >添加</el-button>
                 </el-col>
-                <!-- <el-col :span="2">
+                <el-col :span="2">
                     <el-button
                             size="small"
                             icon="el-icon-download"
-                            v-hasPermission="'department:export'"
+                            v-hasPermission="'costCenter:export'"
                             @click="downExcel"
                     >導出</el-button>
-                </el-col> -->
+                </el-col>
             </el-row>
             <!-- 表格區域 -->
             <template>
@@ -65,17 +65,18 @@
                         size="small"
                         v-loading="loading"
                         stripe
-                        :data="departmentData"
+                        :data="costCenterData"
                         style="width: 100%;margin-top:20px;"
                         height="460"
+                        empty-text="暫無數據"
                 >
                     <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
-                    <el-table-column prop="phone" label="成本中心編號" width="120"></el-table-column>
-                    <el-table-column prop="name" label="成本中心名稱" width="180"></el-table-column>
+                    <el-table-column prop="code" label="成本中心編號" width="120"></el-table-column>
+                    <el-table-column prop="value" label="成本中心名稱" width="180"></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button
-                                    v-hasPermission="'department:edit'"
+                                    v-hasPermission="'costCenter:edit'"
                                     type="text"
                                     size="small"
                                     icon="el-icon-edit"
@@ -83,7 +84,7 @@
                             >編輯</el-button>
 
                             <el-button
-                                    v-hasPermission="'department:delete'"
+                                    v-hasPermission="'costCenter:delete'"
                                     type="text"
                                     size="small"
                                     icon="el-icon-delete"
@@ -112,14 +113,14 @@
                   :model="addRuleForm"
                   :rules="addRules"
                   ref="addRuleFormRef"
-                  label-width="100px"
+                  label-width="120px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="成本中心編號" prop="name">
-              <el-input v-model="addRuleForm.name"></el-input>
+            <el-form-item label="成本中心編號" prop="code">
+              <el-input v-model="addRuleForm.code"></el-input>
             </el-form-item>
-            <el-form-item label="成本中心名稱" prop="phone">
-              <el-input v-model="addRuleForm.phone"></el-input>
+            <el-form-item label="成本中心名稱" prop="value">
+              <el-input v-model="addRuleForm.value"></el-input>
             </el-form-item>
           </el-form>
         </span>
@@ -141,14 +142,14 @@
                   :model="editRuleForm"
                   :rules="addRules"
                   ref="editRuleFormRef"
-                  label-width="100px"
+                  label-width="120px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="成本中心編號" prop="name">
-              <el-input v-model="editRuleForm.name"></el-input>
+            <el-form-item label="成本中心編號" prop="code">
+              <el-input v-model="editRuleForm.code"></el-input>
             </el-form-item>
-            <el-form-item label="成本中心名稱" prop="phone">
-              <el-input v-model="editRuleForm.phone"></el-input>
+            <el-form-item label="成本中心名稱" prop="value">
+              <el-input v-model="editRuleForm.value"></el-input>
             </el-form-item>
           </el-form>
         </span>
@@ -177,18 +178,18 @@
                 editDialogVisible: false,
                 addDialogVisible: false, //添加彈框是否顯示
                 total: 0, //總共多少條數據
-                departmentData: [], //表格數據
-                queryMap: { pageNum: 1, pageSize: 7, name: "" }, //查詢對象
+                costCenterData: [], //表格數據
+                queryMap: { pageNum: 1, pageSize: 7, code: "", value: "" }, //查詢對象
                 addRuleForm: {}, //添加表單數據
                 editRuleForm: {}, //修改表單數據
                 addRules: {
-                    name: [
-                        { required: true, message: "請輸入公司名稱", trigger: "blur" },
-                        { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
+                    code: [
+                        { required: true, message: "請輸入成本中心代碼", trigger: "blur" }
+                        // { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
                     ],
-                    address: [
-                        { required: true, message: "請輸入辦公地址", trigger: "blur" },
-                        { min: 4, max: 12, message: "長度在 4 到 12 個字符", trigger: "blur" }
+                    value: [
+                        { required: true, message: "請輸入成本中心名稱", trigger: "blur" }
+                        // { min: 4, max: 12, message: "長度在 4 到 12 個字符", trigger: "blur" }
                     ]
                 } //添加驗證
             };
@@ -201,14 +202,14 @@
                 const $this = this;
                 const res = axios
                     .request({
-                        url: "system/department/excel",
+                        url: "system/costCenter/excel",
                         method: "post",
                         responseType: "blob"
                     })
                     .then(res => {
                         if (res.headers["content-type"] === "application/json") {
                             return $this.$message.error(
-                                "Subject does not have permission [department:export]"
+                                "Subject does not have permission [costCenter:export]"
                             );
                         }
                         const data = res.data;
@@ -216,7 +217,7 @@
                         var a = document.createElement("a");
                         document.body.appendChild(a);
                         a.href = url;
-                        a.download = "公司列表.xls";
+                        a.download = "成本中心列表.xls";
                         a.click();
                         window.URL.revokeObjectURL(url);
                     });
@@ -226,14 +227,14 @@
              */
             search() {
                 this.queryMap.pageNum = 1;
-                this.getDepartmentList();
+                this.getcostCenterList();
             },
             /**
              * 删除成本中心
              */
             del: async function (id) {
                 let res = await this.$confirm(
-                    "此操作將永久删除該用戶, 是否繼續?",
+                    "此操作將永久删除該類型, 是否繼續?",
                     "提示",
                     {
                         confirmButtonText: "確定",
@@ -248,11 +249,11 @@
                 });
                 if ("confirm" === res) {
                     const {data: res} = await this.$http.delete(
-                        "system/department/delete/" + id
+                        "system/costCenter/delete/" + id
                     );
                     if (res.success) {
-                        this.$message.success("公司删除成功");
-                        await this.getDepartmentList();
+                        this.$message.success("成本中心删除成功");
+                        await this.getcostCenterList();
                     } else {
                         this.$message.error(res.data.errorMsg);
                     }
@@ -268,18 +269,18 @@
                     } else {
                         (this.btnLoading = true), (this.btnDisabled = true);
                         const {data: res} = await this.$http.put(
-                            "system/department/update/" + this.editRuleForm.id,
+                            "system/costCenter/update/" + this.editRuleForm.id,
                             this.editRuleForm
                         );
                         if (res.success) {
                             this.$notify({
                                 title: "成功",
-                                message: "公司信息更新",
+                                message: "成本中心更新",
                                 type: "success"
                             });
-                            await this.getDepartmentList();
+                            await this.getcostCenterList();
                         } else {
-                            this.$message.error("公司信息更新失敗");
+                            this.$message.error("成本中心更新失敗");
                         }
                         this.editRuleForm = {};
                         this.btnDisabled = false;
@@ -293,11 +294,11 @@
              * @param {Object} id
              */
             edit: async function (id) {
-                const {data: res} = await this.$http.get("system/department/edit/" + id);
+                const {data: res} = await this.$http.get("system/costCenter/edit/" + id);
                 if (res.success) {
                     this.editRuleForm = res.data;
                 } else {
-                    return this.$message.error("公司信息編輯失敗" + res.data.errorMsg);
+                    return this.$message.error("成本中心編輯失敗" + res.data.errorMsg);
                 }
                 this.editDialogVisible = true;
             },
@@ -309,45 +310,45 @@
                     } else {
                         (this.btnLoading = true), (this.btnDisabled = true);
                         const {data: res} = await this.$http.post(
-                            "system/department/add",
+                            "system/costCenter/add",
                             this.addRuleForm
                         );
                         if (res.success) {
-                            this.$message.success("公司添加成功");
+                            this.$message.success("成本中心添加成功");
                             this.addRuleForm = {};
-                            await this.getDepartmentList();
+                            await this.getcostCenterList();
                         } else {
-                            return this.$message.error("公司添加失敗:" + res.data.errorMsg);
+                            return this.$message.error("成本中心添加失敗:" + res.data.errorMsg);
                         }
                         this.addDialogVisible = false;
                         (this.btnLoading = false), (this.btnDisabled = false);
                     }
                 });
             },
-            //加載公司別列表
-            async getDepartmentList() {
+            //加載成本中心列表
+            async getcostCenterList() {
                 const { data: res } = await this.$http.get(
-                    "system/department/findDepartmentList",
+                    "system/costCenter/findByPage",
                     {
                         params: this.queryMap
                     }
                 );
                 if (!res.success) {
-                    return this.$message.error("獲取用戶列表失敗:"+res.data.errorMsg);
+                    return this.$message.error("獲取成本中心失敗:"+res.data.errorMsg);
                 } else {
                     this.total = res.data.total;
-                    this.departmentData = res.data.rows;
+                    this.costCenterData = res.data.rows;
                 }
             },
             //改變頁碼
             handleSizeChange(newSize) {
                 this.queryMap.pageSize = newSize;
-                this.getDepartmentList();
+                this.getcostCenterList();
             },
             //翻頁
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
-                this.getDepartmentList();
+                this.getcostCenterList();
             },
             //關閉彈出框
             closeAddDialog() {
@@ -361,7 +362,7 @@
             }
         },
         created() {
-            this.getDepartmentList();
+            this.getcostCenterList();
             setTimeout(() => {
                 this.loading = false;
             }, 500);

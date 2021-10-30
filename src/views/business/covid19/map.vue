@@ -11,7 +11,7 @@
         <div class="grid-content bg-purple">
             <el-tabs type="border-card">
               <el-tab-pane label="疫情概覽">
-                <el-table  v-loading="loading" border :data="info" style="width: 100%" height="495">
+                <el-table  empty-text="暫無數據" v-loading="loading" border :data="info" style="width: 100%" height="495">
                   <el-table-column prop="name" label="名稱" width="150"></el-table-column>
                   <el-table-column prop="value" label="數量" >
                     <template slot-scope="scope">
@@ -75,10 +75,10 @@
       <el-col :span="24">
         <div class="grid-content bg-purple">
           <el-card>
-            <el-table  stripe  :data="tableData" style="width: 100%;">
+            <el-table  empty-text="暫無數據"  stripe  :data="tableData" style="width: 100%;">
               <el-table-column type="expand">
                 <template slot-scope="scope">
-                  <el-table  :data="scope.row.city" style="width: 100%">
+                  <el-table  empty-text="暫無數據" :data="scope.row.city" style="width: 100%">
                     <el-table-column prop="name" label="城市/區" width="200"></el-table-column>
 
                     <el-table-column sortable label="現存確診" prop="econNum"></el-table-column>

@@ -68,7 +68,7 @@
 
             </el-form>
             <!-- 表格區域 -->
-            <el-table size="mini" v-loading="loading" :data="tableData" border style="width: 100%;" height="420">
+            <el-table empty-text="暫無數據"  size="mini" v-loading="loading" :data="tableData" border style="width: 100%;" height="420">
                 <el-table-column label="#" prop="id" width="50"></el-table-column>
                 <el-table-column  prop="inNum" :show-overflow-tooltip='true' label="入库單號" width="180"></el-table-column>
                 <el-table-column prop="type" label="廢棄物類型" width="100">
@@ -213,7 +213,7 @@
                 </el-steps>
                 <span>
           <template>
-            <el-table height="260" max-height="350" border :data="detailTable" style="width: 100%">
+            <el-table empty-text="暫無數據"  height="260" max-height="350" border :data="detailTable" style="width: 100%">
               <el-table-column prop="name" label="名稱"></el-table-column>
               <el-table-column :show-overflow-tooltip="true" prop="pnum" label="商品編號"></el-table-column>
                <el-table-column prop="model" label="規格"></el-table-column>
