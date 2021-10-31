@@ -6,7 +6,7 @@
     >
       <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
       <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用戶管理</el-breadcrumb-item>
+      <el-breadcrumb-item>帳號管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 用戶列表卡片區 -->
     <el-card class="box-card">
@@ -486,61 +486,46 @@
         <el-button
           type="success"
           icon="el-icon-plus"
-          @click="addDialogVisible = true"
+          @click="addCardDialogVisible = true"
           v-hasPermission="'user:add'"
           >添加</el-button
         >
         <!-- 表格區域 -->
-      <el-table
-        v-loading="loading"
-        size="small"
-        :data="userList"
-        border
-        style="width: 100%"
-        height="420"
-      >
-        <!-- <el-table-column type="selection" width="40"></el-table-column> -->
-        <el-table-column label="#" prop="id" width="50"></el-table-column>
-        <el-table-column
-          prop="username"
-          label="卡片號碼"
-          width="300"
-        ></el-table-column>
-        <el-table-column prop="isban" label="是否禁用" width="100">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.status"
-              @change="changUserStatus(scope.row)"
-            ></el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-             <el-tooltip
-              v-hasPermission="'user:assign'"
-              class="item"
-              effect="dark"
-              content="分配廢棄物"
-              placement="top"
-              :enterable="false"
-            >
+        <el-table
+          v-loading="loading"
+          size="small"
+          :data="cardList"
+          border
+          style="width: 100%"
+          height="420"
+        >
+          <!-- <el-table-column type="selection" width="40"></el-table-column> -->
+          <el-table-column
+            prop="cardId"
+            label="卡片號碼"
+            width="300"
+          ></el-table-column>
+          <el-table-column prop="status" label="是否禁用" width="100">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.status"
+                @change="changCardStatus(scope.row)"
+              ></el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
               <el-button
-                type="warning"
+                v-hasPermission="'departmentCategory:edit'"
+                type="text"
                 size="small"
-                icon="el-icon-setting"
+                icon="el-icon-edit"
                 @click="assignRoles(scope.row.id)"
-              ></el-button>
-            </el-tooltip>
-            <el-button
-              v-hasPermission="'user:delete'"
-              type="danger"
-              size="small"
-              icon="el-icon-delete"
-              @click="del(scope.row.id)"
-            ></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+                >分配廢棄物</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
         <!-- <span>
           <template>
             <el-transfer
@@ -568,12 +553,29 @@
           >
         </span> -->
       </el-dialog>
+      <!-- 添加卡片對話框 -->
+      <el-dialog
+        title="添加卡片"
+        :visible.sync="addCardDialogVisible"
+        width="50%"
+      >
+        <span>
+          <el-form label-width="140px" class="demo-ruleForm">
+            <el-form-item label="輸入卡片號碼" prop="addCardId">
+              <el-input type="text" v-model="addCardId"></el-input>
+            </el-form-item>
+          </el-form>
+        </span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addCardDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addCard">確 定</el-button>
+        </span>
+      </el-dialog>
       <!-- 修改密碼對話框 -->
       <el-dialog
         title="修改密碼"
         :visible.sync="resetPwdDialogVisable"
         width="50%"
-        @close="closeAddDialog"
       >
         <span>
           <el-form label-width="140px" class="demo-ruleForm">
@@ -634,6 +636,7 @@ export default {
       editDialogVisible: false, //修改對話框
       assignDialogVisible: false, //分配角色對話框
       cardManagementVisible: false, //卡片管理對話框
+      addCardDialogVisible: false, //添加卡片對話框
       resetPwdDialogVisable: false, //修改密碼對話框
       labelPosition: "right", //lable對齊方式
       //查詢對象
@@ -645,6 +648,7 @@ export default {
         nickname: "",
       },
       userList: [],
+      cardList: [],
 
       addForm: {
         username: "",
@@ -656,6 +660,8 @@ export default {
         birth: "",
       }, //添加表單
       editForm: {}, //更新表單
+      addCardUserId: "",
+      addCardId: "",
       changePasswordUserId: "",
       newPassword: "",
       addFormRules: {
@@ -807,6 +813,17 @@ export default {
       this.total = res.data.total;
       this.userList = res.data.rows;
     },
+    /**
+     * 加載用戶列表
+     */
+    async getCardList(id) {
+      const { data: res } = await this.$http.get("system/user/card/list/" + id);
+      if (!res.success) {
+        return this.$message.error("獲取用戶卡片列表失敗:" + res.data.errorMsg);
+      }
+      this.cardList = res.data;
+      this.addCardUserId = id;
+    },
 
     /**
      * 删除用戶
@@ -934,6 +951,27 @@ export default {
       this.resetPwdDialogVisable = false;
     },
     /**
+     * 新增用戶卡片
+     */
+    async addCard() {
+      const { data: res } = await this.$http.put(
+        "system/user/card/add/" + this.addCardUserId + "/" + this.addCardId
+      );
+      if (res.success) {
+        this.$notify({
+          title: "操作成功",
+          message: "用戶卡片新增成功",
+          type: "success",
+        });
+      } else {
+        this.$message.error("用戶卡片新增失敗:" + res.data.errorMsg);
+      }
+      this.addCardId = "";
+      this.addCardDialogVisible = false;
+      this.getCardList(this.addCardUserId);
+      this.addCardUserId = "";
+    },
+    /**
      * 搜索用戶
      */
     searchUser() {
@@ -1001,6 +1039,24 @@ export default {
       }
     },
     /**
+     * 禁用啟用卡片
+     */
+    async changCardStatus(row) {
+      const { data: res } = await this.$http.put(
+        "system/user/updateCardStatus/" + row.id + "/" + + row.status
+      );
+      if (!res.success) {
+        this.$message.error("更新卡片狀態失敗:" + res.data.errorMsg);
+        row.status = !row.status;
+      } else {
+        const message = row.status ? "卡片已禁用" : "卡片已啟用";
+        this.$notify.success({
+          title: "操作成功",
+          message: message,
+        });
+      }
+    },
+    /**
      * 加載所有公司
      */
     async getDepartmets() {
@@ -1020,6 +1076,7 @@ export default {
      * 彈出用戶卡片管理
      */
     async cardManage(id) {
+      this.getCardList(id);
       this.cardManagementVisible = true;
       // const loading = this.$loading({
       //   lock: true,

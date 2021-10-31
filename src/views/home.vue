@@ -32,7 +32,7 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
-        <el-dialog title="重設密碼" :visible.sync="resetPwdDialogVisable" width="50%" @close="closeAddDialog">
+        <el-dialog title="重設密碼" :visible.sync="resetPwdDialogVisable" width="50%">
             <span>
                 <el-form
                         label-width="140px"
