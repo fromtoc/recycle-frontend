@@ -159,7 +159,7 @@
             width="80"
           ></el-table-column>
           <!-- <el-table-column prop="remark" label="備註"></el-table-column> -->
-          <el-table-column prop="status" label="是否禁用" width="100">
+          <el-table-column prop="isban" label="是否禁用" width="100">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -471,7 +471,7 @@ export default {
         name: "",
         categoryId: "",
         supplier: "",
-        status: 0,
+        status: "",
       }, //查詢對象
       addRuleForm: {}, //添加表單數據
       editRuleForm: {}, //修改表單數據

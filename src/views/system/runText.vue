@@ -53,7 +53,7 @@
                 >
                     <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
                     <el-table-column prop="phone" label="跑馬燈內容" width="1000"></el-table-column>
-                    <el-table-column prop="isban" label="是否啟用" width="100">
+                    <el-table-column prop="isban" label="是否禁用" width="100">
                     <template slot-scope="scope">
                          <el-switch v-model="scope.row.status" @change="changUserStatus(scope.row)"></el-switch>
                     </template>

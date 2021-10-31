@@ -505,7 +505,7 @@
             label="卡片號碼"
             width="300"
           ></el-table-column>
-          <el-table-column prop="status" label="是否禁用" width="100">
+          <el-table-column prop="isban" label="是否禁用" width="100">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -520,7 +520,7 @@
                 type="text"
                 size="small"
                 icon="el-icon-edit"
-                @click="assignRoles(scope.row.id)"
+                @click="assignCardProduct(scope.row.id)"
                 >分配廢棄物</el-button
               >
             </template>
@@ -569,6 +569,40 @@
         <span slot="footer" class="dialog-footer">
           <el-button @click="addCardDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="addCard">確 定</el-button>
+        </span>
+      </el-dialog>
+       <!-- 分配廢棄物對話框 -->
+      <el-dialog
+        center
+        title="分配廢棄物"
+        :visible.sync="assignCardProdcutsDialogVisible"
+        width="49%"
+      >
+        <span>
+          <template>
+            <el-transfer
+              filter-placeholder="請輸入搜索內容"
+              filterable
+              :titles="['未擁有', '已擁有']"
+              :button-texts="['到左邊', '到右邊']"
+              v-model="cardProductsValue"
+              :data="products"
+            ></el-transfer>
+          </template>
+        </span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="assignCardProdcutsDialogVisible = false" class="el-icon-close"
+            >取消分配</el-button
+          >
+          <el-button
+            v-hasPermission="'product:assign'"
+            type="primary"
+            @click="doAssignCardProduct"
+            class="el-icon-check"
+            :loading="btnLoading"
+            :disabled="btnDisabled"
+            >確定分配</el-button
+          >
         </span>
       </el-dialog>
       <!-- 修改密碼對話框 -->
@@ -637,6 +671,7 @@ export default {
       assignDialogVisible: false, //分配角色對話框
       cardManagementVisible: false, //卡片管理對話框
       addCardDialogVisible: false, //添加卡片對話框
+      assignCardProdcutsDialogVisible: false, //卡片分配產品對話框
       resetPwdDialogVisable: false, //修改密碼對話框
       labelPosition: "right", //lable對齊方式
       //查詢對象
@@ -710,6 +745,9 @@ export default {
       roles: [], //角色
       value: [], //用戶擁有的角色
       uid: "",
+      products: [], //產品
+      cardProductsValue: [], //卡片擁有的產品
+      cid: "",
     };
   },
   methods: {
@@ -782,6 +820,54 @@ export default {
      */
     async doAssignRoles() {
       this.assignDialogVisible = true;
+      this.btnLoading = true;
+      this.btnDisabled = true;
+      const { data: res } = await this.$http.post(
+        "system/user/" + this.uid + "/assignRoles",
+        this.value
+      );
+      if (res.success) {
+        this.$notify.success({
+          title: "操作成功",
+          message: "用戶分配角色成功",
+        });
+      } else {
+        this.$message.error("分配角色失敗:" + res.data.errorMsg);
+      }
+      this.assignDialogVisible = false;
+      this.btnLoading = false;
+      this.btnDisabled = false;
+    },
+    /**
+     * 彈出卡片分配廢棄物
+     */
+    async assignCardProduct(id) {
+      const loading = this.$loading({
+        lock: true,
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const { data: res } = await this.$http.get(
+        "system/user/card/" + id + "/products"
+      );
+      if (res.success) {
+        this.products = res.data.products;
+        this.cardProductsValue = res.data.values;
+        this.cid = id;
+        setTimeout(() => {
+          loading.close();
+          this.assignCardProdcutsDialogVisible = true;
+        }, 400);
+      } else {
+        this.$message.error("分配角色失敗:" + res.data.errorMsg);
+      }
+    },
+    /**
+     * 確定卡片分配廢棄物
+     */
+    async doAssignCardProduct() {
+      this.assignCardProdcutsDialogVisible = true;
       this.btnLoading = true;
       this.btnDisabled = true;
       const { data: res } = await this.$http.post(
