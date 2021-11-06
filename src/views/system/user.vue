@@ -871,18 +871,18 @@ export default {
       this.btnLoading = true;
       this.btnDisabled = true;
       const { data: res } = await this.$http.post(
-        "system/user/" + this.uid + "/assignRoles",
-        this.value
+        "system/user/" + this.cid + "/assignProducts",
+        this.cardProductsValue
       );
       if (res.success) {
         this.$notify.success({
           title: "操作成功",
-          message: "用戶分配角色成功",
+          message: "卡片分配廢棄物成功",
         });
       } else {
-        this.$message.error("分配角色失敗:" + res.data.errorMsg);
+        this.$message.error("分配廢棄物失敗:" + res.data.errorMsg);
       }
-      this.assignDialogVisible = false;
+      this.assignCardProdcutsDialogVisible = false;
       this.btnLoading = false;
       this.btnDisabled = false;
     },
