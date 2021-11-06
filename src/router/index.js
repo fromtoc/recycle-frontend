@@ -65,6 +65,11 @@ const routes = [
                 name: 'ProductList',
                 component: () => import( '../views/business/product/list.vue'), //廢棄物列表
             },
+            {
+                path: '/business/product/price',
+                name: 'ProductList',
+                component: () => import( '../views/business/product/price.vue'), //廢棄物列表
+            },
             /**********************************秤重管理的路由******************************/
             {
                 path: '/business/weight/list',
@@ -193,6 +198,12 @@ const whiteList=[
     '/business/product/publish'
 ];
 
+//白名
+const whiteListWeight=[
+    '/weight',
+    '/business/weight/login'
+];
+
 //路由導航守卫
 router.beforeEach((to, from, next) => {
     const token = LocalStorage.get(LOCAL_KEY_XINGUAN_ACCESS_TOKEN);
@@ -209,8 +220,8 @@ router.beforeEach((to, from, next) => {
     }
 
     if (!token) {
-        if (to.path === '/weight') {
-            return next('/weight');
+        if (whiteListWeight.indexOf(to.path) != -1) {
+            return next();
         }
         return next('/login');
     } else {

@@ -50,7 +50,7 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="郵箱">
+        <!-- <el-form-item label="郵箱">
           <el-input
             @keyup.enter.native="searchUser"
             clearable
@@ -58,13 +58,13 @@
             v-model="queryMap.email"
             placeholder="請輸入郵箱查詢"
           ></el-input>
-        </el-form-item>
+        </el-form-item> -->
 
-        <el-form-item label="性別">
+        <!-- <el-form-item label="性別">
           <el-radio v-model="queryMap.sex" label="1">男</el-radio>
           <el-radio v-model="queryMap.sex" label="0">女</el-radio>
           <el-radio v-model="queryMap.sex" label>全部</el-radio>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="名稱">
           <el-input
@@ -129,7 +129,7 @@
           label="名稱"
           width="110"
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="sex"
           :formatter="showSex"
           label="性別"
@@ -141,7 +141,7 @@
             >
             <el-tag size="small" type="warning" v-else>美女</el-tag>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="departmentName"
           label="所屬公司"
@@ -151,14 +151,14 @@
         <!-- <el-table-column prop="birth" label="生日" width="180" sortable></el-table-column> -->
         <el-table-column
           prop="email"
-          label="郵箱"
+          label="信箱"
           width="180"
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="phoneNumber"
           label="電話"
           width="150"
-        ></el-table-column>
+        ></el-table-column> -->
         <el-table-column prop="isban" label="是否禁用" width="100">
           <template slot-scope="scope">
             <el-switch

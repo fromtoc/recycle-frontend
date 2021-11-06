@@ -1,5 +1,5 @@
 <template>
-  <div id="productCategroys">
+  <div id="price">
     <!-- 面包導航 -->
     <el-breadcrumb
       separator="/"
@@ -7,7 +7,7 @@
     >
       <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
       <el-breadcrumb-item>廢棄物管理</el-breadcrumb-item>
-      <el-breadcrumb-item>廢棄物資料</el-breadcrumb-item>
+      <el-breadcrumb-item>單價維護</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 右側卡片區域 -->
     <el-card class="box-card">
@@ -20,7 +20,7 @@
         </el-alert>
       </el-container>
       <el-row :gutter="6">
-        <el-col :span="5">
+        <!-- <el-col :span="5">
           <el-cascader
             size="small"
             placeholder="請選擇分類查詢"
@@ -31,7 +31,7 @@
             :options="cateories"
             clearable
           ></el-cascader>
-        </el-col>
+        </el-col> -->
         <el-col :span="6">
           <el-input
             clearable
@@ -74,22 +74,8 @@
             v-hasPermission="'product:add'"
             >添加
           </el-button>
-          <el-button size="small" icon="el-icon-refresh" @click="getproductList"
+          <el-button size="small" icon="el-icon-refresh" @click="getPriceList"
             >刷新</el-button
-          >
-          <el-button
-            style="float: right"
-            size="small"
-            icon="el-icon-money"
-            type="info"
-            @click="costCenterDialogVisible = true"
-            :disabled="this.sels.length === 0"
-            >成本中心分配</el-button
-          >
-          <router-link style="float: right" to="/business/product/price">
-            <el-button size="small" icon="el-icon-price-tag" type="danger"
-              >單價維護</el-button
-            ></router-link
           >
         </el-col>
       </el-row>
@@ -106,31 +92,7 @@
           height="400"
           @selection-change="selsChange"
         >
-          <el-table-column
-            type="selection"
-            width="55"
-            align="center"
-          ></el-table-column>
-          <el-table-column prop="id" type="index" label="ID"></el-table-column>
-
-          <!-- <el-table-column prop="imageUrl" label="圖片" align="center" width="150px" padding="0px"> -->
-          <!--            <template slot-scope="scope">-->
-          <!--              <img-->
-          <!--                slot="error"-->
-          <!--                :src="'https://www.zykhome.club/'+scope.row.imageUrl"-->
-          <!--                alt-->
-          <!--                style="width: 55px;height:55px"-->
-          <!--              />-->
-          <!--            </template>-->
-          <!-- <template slot-scope="scope">
-                            <el-popover placement="right" trigger="hover">
-                                <img :src="'https://www.zykhome.club/'+scope.row.imageUrl"
-                                     style="height: 200px;width: 200px"/>
-                                <img slot="reference" :src="'https://www.zykhome.club/'+scope.row.imageUrl"
-                                     :alt="scope.row.imgUrl" style="height: 38px;width: 38px;cursor: pointer">
-                            </el-popover>
-                        </template>
-                    </el-table-column> -->
+          <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
           <el-table-column
             prop="oneCategoryName"
             label="大類"
@@ -140,7 +102,8 @@
             label="小類"
           ></el-table-column>
           <el-table-column prop="name" label="廢棄物名稱"></el-table-column>
-          <el-table-column prop="modelName" label="成本中心"></el-table-column>
+          <el-table-column prop="price" label="單價"></el-table-column>
+          <el-table-column prop="unit" label="單位"></el-table-column>
 
           <!-- <el-table-column prop="pnum" :show-overflow-tooltip='true' label="廢棄物編號"></el-table-column> -->
           <!-- <el-table-column label="單價" width="100">
@@ -709,7 +672,7 @@ export default {
     /**
      * 加載廢棄物列表
      */
-    async getproductList() {
+    async getPriceList() {
       const { data: res } = await this.$http.get(
         "business/product/findProductList",
         {

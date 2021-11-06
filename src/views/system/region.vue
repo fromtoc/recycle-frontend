@@ -1,30 +1,21 @@
 <template>
-    <div id="departments">
+    <div id="region">
         <!-- 面包導航 -->
         <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
             <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
             <el-breadcrumb-item>一般設定</el-breadcrumb-item>
-            <el-breadcrumb-item>樓層區域</el-breadcrumb-item>
+            <el-breadcrumb-item>區域設定</el-breadcrumb-item>
         </el-breadcrumb>
         <!-- 右側卡片區域 -->
-        <!-- 樓層區域卡片區 -->
+        <!-- 區域卡片區 -->
         <el-card class="box-card">
             <el-row :gutter="20">
-                 <el-col :span="4">
-                    <template>
-                        <el-select size="small" v-model="queryMap.status" @click="search" placeholder="請選擇類型">
-                            <el-option label="建築別" :value="0"></el-option>
-                            <el-option label="樓層" :value="1"></el-option>
-                            <el-option label="區域" :value="2"></el-option>
-                        </el-select>
-                    </template>
-                </el-col>
                 <el-col :span="4">
                     <el-input
                             size="small"
                             clearable
-                            v-model="queryMap.name"
-                            placeholder="請輸入編號查詢"
+                            v-model="queryMap.code"
+                            placeholder="請輸入區域編號查詢"
                             @clear="search"
                             class="input-with-select"
                     >
@@ -34,8 +25,8 @@
                     <el-input
                             size="small"
                             clearable
-                            v-model="queryMap.name"
-                            placeholder="請輸入名稱查詢"
+                            v-model="queryMap.value"
+                            placeholder="請輸入區域名稱查詢"
                             @clear="search"
                             class="input-with-select"
                     >
@@ -52,20 +43,20 @@
                 <el-col :span="2">
                     <el-button
                             size="small"
-                            v-hasPermission="'department:add'"
+                            v-hasPermission="'region:add'"
                             type="success"
                             icon="el-icon-circle-plus-outline"
                             @click="addDialogVisible=true"
                     >添加</el-button>
                 </el-col>
-                <!-- <el-col :span="2">
+                <el-col :span="2">
                     <el-button
                             size="small"
                             icon="el-icon-download"
-                            v-hasPermission="'department:export'"
+                            v-hasPermission="'region:export'"
                             @click="downExcel"
                     >導出</el-button>
-                </el-col> -->
+                </el-col>
             </el-row>
             <!-- 表格區域 -->
             <template>
@@ -74,18 +65,18 @@
                         size="small"
                         v-loading="loading"
                         stripe
-                        :data="departmentData"
+                        :data="regionData"
                         style="width: 100%;margin-top:20px;"
                         height="460"
+                        empty-text="暫無數據"
                 >
                     <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
-                    <el-table-column prop="phone" label="類型" width="120"></el-table-column>
-                    <el-table-column prop="phone" label="編號" width="120"></el-table-column>
-                    <el-table-column prop="name" label="名稱" width="180"></el-table-column>
+                    <el-table-column prop="code" label="區域編號" width="120"></el-table-column>
+                    <el-table-column prop="value" label="區域名稱" width="180"></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button
-                                    v-hasPermission="'department:edit'"
+                                    v-hasPermission="'region:edit'"
                                     type="text"
                                     size="small"
                                     icon="el-icon-edit"
@@ -93,7 +84,7 @@
                             >編輯</el-button>
 
                             <el-button
-                                    v-hasPermission="'department:delete'"
+                                    v-hasPermission="'region:delete'"
                                     type="text"
                                     size="small"
                                     icon="el-icon-delete"
@@ -115,28 +106,21 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total"
             ></el-pagination>
-            <!-- 樓層區域添加彈出框 -->
-            <el-dialog title="添加樓層區域" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
+            <!-- 區域添加彈出框 -->
+            <el-dialog title="添加區域" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
         <span>
           <el-form
                   :model="addRuleForm"
                   :rules="addRules"
                   ref="addRuleFormRef"
-                  label-width="100px"
+                  label-width="120px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="類型" prop="name">
-              <el-select v-model="addRuleForm.name">
-                   <el-option label="建築別" value="1"></el-option>
-                   <el-option label="樓層" value="2"></el-option>
-                   <el-option label="區域" value="3"></el-option>
-              </el-select>
+            <el-form-item label="區域編號" prop="code">
+              <el-input v-model="addRuleForm.code"></el-input>
             </el-form-item>
-            <el-form-item label="編號" prop="name">
-              <el-input v-model="addRuleForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="名稱" prop="phone">
-              <el-input v-model="addRuleForm.phone"></el-input>
+            <el-form-item label="區域名稱" prop="value">
+              <el-input v-model="addRuleForm.value"></el-input>
             </el-form-item>
           </el-form>
         </span>
@@ -146,9 +130,9 @@
         </span>
             </el-dialog>
 
-            <!-- 樓層區域編輯彈出框 -->
+            <!-- 區域編輯彈出框 -->
             <el-dialog
-                    title="更新樓層區域"
+                    title="更新區域"
                     :visible.sync="editDialogVisible"
                     width="50%"
                     @close="closeEditDialog"
@@ -158,21 +142,14 @@
                   :model="editRuleForm"
                   :rules="addRules"
                   ref="editRuleFormRef"
-                  label-width="100px"
+                  label-width="120px"
                   class="demo-ruleForm"
           >
-            <el-form-item label="類型" prop="name">
-              <el-select v-model="addRuleForm.name">
-                   <el-option label="建築別" value="1"></el-option>
-                   <el-option label="樓層" value="2"></el-option>
-                   <el-option label="區域" value="3"></el-option>
-              </el-select>
+            <el-form-item label="區域編號" prop="code">
+              <el-input v-model="editRuleForm.code"></el-input>
             </el-form-item>
-            <el-form-item label="編號" prop="name">
-              <el-input v-model="editRuleForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="名稱" prop="phone">
-              <el-input v-model="editRuleForm.phone"></el-input>
+            <el-form-item label="區域名稱" prop="value">
+              <el-input v-model="editRuleForm.value"></el-input>
             </el-form-item>
           </el-form>
         </span>
@@ -201,18 +178,18 @@
                 editDialogVisible: false,
                 addDialogVisible: false, //添加彈框是否顯示
                 total: 0, //總共多少條數據
-                departmentData: [], //表格數據
-                queryMap: { pageNum: 1, pageSize: 7, name: "" }, //查詢對象
+                regionData: [], //表格數據
+                queryMap: { pageNum: 1, pageSize: 7, code: "", value: "" }, //查詢對象
                 addRuleForm: {}, //添加表單數據
                 editRuleForm: {}, //修改表單數據
                 addRules: {
-                    name: [
-                        { required: true, message: "請輸入公司名稱", trigger: "blur" },
-                        { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
+                    code: [
+                        { required: true, message: "請輸入區域代碼", trigger: "blur" }
+                        // { min: 3, max: 10, message: "長度在 3 到 10 個字符", trigger: "blur" }
                     ],
-                    address: [
-                        { required: true, message: "請輸入辦公地址", trigger: "blur" },
-                        { min: 4, max: 12, message: "長度在 4 到 12 個字符", trigger: "blur" }
+                    value: [
+                        { required: true, message: "請輸入區域名稱", trigger: "blur" }
+                        // { min: 4, max: 12, message: "長度在 4 到 12 個字符", trigger: "blur" }
                     ]
                 } //添加驗證
             };
@@ -225,14 +202,14 @@
                 const $this = this;
                 const res = axios
                     .request({
-                        url: "system/department/excel",
+                        url: "system/region/excel",
                         method: "post",
                         responseType: "blob"
                     })
                     .then(res => {
                         if (res.headers["content-type"] === "application/json") {
                             return $this.$message.error(
-                                "Subject does not have permission [department:export]"
+                                "Subject does not have permission [region:export]"
                             );
                         }
                         const data = res.data;
@@ -240,24 +217,24 @@
                         var a = document.createElement("a");
                         document.body.appendChild(a);
                         a.href = url;
-                        a.download = "公司列表.xls";
+                        a.download = "區域列表.xls";
                         a.click();
                         window.URL.revokeObjectURL(url);
                     });
             },
             /**
-             * 搜索樓層區域
+             * 搜索區域
              */
             search() {
                 this.queryMap.pageNum = 1;
-                this.getDepartmentList();
+                this.getregionList();
             },
             /**
-             * 删除樓層區域
+             * 删除區域
              */
             del: async function (id) {
                 let res = await this.$confirm(
-                    "此操作將永久删除該用戶, 是否繼續?",
+                    "此操作將永久删除該類型, 是否繼續?",
                     "提示",
                     {
                         confirmButtonText: "確定",
@@ -272,11 +249,11 @@
                 });
                 if ("confirm" === res) {
                     const {data: res} = await this.$http.delete(
-                        "system/department/delete/" + id
+                        "system/region/delete/" + id
                     );
                     if (res.success) {
-                        this.$message.success("公司删除成功");
-                        await this.getDepartmentList();
+                        this.$message.success("區域删除成功");
+                        await this.getregionList();
                     } else {
                         this.$message.error(res.data.errorMsg);
                     }
@@ -292,18 +269,18 @@
                     } else {
                         (this.btnLoading = true), (this.btnDisabled = true);
                         const {data: res} = await this.$http.put(
-                            "system/department/update/" + this.editRuleForm.id,
+                            "system/region/update/" + this.editRuleForm.id,
                             this.editRuleForm
                         );
                         if (res.success) {
                             this.$notify({
                                 title: "成功",
-                                message: "公司信息更新",
+                                message: "區域更新",
                                 type: "success"
                             });
-                            await this.getDepartmentList();
+                            await this.getregionList();
                         } else {
-                            this.$message.error("公司信息更新失敗");
+                            this.$message.error("區域更新失敗");
                         }
                         this.editRuleForm = {};
                         this.btnDisabled = false;
@@ -317,11 +294,11 @@
              * @param {Object} id
              */
             edit: async function (id) {
-                const {data: res} = await this.$http.get("system/department/edit/" + id);
+                const {data: res} = await this.$http.get("system/region/edit/" + id);
                 if (res.success) {
                     this.editRuleForm = res.data;
                 } else {
-                    return this.$message.error("公司信息編輯失敗" + res.data.errorMsg);
+                    return this.$message.error("區域編輯失敗" + res.data.errorMsg);
                 }
                 this.editDialogVisible = true;
             },
@@ -333,45 +310,45 @@
                     } else {
                         (this.btnLoading = true), (this.btnDisabled = true);
                         const {data: res} = await this.$http.post(
-                            "system/department/add",
+                            "system/region/add",
                             this.addRuleForm
                         );
                         if (res.success) {
-                            this.$message.success("公司添加成功");
+                            this.$message.success("區域添加成功");
                             this.addRuleForm = {};
-                            await this.getDepartmentList();
+                            await this.getregionList();
                         } else {
-                            return this.$message.error("公司添加失敗:" + res.data.errorMsg);
+                            return this.$message.error("區域添加失敗:" + res.data.errorMsg);
                         }
                         this.addDialogVisible = false;
                         (this.btnLoading = false), (this.btnDisabled = false);
                     }
                 });
             },
-            //加載公司別列表
-            async getDepartmentList() {
+            //加載區域列表
+            async getregionList() {
                 const { data: res } = await this.$http.get(
-                    "system/department/findDepartmentList",
+                    "system/region/findByPage",
                     {
                         params: this.queryMap
                     }
                 );
                 if (!res.success) {
-                    return this.$message.error("獲取用戶列表失敗:"+res.data.errorMsg);
+                    return this.$message.error("獲取區域失敗:"+res.data.errorMsg);
                 } else {
                     this.total = res.data.total;
-                    this.departmentData = res.data.rows;
+                    this.regionData = res.data.rows;
                 }
             },
             //改變頁碼
             handleSizeChange(newSize) {
                 this.queryMap.pageSize = newSize;
-                this.getDepartmentList();
+                this.getregionList();
             },
             //翻頁
             handleCurrentChange(current) {
                 this.queryMap.pageNum = current;
-                this.getDepartmentList();
+                this.getregionList();
             },
             //關閉彈出框
             closeAddDialog() {
@@ -385,7 +362,7 @@
             }
         },
         created() {
-            this.getDepartmentList();
+            this.getregionList();
             setTimeout(() => {
                 this.loading = false;
             }, 500);
