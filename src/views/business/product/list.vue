@@ -170,7 +170,7 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <!--              给操作员提供的編輯和回收-->
-              <span v-if="scope.row.status == 1">
+              <span v-if="scope.row.status == 0">
                 <el-button
                   type="text"
                   size="mini"

@@ -501,7 +501,7 @@
         >
           <!-- <el-table-column type="selection" width="40"></el-table-column> -->
           <el-table-column
-            prop="cardId"
+            prop="cardName"
             label="卡片號碼"
             width="300"
           ></el-table-column>
@@ -1050,7 +1050,7 @@ export default {
           type: "success",
         });
       } else {
-        this.$message.error("用戶卡片新增失敗:" + res.data.errorMsg);
+        this.$message.error("用戶卡片新增失敗:" + res.data);
       }
       this.addCardId = "";
       this.addCardDialogVisible = false;
