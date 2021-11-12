@@ -36,7 +36,7 @@
             type="success"
             icon="el-icon-circle-plus-outline"
             @click="addDialogVisible = true"
-            >添加</el-button
+            >新增</el-button
           >
         </el-col>
         <el-col :span="2">
@@ -83,7 +83,7 @@
           <el-table-column
             prop="contact"
             label="聯絡人姓名"
-            width="60"
+            width="100"
           ></el-table-column>
           <el-table-column
             prop="phone"
@@ -177,9 +177,9 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
-      <!-- 公司別添加彈出框 -->
+      <!-- 公司別新增彈出框 -->
       <el-dialog
-        title="添加公司"
+        title="新增公司"
         :visible.sync="addDialogVisible"
         width="60%"
         @close="closeAddDialog"
@@ -346,11 +346,11 @@ export default {
       btnDisabled: false,
       loading: true,
       editDialogVisible: false,
-      addDialogVisible: false, //添加彈框是否顯示
+      addDialogVisible: false, //新增彈框是否顯示
       total: 0, //總共多少條數據
       departmentData: [], //表格數據
       queryMap: { pageNum: 1, pageSize: 7, name: "" }, //查詢對象
-      addRuleForm: {}, //添加表單數據
+      addRuleForm: {}, //新增表單數據
       editRuleForm: {}, //修改表單數據
       addRules: {
         typeId: [
@@ -371,7 +371,7 @@ export default {
         email: [
           { required: true, message: "請輸入E-mail郵件信箱", trigger: "blur" },
         ],
-      }, //添加驗證
+      }, //新增驗證
     };
   },
   methods: {
@@ -484,7 +484,7 @@ export default {
       }
       this.editDialogVisible = true;
     },
-    //添加
+    //新增
     add: function () {
       this.$refs.addRuleFormRef.validate(async (valid) => {
         if (!valid) {
@@ -496,11 +496,11 @@ export default {
             this.addRuleForm
           );
           if (res.success) {
-            this.$message.success("公司添加成功");
+            this.$message.success("公司新增成功");
             this.addRuleForm = {};
             await this.getDepartmentList();
           } else {
-            return this.$message.error("公司添加失敗:" + res.data.errorMsg);
+            return this.$message.error("公司新增失敗:" + res.data.errorMsg);
           }
           this.addDialogVisible = false;
           (this.btnLoading = false), (this.btnDisabled = false);

@@ -6,7 +6,7 @@
     >
       <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
       <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-      <el-breadcrumb-item>帳號管理</el-breadcrumb-item>
+      <el-breadcrumb-item>用戶管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 用戶列表卡片區 -->
     <el-card class="box-card">
@@ -17,13 +17,30 @@
         label-width="70px"
         size="small"
       >
+        <el-form-item label="名稱">
+          <el-input
+            clearable
+            @clear="searchUser"
+            v-model="queryMap.nickname"
+            placeholder="請輸入用戶名稱查詢"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="帳號">
+          <el-input
+            @keyup.enter.native="searchUser"
+            @clear="searchUser"
+            clearable
+            v-model="queryMap.username"
+            placeholder="請輸入用戶帳號查詢"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="公司">
           <el-select
             clearable
             @change="searchUser"
             @clear="searchUser"
             v-model="queryMap.departmentId"
-            placeholder="請選擇所屬公司"
+            placeholder="請選擇所屬公司查詢"
           >
             <el-option
               v-for="department in departments"
@@ -40,16 +57,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="帳號">
-          <el-input
-            @keyup.enter.native="searchUser"
-            @clear="searchUser"
-            clearable
-            v-model="queryMap.username"
-            placeholder="請輸入帳號查詢"
-          ></el-input>
-        </el-form-item>
-
         <!-- <el-form-item label="郵箱">
           <el-input
             @keyup.enter.native="searchUser"
@@ -65,15 +72,6 @@
           <el-radio v-model="queryMap.sex" label="0">女</el-radio>
           <el-radio v-model="queryMap.sex" label>全部</el-radio>
         </el-form-item> -->
-
-        <el-form-item label="名稱">
-          <el-input
-            clearable
-            @clear="searchUser"
-            v-model="queryMap.nickname"
-            placeholder="請輸入名稱查詢"
-          ></el-input>
-        </el-form-item>
         <!-- <el-form-item label="狀態">
                   <el-select
                     clearable
@@ -97,13 +95,13 @@
             icon="el-icon-plus"
             @click="addDialogVisible = true"
             v-hasPermission="'user:add'"
-            >添加</el-button
+            >新增</el-button
           >
           <el-button
             @click="downExcel"
             v-hasPermission="'user:export'"
             icon="el-icon-download"
-            >導出</el-button
+            >下載</el-button
           >
         </el-form-item>
       </el-form>
@@ -118,15 +116,15 @@
         height="420"
       >
         <!-- <el-table-column type="selection" width="40"></el-table-column> -->
-        <el-table-column label="#" prop="id" width="50"></el-table-column>
+        <el-table-column label="序號" prop="id" width="50"></el-table-column>
         <el-table-column
-          prop="username"
-          label="帳號"
+          prop="nickname"
+          label="用戶名稱"
           width="110"
         ></el-table-column>
         <el-table-column
-          prop="nickname"
-          label="名稱"
+          prop="username"
+          label="用戶帳號"
           width="110"
         ></el-table-column>
         <!-- <el-table-column
@@ -146,7 +144,6 @@
           prop="departmentName"
           label="所屬公司"
           width="180"
-          sortable
         ></el-table-column>
         <el-table-column
           prop="regionName"
@@ -156,7 +153,7 @@
         <!-- <el-table-column prop="birth" label="生日" width="180" sortable></el-table-column> -->
         <el-table-column
           prop="email"
-          label="信箱"
+          label="E-mail信箱"
           width="180"
         ></el-table-column>
         <!-- <el-table-column
@@ -164,7 +161,7 @@
           label="電話"
           width="150"
         ></el-table-column> -->
-        <el-table-column prop="isban" label="是否禁用" width="100">
+        <el-table-column prop="isban" label="停用" width="100">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.status"
@@ -181,13 +178,13 @@
               icon="el-icon-edit-outline"
               @click="edit(scope.row.id)"
             ></el-button>
-            <el-button
+            <!-- <el-button
               v-hasPermission="'user:delete'"
               type="danger"
               size="small"
               icon="el-icon-delete"
               @click="del(scope.row.id)"
-            ></el-button>
+            ></el-button> -->
             <el-tooltip
               v-hasPermission="'user:assign'"
               class="item"
@@ -207,21 +204,6 @@
             <el-tooltip
               class="item"
               effect="dark"
-              content="卡片管理"
-              placement="top"
-              :enterable="false"
-            >
-              <el-button
-                type="success"
-                size="small"
-                icon="el-icon-bank-card"
-                @click="cardManage(scope.row.id)"
-              ></el-button>
-            </el-tooltip>
-            <!-- todo -->
-            <el-tooltip
-              class="item"
-              effect="dark"
               content="重設密碼"
               placement="top"
               :enterable="false"
@@ -231,6 +213,21 @@
                 size="small"
                 icon="el-icon-setting"
                 @click="resetPwd(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            <!-- todo -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="卡片管理"
+              placement="top"
+              :enterable="false"
+            >
+              <el-button
+                type="success"
+                size="small"
+                icon="el-icon-bank-card"
+                @click="cardManage(scope.row.id)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -250,9 +247,9 @@
         :total="total"
       ></el-pagination>
 
-      <!-- 添加對話框 -->
+      <!-- 新增對話框 -->
       <el-dialog
-        title="添加用戶"
+        title="新增用戶"
         @close="closeDialog"
         :visible.sync="addDialogVisible"
         width="50%;"
@@ -268,15 +265,8 @@
           >
             <el-row>
               <el-col :span="10">
-                <div class="grid-content bg-purple">
-                  <el-form-item label="帳號" prop="username">
-                    <el-input v-model="addForm.username"></el-input>
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :span="12">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="公司" prop="departmentId">
+                  <el-form-item label="所屬公司" prop="departmentId">
                     <el-select
                       v-model="addForm.departmentId"
                       placeholder="請選擇所屬公司"
@@ -291,8 +281,6 @@
                   </el-form-item>
                 </div>
               </el-col>
-            </el-row>
-            <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
                   <el-form-item label="區域" prop="regionId">
@@ -314,12 +302,19 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="名稱" prop="nickname">
+                  <el-form-item label="用戶帳號" prop="username">
+                    <el-input v-model="addForm.username"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="10">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="用戶名稱" prop="nickname">
                     <el-input v-model="addForm.nickname"></el-input>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="12">
+              <!-- <el-col :span="12">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="性別" prop="sex">
                     <el-radio-group v-model="addForm.sex">
@@ -328,27 +323,13 @@
                     </el-radio-group>
                   </el-form-item>
                 </div>
-              </el-col>
+              </el-col> -->
             </el-row>
             <el-form-item label="密碼" prop="password">
               <el-input v-model="addForm.password"></el-input>
             </el-form-item>
-            <el-form-item label="郵箱" prop="email">
+            <el-form-item label="E-mail" prop="email">
               <el-input v-model="addForm.email"></el-input>
-            </el-form-item>
-            <el-form-item label="手機" prop="phoneNumber">
-              <el-input v-model="addForm.phoneNumber"></el-input>
-            </el-form-item>
-            <el-form-item prop="birth" label="生日">
-              <el-col :span="11">
-                <el-date-picker
-                  type="date"
-                  value-format="yyyy年MM月dd日"
-                  placeholder="選擇出生日期"
-                  v-model="addForm.birth"
-                  style="width: 100%"
-                ></el-date-picker>
-              </el-col>
             </el-form-item>
           </el-form>
         </span>
@@ -366,7 +347,7 @@
       </el-dialog>
       <!-- 修改對話框 -->
       <el-dialog
-        title="修改用戶"
+        title="編輯用戶"
         :visible.sync="editDialogVisible"
         width="50%"
         @close="editClose"
@@ -381,24 +362,8 @@
           >
             <el-row>
               <el-col :span="10">
-                <div class="grid-content bg-purple">
-                  <el-form-item label="帳號" prop="username">
-                    <el-input
-                      v-model="editForm.username"
-                      :disabled="true"
-                    ></el-input>
-                    <el-input
-                      type="hidden"
-                      v-model="editForm.id"
-                      :disabled="true"
-                      style="display: none"
-                    ></el-input>
-                  </el-form-item>
-                </div>
-              </el-col>
-              <el-col :span="12">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="公司" prop="departmentId">
+                  <el-form-item label="所屬公司" prop="departmentId">
                     <el-select
                       v-model="editForm.departmentId"
                       placeholder="請選擇所屬公司"
@@ -413,8 +378,6 @@
                   </el-form-item>
                 </div>
               </el-col>
-            </el-row>
-            <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
                   <el-form-item label="區域" prop="regionId">
@@ -436,40 +399,35 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="名稱" prop="nickname">
+                  <el-form-item label="用戶帳號" prop="username">
+                    <el-input
+                      v-model="editForm.username"
+                      :disabled="true"
+                    ></el-input>
+                    <el-input
+                      type="hidden"
+                      v-model="editForm.id"
+                      :disabled="true"
+                      style="display: none"
+                    ></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="10">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="用戶名稱" prop="nickname">
                     <el-input v-model="editForm.nickname"></el-input>
                   </el-form-item>
                 </div>
               </el-col>
-              <el-col :span="12">
-                <div class="grid-content bg-purple-light">
-                  <el-form-item label="性別" prop="sex">
-                    <el-radio-group v-model="editForm.sex">
-                      <el-radio :label="1">帥哥</el-radio>
-                      <el-radio :label="0">美女</el-radio>
-                    </el-radio-group>
+              <el-col :span="10">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="E-mail" prop="email">
+                    <el-input v-model="editForm.email"></el-input>
                   </el-form-item>
                 </div>
               </el-col>
             </el-row>
-
-            <el-form-item label="郵箱" prop="email">
-              <el-input v-model="editForm.email"></el-input>
-            </el-form-item>
-            <el-form-item label="聯繫方式" prop="phoneNumber">
-              <el-input v-model="editForm.phoneNumber"></el-input>
-            </el-form-item>
-            <el-form-item prop="birth" label="生日">
-              <el-col :span="11">
-                <el-date-picker
-                  type="date"
-                  value-format="yyyy年MM月dd日"
-                  placeholder="選擇出生日期"
-                  v-model="editForm.birth"
-                  style="width: 100%"
-                ></el-date-picker>
-              </el-col>
-            </el-form-item>
           </el-form>
         </span>
 
@@ -530,7 +488,7 @@
           icon="el-icon-plus"
           @click="addCardDialogVisible = true"
           v-hasPermission="'user:add'"
-          >添加</el-button
+          >新增</el-button
         >
         <!-- 表格區域 -->
         <el-table
@@ -544,10 +502,25 @@
           <!-- <el-table-column type="selection" width="40"></el-table-column> -->
           <el-table-column
             prop="cardName"
-            label="卡片號碼"
-            width="300"
+            label="過磅卡號"
+            width="200"
           ></el-table-column>
-          <el-table-column prop="isban" label="是否禁用" width="100">
+          <el-table-column
+            prop="departmentCategoryName"
+            label="公司類型"
+            width="100"
+          ></el-table-column>
+          <el-table-column
+            prop="departmentName"
+            label="公司名稱"
+            width="100"
+          ></el-table-column>
+          <el-table-column
+            prop="regionName"
+            label="區域位置"
+            width="100"
+          ></el-table-column>
+          <el-table-column prop="isban" label="停用" width="100">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -595,9 +568,9 @@
           >
         </span> -->
       </el-dialog>
-      <!-- 添加卡片對話框 -->
+      <!-- 新增卡片對話框 -->
       <el-dialog
-        title="添加卡片"
+        title="新增卡片"
         :visible.sync="addCardDialogVisible"
         width="50%"
       >
@@ -711,11 +684,11 @@ export default {
       departments: [],
       loading: true,
       total: 0,
-      addDialogVisible: false, //添加對話框,
+      addDialogVisible: false, //新增對話框,
       editDialogVisible: false, //修改對話框
       assignDialogVisible: false, //分配角色對話框
       cardManagementVisible: false, //卡片管理對話框
-      addCardDialogVisible: false, //添加卡片對話框
+      addCardDialogVisible: false, //新增卡片對話框
       assignCardProdcutsDialogVisible: false, //卡片分配產品對話框
       resetPwdDialogVisable: false, //修改密碼對話框
       labelPosition: "right", //lable對齊方式
@@ -738,7 +711,7 @@ export default {
         phoneNumber: "",
         sex: "",
         birth: "",
-      }, //添加表單
+      }, //新增表單
       editForm: {}, //更新表單
       addCardUserId: "",
       addCardId: "",
@@ -746,50 +719,18 @@ export default {
       newPassword: "",
       addFormRules: {
         username: [
-          { required: true, message: "請輸入帳號", trigger: "blur" },
-          {
-            min: 3,
-            max: 10,
-            message: "長度在 3 到 10 個字符",
-            trigger: "blur",
-          },
+          { required: true, message: "請輸入用戶帳號", trigger: "blur" },
         ],
-        password: [
-          { required: true, message: "請輸入密碼", trigger: "blur" },
-          {
-            min: 3,
-            max: 12,
-            message: "長度在 3 到 12 個字符",
-            trigger: "blur",
-          },
-        ],
+        password: [{ required: true, message: "請輸入密碼", trigger: "blur" }],
         departmentId: [
-          { required: true, message: "請選擇公司", trigger: "blur" },
+          { required: true, message: "請選擇所屬公司", trigger: "blur" },
         ],
-        sex: [{ required: true, message: "請選擇性別", trigger: "blur" }],
-        birth: [{ required: true, message: "請填寫出生日期", trigger: "blur" }],
-        email: [{ required: true, validator: checkEmail, trigger: "blur" }],
-        phoneNumber: [
-          {
-            required: true,
-            message: "請輸入聯繫方式",
-            // validator: checkPhone,
-            trigger: "blur",
-          },
-        ],
+        email: [{ required: true, message: "請輸入E-mail", trigger: "blur" }],
         nickname: [
-          { required: true, message: "請輸入名稱", trigger: "blur" },
-          {
-            min: 5,
-            max: 10,
-            message: "長度在 5 到 10 個字符",
-            trigger: "blur",
-          },
+          { required: true, message: "請輸入用戶名稱", trigger: "blur" },
         ],
-        regionId: [
-          { required: true, message: "請選擇區域", trigger: "blur" },
-        ],
-      }, //添加表單驗證規則
+        regionId: [{ required: true, message: "請選擇區域", trigger: "blur" }],
+      }, //新增表單驗證規則
       roles: [], //角色
       value: [], //用戶擁有的角色
       uid: "",
@@ -995,7 +936,7 @@ export default {
       }
     },
     /**
-     * 添加用戶
+     * 新增用戶
      */
     async addUser() {
       this.$refs.addFormRef.validate(async (valid) => {
@@ -1011,13 +952,13 @@ export default {
           if (res.success) {
             this.$notify.success({
               title: "操作成功",
-              message: "用戶添加成功",
+              message: "用戶新增成功",
             });
             this.addForm = {};
             await this.getUserList();
             await this.getDepartmets();
           } else {
-            return this.$message.error("用戶添加失敗:" + res.data.errorMsg);
+            return this.$message.error("用戶新增失敗:" + res.data.errorMsg);
           }
           this.addDialogVisible = false;
           this.btnLoading = false;
@@ -1140,7 +1081,7 @@ export default {
     },
 
     /**
-     * 關閉添加彈出框
+     * 關閉新增彈出框
      */
     closeDialog() {
       this.$refs.addFormRef.clearValidate();
