@@ -114,6 +114,22 @@
                 label-width="80px"
                 :rules="addFormRules"
         >
+          <!-- <el-form-item label="父節點" prop="menuName">
+            <el-input v-model="editForm.parentId"></el-input>
+          </el-form-item> -->
+          <el-form-item v-if="editForm.parentId!=0" label="父節點" prop="parentId">
+            <el-select
+            v-model="editForm.parentId"
+            placeholder="請選擇父節點"
+            >
+            <el-option
+                v-for="menu in data"
+                :key="menu.id"
+                :label="menu.menuName"
+                :value="menu.id"
+            ></el-option>
+            </el-select>
+        </el-form-item>
           <el-form-item label="節點名稱" prop="menuName">
             <el-input v-model="editForm.menuName"></el-input>
           </el-form-item>

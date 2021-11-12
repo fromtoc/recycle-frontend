@@ -148,6 +148,11 @@
           width="180"
           sortable
         ></el-table-column>
+        <el-table-column
+          prop="regionName"
+          label="區域"
+          width="100"
+        ></el-table-column>
         <!-- <el-table-column prop="birth" label="生日" width="180" sortable></el-table-column> -->
         <el-table-column
           prop="email"
@@ -290,6 +295,25 @@
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
+                  <el-form-item label="區域" prop="regionId">
+                    <el-select
+                      v-model="addForm.regionId"
+                      placeholder="請選擇區域"
+                    >
+                      <el-option
+                        v-for="region in regions"
+                        :key="region.id"
+                        :label="region.value"
+                        :value="region.id"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="10">
+                <div class="grid-content bg-purple">
                   <el-form-item label="名稱" prop="nickname">
                     <el-input v-model="addForm.nickname"></el-input>
                   </el-form-item>
@@ -390,7 +414,25 @@
                 </div>
               </el-col>
             </el-row>
-
+            <el-row>
+              <el-col :span="10">
+                <div class="grid-content bg-purple">
+                  <el-form-item label="區域" prop="regionId">
+                    <el-select
+                      v-model="editForm.regionId"
+                      placeholder="請選擇區域"
+                    >
+                      <el-option
+                        v-for="region in regions"
+                        :key="region.id"
+                        :label="region.value"
+                        :value="region.id"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </el-col>
+            </el-row>
             <el-row>
               <el-col :span="10">
                 <div class="grid-content bg-purple">
@@ -571,7 +613,7 @@
           <el-button type="primary" @click="addCard">確 定</el-button>
         </span>
       </el-dialog>
-       <!-- 分配廢棄物對話框 -->
+      <!-- 分配廢棄物對話框 -->
       <el-dialog
         center
         title="分配廢棄物"
@@ -591,7 +633,9 @@
           </template>
         </span>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="assignCardProdcutsDialogVisible = false" class="el-icon-close"
+          <el-button
+            @click="assignCardProdcutsDialogVisible = false"
+            class="el-icon-close"
             >取消分配</el-button
           >
           <el-button
@@ -661,6 +705,7 @@ export default {
       }, 100);
     };
     return {
+      regions: [],
       btnLoading: false,
       btnDisabled: false,
       departments: [],
@@ -740,6 +785,9 @@ export default {
             message: "長度在 5 到 10 個字符",
             trigger: "blur",
           },
+        ],
+        regionId: [
+          { required: true, message: "請選擇區域", trigger: "blur" },
         ],
       }, //添加表單驗證規則
       roles: [], //角色
@@ -1129,7 +1177,7 @@ export default {
      */
     async changCardStatus(row) {
       const { data: res } = await this.$http.put(
-        "system/user/updateCardStatus/" + row.id + "/" + + row.status
+        "system/user/updateCardStatus/" + row.id + "/" + +row.status
       );
       if (!res.success) {
         this.$message.error("更新卡片狀態失敗:" + res.data.errorMsg);
@@ -1151,6 +1199,16 @@ export default {
         return this.$message.error("獲取公司列表失敗:" + res.data.errorMsg);
       }
       this.departments = res.data;
+    },
+    /**
+     * 加載所有區域類別
+     */
+    async getRegion() {
+      const { data: res } = await this.$http.get("system/region/findAll");
+      if (!res.success) {
+        return this.$message.error("獲取區域失敗:" + res.data.errorMsg);
+      }
+      this.regions = res.data;
     },
     /**
      * 顯示用戶性別
@@ -1189,6 +1247,7 @@ export default {
   created() {
     this.getUserList();
     this.getDepartmets();
+    this.getRegion();
     setTimeout(() => {
       this.loading = false;
     }, 500);

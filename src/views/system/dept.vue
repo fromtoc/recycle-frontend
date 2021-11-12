@@ -6,11 +6,11 @@
       style="padding-left: 10px; padding-bottom: 10px; font-size: 12px"
     >
       <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
-      <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+      <el-breadcrumb-item>基本資料</el-breadcrumb-item>
       <el-breadcrumb-item>公司管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 右側卡片區域 -->
-    <!-- 用戶列表卡片區 -->
+    <!-- 公司列表卡片區 -->
     <el-card class="box-card">
       <el-row :gutter="20">
         <el-col :span="8">
@@ -18,7 +18,7 @@
             size="small"
             clearable
             v-model="queryMap.name"
-            placeholder="請輸入公司查詢"
+            placeholder="請輸入公司名稱查詢"
             @clear="search"
             class="input-with-select"
           >
@@ -45,7 +45,7 @@
             icon="el-icon-download"
             v-hasPermission="'department:export'"
             @click="downExcel"
-            >導出</el-button
+            >下載</el-button
           >
         </el-col>
       </el-row>
@@ -61,8 +61,8 @@
           height="460"
         >
           <el-table-column
-            prop="typeNumber"
-            label="公司帳號"
+            prop="id"
+            label="序號"
             width="70"
           ></el-table-column>
           <el-table-column
@@ -72,7 +72,7 @@
           ></el-table-column>
           <el-table-column
             prop="name"
-            label="公司名"
+            label="公司名稱"
             width="120"
           ></el-table-column>
           <el-table-column
@@ -82,32 +82,27 @@
           ></el-table-column>
           <el-table-column
             prop="contact"
-            label="聯絡人"
+            label="聯絡人姓名"
             width="60"
           ></el-table-column>
           <el-table-column
             prop="phone"
-            label="電話"
+            label="聯絡人市話"
             width="100"
           ></el-table-column>
           <el-table-column
             prop="cellPhone"
-            label="手機"
+            label="聯絡人手機"
             width="100"
           ></el-table-column>
           <el-table-column
             prop="email"
-            label="信箱"
+            label="E-mail郵件信箱"
             width="150"
           ></el-table-column>
           <el-table-column
             prop="remark"
             label="備註"
-            width="100"
-          ></el-table-column>
-          <el-table-column
-            prop="regionName"
-            label="區域"
             width="100"
           ></el-table-column>
           <el-table-column prop="total" label="人數" sortable width="70">
@@ -120,7 +115,7 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="isban" label="廚餘" width="100">
+          <el-table-column prop="isban" label="廚餘標記" width="100">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.food"
@@ -128,7 +123,7 @@
               ></el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="isban" label="是否禁用" width="100">
+          <el-table-column prop="isban" label="停用" width="100">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -158,14 +153,14 @@
                 >編輯</el-button
               >
 
-              <el-button
+              <!-- <el-button
                 v-hasPermission="'department:delete'"
                 type="text"
                 size="small"
                 icon="el-icon-delete"
                 @click="del(scope.row.id)"
                 >删除</el-button
-              >
+              > -->
             </template>
           </el-table-column>
         </el-table>
@@ -186,7 +181,7 @@
       <el-dialog
         title="添加公司"
         :visible.sync="addDialogVisible"
-        width="50%"
+        width="60%"
         @close="closeAddDialog"
       >
         <span>
@@ -197,10 +192,10 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="公司類別" prop="typeId">
+            <el-form-item label="公司類型" prop="typeId">
               <el-select
                 v-model="addRuleForm.typeId"
-                placeholder="請選擇公司類別"
+                placeholder="請選擇公司類型"
               >
                 <el-option
                   v-for="departmentCategory in departmentCategories"
@@ -216,30 +211,17 @@
             <el-form-item label="公司簡稱" prop="nickname">
               <el-input v-model="addRuleForm.nickname"></el-input>
             </el-form-item>
-            <el-form-item label="聯絡人" prop="contact">
+            <el-form-item label="聯絡人姓名" prop="contact">
               <el-input v-model="addRuleForm.contact"></el-input>
             </el-form-item>
-            <el-form-item label="電話" prop="phone">
+            <el-form-item label="聯絡人市話" prop="phone">
               <el-input v-model="addRuleForm.phone"></el-input>
             </el-form-item>
-            <el-form-item label="手機" prop="cellPhone">
+            <el-form-item label="聯絡人手機" prop="cellPhone">
               <el-input v-model="addRuleForm.cellPhone"></el-input>
             </el-form-item>
-            <el-form-item label="信箱" prop="email">
+            <el-form-item label="E-mail" prop="email">
               <el-input v-model="addRuleForm.email"></el-input>
-            </el-form-item>
-            <el-form-item label="區域" prop="regionId">
-              <el-select
-                v-model="addRuleForm.regionId"
-                placeholder="請選擇區域"
-              >
-                <el-option
-                  v-for="region in regions"
-                  :key="region.id"
-                  :label="region.value"
-                  :value="region.id"
-                ></el-option>
-              </el-select>
             </el-form-item>
             <el-form-item label="備註" prop="remark">
               <el-input type="textarea" v-model="addRuleForm.remark"></el-input>
@@ -279,10 +261,10 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="公司類別" prop="typeId">
+            <el-form-item label="公司類型" prop="typeId">
               <el-select
                 v-model="editRuleForm.typeId"
-                placeholder="請選擇公司類別"
+                placeholder="請選擇公司類型"
               >
                 <el-option
                   v-for="departmentCategory in departmentCategories"
@@ -298,30 +280,17 @@
             <el-form-item label="公司簡稱" prop="nickname">
               <el-input v-model="editRuleForm.nickname"></el-input>
             </el-form-item>
-            <el-form-item label="聯絡人" prop="contact">
+            <el-form-item label="聯絡人姓名" prop="contact">
               <el-input v-model="editRuleForm.contact"></el-input>
             </el-form-item>
-            <el-form-item label="電話" prop="phone">
+            <el-form-item label="聯絡人市話" prop="phone">
               <el-input v-model="editRuleForm.phone"></el-input>
             </el-form-item>
-            <el-form-item label="手機" prop="cellPhone">
+            <el-form-item label="聯絡人手機" prop="cellPhone">
               <el-input v-model="editRuleForm.cellPhone"></el-input>
             </el-form-item>
-            <el-form-item label="信箱" prop="email">
+            <el-form-item label="E-mail" prop="email">
               <el-input v-model="editRuleForm.email"></el-input>
-            </el-form-item>
-            <el-form-item label="區域" prop="regionId">
-              <el-select
-                v-model="editRuleForm.regionId"
-                placeholder="請選擇區域"
-              >
-                <el-option
-                  v-for="region in regions"
-                  :key="region.id"
-                  :label="region.value"
-                  :value="region.id"
-                ></el-option>
-              </el-select>
             </el-form-item>
             <el-form-item label="備註" prop="remark">
               <el-input type="textarea" v-model="editRuleForm.remark"></el-input>
@@ -373,7 +342,6 @@ export default {
     // };
     return {
       departmentCategories: [],
-      regions: [],
       btnLoading: false,
       btnDisabled: false,
       loading: true,
@@ -385,32 +353,24 @@ export default {
       addRuleForm: {}, //添加表單數據
       editRuleForm: {}, //修改表單數據
       addRules: {
+        typeId: [
+          { required: true, message: "請選擇公司類型", trigger: "blur" },
+        ],
         name: [
           { required: true, message: "請輸入公司名稱", trigger: "blur" },
-          {
-            min: 3,
-            max: 10,
-            message: "長度在 3 到 10 個字符",
-            trigger: "blur",
-          },
         ],
-        // address: [
-        //   { required: true, message: "請輸入辦公地址", trigger: "blur" },
-        //   {
-        //     min: 4,
-        //     max: 12,
-        //     message: "長度在 4 到 12 個字符",
-        //     trigger: "blur",
-        //   },
-        // ],
-        // phone: [
-        //   {
-        //     required: true,
-        //     message: "請輸入公司聯絡方式",
-        //     // validator: checkPhone,
-        //     trigger: "blur",
-        //   },
-        // ],
+        nickname: [
+          { required: true, message: "請輸入公司簡稱", trigger: "blur" },
+        ],
+        contact: [
+          { required: true, message: "請輸入聯絡人姓名", trigger: "blur" },
+        ],
+        cellPhone: [
+          { required: true, message: "請輸入聯絡人手機", trigger: "blur" },
+        ],
+        email: [
+          { required: true, message: "請輸入E-mail郵件信箱", trigger: "blur" },
+        ],
       }, //添加驗證
     };
   },
@@ -595,16 +555,6 @@ export default {
       this.departmentCategories = res.data;
     },
     /**
-     * 加載所有區域類別
-     */
-    async getRegion() {
-      const { data: res } = await this.$http.get("system/region/findAll");
-      if (!res.success) {
-        return this.$message.error("獲取區域失敗:" + res.data.errorMsg);
-      }
-      this.regions = res.data;
-    },
-    /**
      * 禁用啟用公司
      */
     async changeStatus(row) {
@@ -644,7 +594,6 @@ export default {
   created() {
     this.getDepartmentList();
     this.getDepartmentCategory();
-    this.getRegion();
     setTimeout(() => {
       this.loading = false;
     }, 500);

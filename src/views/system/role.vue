@@ -51,6 +51,7 @@
                         size="small"
                 >
                     <el-table-column prop="id" label="ID" width="180"></el-table-column>
+                    <el-table-column prop="type" label="類型" width="180"></el-table-column>
                     <el-table-column prop="roleName" label="角色名" width="180"></el-table-column>
                     <el-table-column prop="createTime" label="創建時間" width="150"></el-table-column>
                     <el-table-column prop="isban" label="是否禁用" width="100">

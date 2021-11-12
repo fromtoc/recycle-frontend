@@ -1037,8 +1037,6 @@ export default {
     confirmDeductNumber: function () {
       var reg = /^(0|[1-9][0-9]*)+(.[0-9]{1,6})?$/;
       if (reg.test(this.deductWeight)) {
-        this.totalWeight = Number(this.totalWeight);
-        this.deductWeight = Number(this.deductWeight);
         this.netWeight = this.count(this.totalWeight, this.deductWeight);
         this.deductPage = false;
         this.finalPage = true;
