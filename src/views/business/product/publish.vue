@@ -28,7 +28,7 @@
                                 :model="addRuleForm"
                                 label-width="80px"
                         >
-                            <el-form-item label="添加方式" >
+                            <el-form-item label="新增方式" >
                                 <el-col :span="24"><div class="grid-content bg-purple">
                                     <el-radio border size="mini"  @change="existenceChange(existence)" v-model="existence"  :label="0">新增去向</el-radio>
                                     <el-radio border size="mini" @change="existenceChange(existence)"  v-model="existence" :label="1">已知去向</el-radio>
@@ -230,7 +230,7 @@
                             </el-form-item>
                         </el-form>
                         <el-alert
-                                title="勾選先下方廢棄物後,在左側表單的明细中添加其發放數量"
+                                title="勾選先下方廢棄物後,在左側表單的明细中新增其發放數量"
                                 type="warning"
                                 show-icon style="margin-bottom:20px;">
                         </el-alert>
@@ -443,7 +443,7 @@
                             trigger: "blur"
                         }
                     ]
-                }, //添加驗證
+                }, //新增驗證
             }
         },
         methods:{
@@ -576,7 +576,7 @@
                         this.addRuleForm.origin = this.originList[index].label;
                     }
                 });
-                //添加this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
+                //新增this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
                 this.$forceUpdate();
             },
 
@@ -674,7 +674,7 @@
             /**
              * 創建發放單
              */
-            //添加
+            //新增
             add() {
                 this.$refs.addRuleFormRef.validate(async valid => {
                     if (!valid) {
@@ -697,7 +697,7 @@
                             this.addRuleForm.products = car;
                         } else {
                             return this.$message.warning(
-                                "發放商品的數量不能為空，請勾選廢棄物後在明细中添加數量"
+                                "發放商品的數量不能為空，請勾選廢棄物後在明细中新增數量"
                             );
                         }
                         var res = await this.$confirm("此操作將提交發放單, 是否繼續?", "提示", {

@@ -22,6 +22,7 @@ export const hasPermission = {
             //   el.parentNode.removeChild(el);
             // }
             el.setAttribute("disabled",true);
+            el.setAttribute("style","display:none")
             el.classList.add("is-disabled");
           }
         }

@@ -86,7 +86,6 @@
                 loginRules: {
                     username: [
                         {required: true, message: "請輸入帳號", trigger: "blur"},
-                        {min: 3, max: 12, message: "長度在 3 到 12 個字符", trigger: "blur"}
                     ],
                     password: [
                         {required: true, message: "請輸入用戶密碼", trigger: "blur"},

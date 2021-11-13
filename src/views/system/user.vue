@@ -44,11 +44,11 @@
           >
             <el-option
               v-for="department in departments"
-              :label="department.name"
+              :label="department.nickname"
               :key="department.id"
               :value="department.id"
             >
-              <span style="float: left">{{ department.name }}</span>
+              <span style="float: left">{{ department.nickname }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">
                 <el-tag size="small" effect="plain" type="success">
                   {{ department.total }}人
@@ -108,6 +108,7 @@
 
       <!-- 表格區域 -->
       <el-table
+        empty-text="暫無數據"
         v-loading="loading"
         size="small"
         :data="userList"
@@ -116,7 +117,7 @@
         height="420"
       >
         <!-- <el-table-column type="selection" width="40"></el-table-column> -->
-        <el-table-column label="序號" prop="id" width="50"></el-table-column>
+        <el-table-column label="序號" type="index" width="50"></el-table-column>
         <el-table-column
           prop="nickname"
           label="用戶名稱"
@@ -274,7 +275,7 @@
                       <el-option
                         v-for="department in departments"
                         :key="department.id"
-                        :label="department.name"
+                        :label="department.nickname"
                         :value="department.id"
                       ></el-option>
                     </el-select>
@@ -371,7 +372,7 @@
                       <el-option
                         v-for="department in departments"
                         :key="department.id"
-                        :label="department.name"
+                        :label="department.nickname"
                         :value="department.id"
                       ></el-option>
                     </el-select>
@@ -488,13 +489,20 @@
           icon="el-icon-plus"
           @click="addCardDialogVisible = true"
           v-hasPermission="'user:add'"
+          style="margin-bottom: 5px"
           >新增</el-button
         >
+        <div style="float: right">
+          <span style="margin-right: 5px">顯示停用</span>
+          <el-switch v-model="showCardStop"></el-switch>
+        </div>
+
         <!-- 表格區域 -->
         <el-table
+          empty-text="暫無數據"
           v-loading="loading"
           size="small"
-          :data="cardList"
+          :data="cardListFilter"
           border
           style="width: 100%"
           height="420"
@@ -678,6 +686,7 @@ export default {
       }, 100);
     };
     return {
+      showCardStop: false,
       regions: [],
       btnLoading: false,
       btnDisabled: false,
@@ -738,6 +747,14 @@ export default {
       cardProductsValue: [], //卡片擁有的產品
       cid: "",
     };
+  },
+  computed: {
+    cardListFilter: function () {
+      if (!this.showCardStop) {
+        return this.cardList.filter((item) => item.status !== true);
+      }
+      return this.cardList.filter((item) => item.status == true);
+    },
   },
   methods: {
     /**

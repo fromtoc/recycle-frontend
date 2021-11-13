@@ -31,7 +31,7 @@
         :expand-type="false"
         :selection-type="false"
         sum-text="sum"
-        index-text="#"
+        index-text="序號"
         :data="categorys"
         :columns="columns"
       >

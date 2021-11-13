@@ -1,428 +1,581 @@
 <template>
-    <div id="inStocks">
-        <!-- 面包導航 -->
-        <el-breadcrumb separator="/" style="padding-left:10px;padding-bottom:10px;font-size:12px;">
-            <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
-            <el-breadcrumb-item>秤重管理</el-breadcrumb-item>
-            <el-breadcrumb-item>秤重明細查詢</el-breadcrumb-item>
-        </el-breadcrumb>
-        <!-- 卡片區域 -->
-        <el-card>
-            <!-- 搜索部分 -->
-            <el-form size="small" :inline="true" :model="queryMap" class="demo-form-inline">
-                <!-- <el-form-item label="類型">
-                    <el-select  clearable  v-model="queryMap.type" placeholder="請選擇入庫類型">
-                        <el-option label="捐赠" value="1"></el-option>
-                        <el-option label="下拨" value="2"></el-option>
-                        <el-option label="采购" value="3"></el-option>
-                        <el-option label="借用" value="4"></el-option>
-                    </el-select>
-                </el-form-item> -->
-                <!-- <el-form-item>
-                    <el-select    v-model="queryMap.status" placeholder="請選擇狀態">
-                        <el-option label="已入庫" :value="0"></el-option>
-                        <el-option label="回收站" :value="1"></el-option>
-                        <el-option label="待审核" :value="2"></el-option>
-                    </el-select>
-                </el-form-item> -->
-                <el-form-item>
-                    <el-date-picker
-                            :clearable="false"
-                            v-model="range"
-                            type="datetimerange"
-                            :value-format="'yyyy-MM-dd HH:mm:ss'"
-                            :picker-options="pickerOptions"
-                            range-separator="至"
-                            start-placeholder="開始日期"
-                            end-placeholder="结束日期"
-                            align="right">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="廢棄物">
+  <div id="users">
+    <el-breadcrumb
+      separator="/"
+      style="padding-left: 10px; padding-bottom: 10px; font-size: 12px"
+    >
+      <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
+      <el-breadcrumb-item>秤重管理</el-breadcrumb-item>
+      <el-breadcrumb-item>秤重明細維護</el-breadcrumb-item>
+    </el-breadcrumb>
+    <!-- 秤重明細列表卡片區 -->
+    <el-card class="box-card">
+      <el-form
+        :inline="true"
+        ref="form"
+        :model="queryMap"
+        label-width="70px"
+        size="small"
+      >
+        <el-form-item label="公司">
+          <el-select
+            clearable
+            @change="searchWeight"
+            @clear="searchWeight"
+            v-model="queryMap.departmentId"
+            placeholder="請選擇公司查詢"
+          >
+            <el-option
+              v-for="department in departments"
+              :label="department.nickname"
+              :key="department.id"
+              :value="department.id"
+            >
+              <span style="float: left">{{ department.nickname }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">
+                <el-tag size="small" effect="plain" type="success">
+                  {{ department.total }}人
+                </el-tag>
+              </span>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用戶">
+          <el-input
+            @keyup.enter.native="searchWeight"
+            @clear="searchWeight"
+            clearable
+            v-model="queryMap.userNickname"
+            placeholder="請輸入用戶名稱查詢"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="廢棄物">
+          <el-input
+            clearable
+            @clear="searchWeight"
+            v-model="queryMap.productName"
+            placeholder="請輸入廢棄物名稱查詢"
+          ></el-input>
+        </el-form-item>
+        <el-form-item style="margin-left: 50px"
+          ><el-button @click="reset" icon="el-icon-refresh">重置</el-button>
+          <el-button type="primary" @click="searchWeight" icon="el-icon-search"
+            >查詢</el-button
+          >
+          <el-button
+            type="success"
+            icon="el-icon-plus"
+            @click="addDialogVisible = true"
+            v-hasPermission="'user:add'"
+            >新增</el-button
+          >
+          <el-button
+            @click="downExcel"
+            v-hasPermission="'user:export'"
+            icon="el-icon-download"
+            >下載</el-button
+          ></el-form-item
+        >
 
-                    <el-input
-                            clearable
-                            @clear="search"
-                            v-model="queryMap.inNum"
-                            placeholder="請輸入廢棄物查詢"
-                            @keyup.enter.native="search"
-                            class="input-with-select"
-                    >
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="登入者">
+        <el-form-item label="日期">
+          <el-date-picker
+            v-model="range"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="開始日期"
+            end-placeholder="结束日期"
+            :value-format="'yyyy-MM-dd HH:mm:ss'"
+          >
+          </el-date-picker>
+        </el-form-item>
 
-                    <el-input
-                            clearable
-                            @clear="search"
-                            v-model="queryMap.inNum"
-                            placeholder="請輸入登入者查詢"
-                            @keyup.enter.native="search"
-                            class="input-with-select"
-                    >
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="公司">
+        <el-form-item style="float: right">
+          <div style="float: right">
+            <span style="margin-right: 5px">顯示停用</span>
+            <el-switch v-model="showWeightStop"></el-switch>
+          </div>
+        </el-form-item>
+      </el-form>
 
-                    <el-input
-                            clearable
-                            @clear="search"
-                            v-model="queryMap.inNum"
-                            placeholder="請輸入公司查詢"
-                            @keyup.enter.native="search"
-                            class="input-with-select"
-                    >
-                    </el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" icon="el-icon-search" @click="search">查詢</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-button icon="el-icon-refresh" type="warning" @click="clearTime">重置</el-button>
-                </el-form-item>
-                <!-- <el-form-item>
-                    <router-link to="/business/product/add-stocks">
-                        <el-button type="success" icon="el-icon-plus">入庫</el-button>
-                    </router-link>
-                </el-form-item> -->
-
-                <!-- <el-form-item>
-                    <el-button type="button" icon="el-icon-download">導出</el-button>
-                </el-form-item> -->
-
-            </el-form>
-            <!-- 表格區域 -->
-            <el-table empty-text="暫無數據" size="mini" v-loading="loading" :data="tableData" border style="width: 100%;" height="420">
-                <el-table-column label="#" prop="id" width="50"></el-table-column>
-                <el-table-column  prop="inNum" :show-overflow-tooltip='true' label="秤重單號" width="180"></el-table-column>
-                <!-- <el-table-column prop="type" label="廢棄物類型" width="100">
-                    <template slot-scope="scope">
-                        <el-tag  type="success" v-if="scope.row.type===1">捐赠</el-tag>
-                        <el-tag  v-else-if="scope.row.type===2">下拨</el-tag>
-                        <el-tag  type="danger" v-else-if="scope.row.type===3">采购</el-tag>
-                        <el-tag  type="warning" v-else>借用</el-tag>
-                    </template>
-                </el-table-column> -->
-                <el-table-column prop="createTime" label="時間" sortable width="180"></el-table-column>
-                <el-table-column prop="phone" label="廢棄物" width="150"></el-table-column>
-                <el-table-column prop="productNumber" label="淨重" sortable width="100"></el-table-column>
-                <el-table-column prop="productNumber" label="總重" sortable width="100"></el-table-column>
-                <el-table-column prop="productNumber" label="扣重" sortable width="100"></el-table-column>
-                <el-table-column prop="operator" label="登入者" width="180"></el-table-column>
-                <el-table-column prop="operator" label="公司" width="180"></el-table-column>
-                <!-- <el-table-column prop="status" label="狀態" width="100">
-                    <template slot-scope="scope">
-                        <el-tag size="mini" type="danger" effect="plain" v-if="scope.row.status==1">回收</el-tag>
-                        <el-tag size="mini" effect="plain" v-if="scope.row.status==0">已入庫</el-tag>
-                        <el-tag size="mini" effect="plain" type="warning" v-if="scope.row.status==2">审核中</el-tag>
-                    </template>
-                </el-table-column> -->
-            </el-table>
-            <!-- 分頁部分 -->
-            <el-pagination
-                    style="margin-top:10px;"
-                    background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="queryMap.pageNum"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size="queryMap.pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total"
-            ></el-pagination>
-            <!-- 入庫明细 -->
-            <el-dialog title="入庫明细" :visible.sync="dialogVisible" @close="closeDetail" width="60%">
-                <!--                来源信息-->
-                <el-card class="box-card" style="margin-bottom: 10px;">
-                    <div  class="text item">
-                        <el-row :gutter="20">
-                            <el-col :span="6">
-                                <div class="grid-content bg-purple">
-                                    <span style="font-size: 11px;color: #303030;">省區市:</span> &nbsp;<el-tag size="mini" >{{supplier.address}}</el-tag>
-                                </div>
-                            </el-col>
-                            <el-col :span="6">
-                                <div class="grid-content bg-purple">
-                                    <span style="font-size: 11px;color: #303030;">具體位置:</span> &nbsp;<el-tag size="mini" >{{supplier.name}}</el-tag>
-                                </div>
-                            </el-col>
-                            <el-col :span="6">
-                                <div class="grid-content bg-purple">
-                                    <span style="font-size: 11px;color: #303030;">聯繫人 :</span> &nbsp;<el-tag size="mini"  >{{supplier.contact}}</el-tag>
-                                </div>
-                            </el-col>
-                            <el-col :span="6">
-                                <div class="grid-content bg-purple">
-                                    <span style="font-size: 11px;color: #303030;">電話 : </span>&nbsp;<el-tag size="mini" >{{supplier.phone}}</el-tag>
-                                </div>
-                            </el-col>
-
-                        </el-row>
-                    </div>
-                </el-card>
-
-                <!--                步骤條-->
-                <el-steps simple v-if="pStatus==0"  style="margin-left: 10px;margin-bottom: 5px;" :space="200" :active="3" finish-status="success">
-                    <el-step title="提交入庫單" ></el-step>
-                    <el-step title="审核入庫單"></el-step>
-                    <el-step title="進入庫存"></el-step>
-                </el-steps>
-                <el-steps simple v-if="pStatus==2"  style="margin-left: 10px;margin-bottom: 5px;" :space="200" :active="2" finish-status="success">
-                    <el-step title="提交入庫單" ></el-step>
-                    <el-step title="审核入庫單"></el-step>
-                    <el-step title="進入庫存"></el-step>
-                </el-steps>
-                <span>
-          <template>
-            <el-table empty-text="暫無數據" height="260" max-height="350" border :data="detailTable" style="width: 100%">
-              <el-table-column prop="name" label="名稱"></el-table-column>
-              <el-table-column :show-overflow-tooltip="true" prop="pnum" label="商品編號"></el-table-column>
-               <el-table-column prop="model" label="規格"></el-table-column>
-              <el-table-column
-                      prop="imageUrl"
-                      label="圖片"
-                      align="center"
-                      width="150px"
-                      padding="0px"
-              >
-                <template slot-scope="scope">
-                  <img
-                          :src="'https://www.zykhome.club/'+scope.row.imageUrl"
-                          alt
-                          style="width: 30px;height:30px"
-                  />
-                </template>
-              </el-table-column>
-               <el-table-column prop="count" label="數量"></el-table-column>
-                <el-table-column prop="unit" label="單位"></el-table-column>
-            </el-table>
-              <!--              明细分頁-->
-        <el-pagination
-                style="margin-top:20px;"
-                background
-                @current-change="handleDetailSizeChange"
-                :current-page="this.pageNum"
-                :page-size="3"
-                layout="prev, pager, next,total"
-                :total="this.detailTotal">
-        </el-pagination>
+      <!-- 表格區域 -->
+      <el-table
+        empty-text="暫無數據"
+        v-loading="loading"
+        size="small"
+        :data="weightListFilter"
+        border
+        style="width: 100%"
+        height="420"
+      >
+        <!-- <el-table-column type="selection" width="40"></el-table-column> -->
+        <el-table-column
+          label="流水編號"
+          prop="id"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="departmentName"
+          label="公司名稱"
+          width="110"
+        ></el-table-column>
+        <el-table-column
+          prop="userNickname"
+          label="用戶名稱"
+          width="110"
+        ></el-table-column>
+        <el-table-column
+          prop="cardName"
+          label="登入卡號"
+          width="110"
+        ></el-table-column>
+        <el-table-column
+          prop="productName"
+          label="廢棄物名稱"
+          width="110"
+        ></el-table-column>
+        <el-table-column
+          prop="totalWeight"
+          label="總重"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="deductWeight"
+          label="扣重"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="netWeight"
+          label="淨重"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="日期"
+          width="150"
+        ></el-table-column>
+        <el-table-column prop="isban" label="作廢" width="100">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.status"
+              @change="changeStatus(scope.row)"
+            ></el-switch>
           </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.status == false"
+              v-hasPermission="'weight:edit'"
+              type="text"
+              size="small"
+              icon="el-icon-edit"
+              @click="edit(scope.row.id)"
+              >編輯</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
 
+      <!-- 分頁 -->
+      <el-pagination
+        style="margin-top: 10px"
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryMap.pageNo"
+        :page-sizes="[6, 10, 20, 30]"
+        :page-size="queryMap.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
+
+      <!-- 新增對話框 -->
+      <el-dialog
+        title="新增秤重明細"
+        @close="closeDialog"
+        :visible.sync="addDialogVisible"
+        width="60%;"
+      >
+        <!-- 表單 -->
+        <span>
+          <el-form
+            :model="addForm"
+            :label-position="labelPosition"
+            :rules="addFormRules"
+            ref="addFormRef"
+            label-width="100px"
+          >
+            <el-form-item label="登入卡號" prop="cardName">
+              <el-input v-model="addForm.cardName"></el-input>
+            </el-form-item>
+            <el-form-item label="廢棄物名稱" prop="productName">
+              <el-input v-model="addForm.productName"></el-input>
+            </el-form-item>
+            <el-form-item label="總重" prop="totalWeight">
+              <el-input type="number" v-model="addForm.totalWeight"></el-input>
+            </el-form-item>
+            <el-form-item label="扣重" prop="deductWeight">
+              <el-input type="number" v-model="addForm.deductWeight"></el-input>
+            </el-form-item>
+            <el-form-item label="淨重" prop="netWeight">
+              <el-input disabled type="number" v-model="netWeight"></el-input>
+            </el-form-item>
+          </el-form>
         </span>
-            </el-dialog>
-        </el-card>
-    </div>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addDialogVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="addWeight"
+            :loading="btnLoading"
+            :disabled="btnDisabled"
+            >確 定</el-button
+          >
+        </span>
+      </el-dialog>
+      <!-- 修改對話框 -->
+      <el-dialog
+        title="編輯用戶"
+        :visible.sync="editDialogVisible"
+        width="60%"
+        @close="editClose"
+      >
+        <span>
+          <el-form
+            :model="editForm"
+            :label-position="labelPosition"
+            :rules="addFormRules"
+            ref="editFormRef"
+            label-width="80px"
+          >
+            <el-form-item label="登入卡號" prop="cardName">
+              <el-input v-model="editForm.cardName"></el-input>
+            </el-form-item>
+            <el-form-item label="廢棄物名稱" prop="productName">
+              <el-input v-model="editForm.productName"></el-input>
+            </el-form-item>
+            <el-form-item label="總重" prop="totalWeight">
+              <el-input type="number" v-model="editForm.totalWeight"></el-input>
+            </el-form-item>
+            <el-form-item label="扣重" prop="deductWeight">
+              <el-input
+                type="number"
+                v-model="editForm.deductWeight"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="淨重" prop="netWeight">
+              <el-input
+                disabled
+                type="number"
+                v-model="editForm.netWeight"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </span>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="editDialogVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="updateWeight"
+            :loading="btnLoading"
+            :disabled="btnDisabled"
+            >確 定</el-button
+          >
+        </span>
+      </el-dialog>
+    </el-card>
+  </div>
 </template>
-
 <script>
-    export default {
-        data() {
-            return {
-                pickerOptions: {
-                    shortcuts: [
-                        {
-                            text: '今天(此刻)',
-                            onClick(picker) {
-                                const end = new Date();
-                                const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-                                picker.$emit('pick', [start, end]);
-                            }
-                        },
-                        {
-                            text: '昨天',
-                            onClick(picker) {
-                                const end = new Date(new Date(new Date().toLocaleDateString()).getTime());
-                                const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-                                start.setTime(start.getTime() - 3600 * 1000 * 24);
-                                picker.$emit('pick', [start, end]);
-                            }
-                        },
-                        {
-                            text: '最近一周',
-                            onClick(picker) {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                                picker.$emit('pick', [start, end]);
-                            }
-                        }, {
-                            text: '最近一個月',
-                            onClick(picker) {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                                picker.$emit('pick', [start, end]);
-                            }
-                        }, {
-                        }, {
-                            text: '最近两個月',
-                            onClick(picker) {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 60);
-                                picker.$emit('pick', [start, end]);
-                            }
-                        }, {
-                            text: '最近三個月',
-                            onClick(picker) {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                                picker.$emit('pick', [start, end]);
-                            }
-                        }]
-                },
-                supplier:{},
-                detailTotal:0,
-                pageNum:1,
-                detailId:undefined,
-                loading: true,
-                detailTable: [],
-                dialogVisible: false,
-                total: 0,
-                queryMap: {pageNum: 1, pageSize: 10, status: 0},
-                tableData: [],
-                range:[],
-                pStatus:'',//步骤flag
-            };
-        },
-        methods: {
-            /**
-             * 關閉明细
-             */
-            closeDetail(){
-                this.pageNum=1;
-            },
-            clearTime(){
-                this.queryMap= {pageNum: 1, pageSize: 10, status: 0};
-                this.queryMap.startTime=null;
-                this.queryMap.endTime=null;
-                this.range=[];
-            },
-            /**
-             *  改變頁碼
-             */
-            handleDetailSizeChange(newSize) {
-                this.pageNum = newSize;
-                this.detail(this.detailId);
-            },
+import axios from "axios";
+export default {
+  data() {
+    return {
+      range: [],
+      showWeightStop: false,
+      regions: [],
+      btnLoading: false,
+      btnDisabled: false,
+      departments: [],
+      loading: true,
+      total: 0,
+      addDialogVisible: false, //新增對話框,
+      editDialogVisible: false, //修改對話框
+      labelPosition: "right", //lable對齊方式
+      //查詢對象
+      queryMap: {
+        pageNum: 1,
+        pageSize: 6,
+      },
+      weightList: [],
 
-            /**
-             *廢棄物入庫审核
-             */
-            async publish(id){
-                const { data: res } = await this.$http.put("business/inStock/publish/"+id);
-                if (!res.success) {
-                    return this.$message.error("审核失敗:"+res.data.errorMsg);
-                } else {
-                    await this.loadTableData();
-                    return this.$message.success("入庫已审核通過");
-                }
-            },
-            /**
-             * 從回收站恢复
-             */
-            async back(id){
-                const { data: res } = await this.$http.put("business/inStock/back/"+id);
-                if (!res.success) {
-                    return this.$message.error("從回收站恢复失敗:"+res.data.errorMsg);
-                } else {
-                    await this.loadTableData();
-                    return this.$message.success("從回收站中已恢复");
-                }
-            },
-            /**
-             * 移除回收站
-             */
-            async remove(id) {
-                const {data: res} = await this.$http.put("business/inStock/remove/" + id);
-                if (!res.success) {
-                    return this.$message.error("移入回收站失敗:" + res.data.errorMsg);
-                } else {
-                    await this.loadTableData();
-                    return this.$message.success("移入回收站成功");
-                }
-            },
-            /**删除明细
-             */
-            async del(id) {
-                const {data: res} = await this.$http.get("business/inStock/delete/" + id);
-                if (!res.success) {
-                    return this.$message.error("删除失敗:" + res.data.errorMsg);
-                } else {
-                    await this.loadTableData();
-                    return this.$message.success("删除入庫單記錄成功");
-                }
-            },
-            /**
-             * 查看入庫單明细
-             */
-            async detail(id) {
-                this.detailId=id;
-                const {data: res} = await this.$http.get("business/inStock/detail/" + id+"?pageNum="+this.pageNum);
-                if (!res.success) {
-                    this.$message.error("獲取明细失敗:" + res.data.errorMsg);
-                } else {
-                    this.detailTable = res.data.itemVOS;
-                    this.detailTotal = res.data.total;
-                    this.supplier=res.data.supplierVO;
-                    this.pStatus=res.data.status;
-                    this.dialogVisible = true;
-
-                }
-
-            },
-            /**
-             * 加載表格數據
-             */
-            async loadTableData() {
-
-                if(this.range!=null&&this.range.length===1){
-                    this.queryMap.startTime=this.range[0];
-                }else if(this.range!=null&&this.range.length===2){
-                    this.queryMap.startTime=this.range[0];
-                    this.queryMap.endTime=this.range[1];
-                }
-
-                const {data: res} = await this.$http.get("business/inStock/findInStockList", {
-                    params: this.queryMap
-                });
-                if (!res.success) {
-                    return this.$message.error("獲取列表失敗:"+res.data.errorMsg);
-                } else {
-                    this.total = res.data.total;
-                    this.tableData = res.data.rows;
-                }
-            },
-            /**
-             * 改變頁碼
-             */
-            handleSizeChange(newSize) {
-                this.queryMap.pageSize = newSize;
-                this.loadTableData();
-            },
-            /**
-             * 查詢入庫單
-             */
-            search() {
-                this.queryMap.pageNum = 1;
-                this.loadTableData();
-            },
-            /**
-             * 點擊分頁
-             */
-            handleCurrentChange(current) {
-                this.queryMap.pageNum = current;
-                this.loadTableData();
-            }
-        },
-        created() {
-            this.loadTableData();
-            setTimeout(() => {
-                this.loading = false;
-            }, 1000);
-        }
+      addForm: {}, //新增表單
+      editForm: {}, //更新表單
+      addCardUserId: "",
+      addCardId: "",
+      changePasswordUserId: "",
+      newPassword: "",
+      addFormRules: {
+        cardName: [
+          { required: true, message: "請輸入登入卡號", trigger: "blur" },
+        ],
+        productName: [
+          { required: true, message: "請輸入廢棄物名稱", trigger: "blur" },
+        ],
+        totalWeight: [
+          { required: true, message: "請輸入總重", trigger: "blur" },
+        ],
+        deductWeight: [
+          { required: true, message: "請輸入扣重", trigger: "blur" },
+        ],
+      }, //新增表單驗證規則
+      roles: [], //角色
+      value: [], //用戶擁有的角色
+      uid: "",
+      products: [], //產品
+      cardProductsValue: [], //卡片擁有的產品
+      cid: "",
     };
+  },
+  computed: {
+    weightListFilter: function () {
+      if (!this.showWeightStop) {
+        return this.weightList.filter((item) => item.status !== true);
+      }
+      return this.weightList.filter((item) => item.status == true);
+    },
+    netWeight: function () {
+      return this.count(this.addForm.totalWeight, this.addForm.deductWeight);
+    },
+  },
+  methods: {
+    /**
+     * 重置
+     */
+    reset() {
+      this.range = [];
+      this.queryMap = {
+        pageNum: 1,
+        pageSize: 6,
+      };
+    },
+    /**
+     * 加載用戶表格
+     */
+    downExcel() {
+      const $this = this;
+      const res = axios
+        .request({
+          url: "business/weight/excel",
+          method: "post",
+          responseType: "blob",
+        })
+        .then((res) => {
+          if (res.headers["content-type"] === "application/json") {
+            return $this.$message.error(
+              "Subject does not have permission [user:export]"
+            );
+          }
+          const data = res.data;
+          let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
+          const a = document.createElement("a");
+          document.body.appendChild(a);
+          a.href = url;
+          a.download = "秤重明細列表.xls";
+          a.click();
+          window.URL.revokeObjectURL(url);
+        });
+    },
+    /**
+     * 加載秤重明細列表
+     */
+    async getWeightList() {
+      if (this.range != null && this.range.length === 1) {
+        this.queryMap.createTimeStart = this.range[0];
+      } else if (this.range != null && this.range.length === 2) {
+        this.queryMap.createTimeStart = this.range[0];
+        this.queryMap.createTimeEnd = this.range[1];
+      }
+      const { data: res } = await this.$http.get(
+        "business/weight/findWeightList",
+        {
+          params: this.queryMap,
+        }
+      );
+      if (!res.success) {
+        return this.$message.error("獲取秤重明細列表失敗:" + res.data.errorMsg);
+      }
+      this.total = res.data.total;
+      this.weightList = res.data.rows;
+    },
+
+    /**
+     * 新增秤重明細
+     */
+    async addWeight() {
+      this.addForm.netWeight = this.netWeight;
+      this.$refs.addFormRef.validate(async (valid) => {
+        if (!valid) {
+          return;
+        } else {
+          this.btnLoading = true;
+          this.btnDisabled = true;
+          const { data: res } = await this.$http.post(
+            "business/weight/addVO",
+            this.addForm
+          );
+          if (res.success) {
+            this.$notify.success({
+              title: "操作成功",
+              message: "秤重明細新增成功",
+            });
+            this.addForm = {};
+            await this.getWeightList();
+            await this.getDepartmets();
+          } else {
+            this.btnLoading = false;
+            this.btnDisabled = false;
+            return this.$message.error("秤重明細新增失敗:" + res.data.errorMsg);
+          }
+          this.addDialogVisible = false;
+          this.btnLoading = false;
+          this.btnDisabled = false;
+        }
+      });
+    },
+    /**
+     * 更新用戶
+     */
+    async updateWeight() {
+      this.$refs.editFormRef.validate(async (valid) => {
+        if (!valid) {
+          return;
+        } else {
+          this.btnLoading = true;
+          this.btnDisabled = true;
+          const { data: res } = await this.$http.put(
+            "business/weight/update/" + this.editForm.id,
+            this.editForm
+          );
+          if (res.success) {
+            this.$notify({
+              title: "操作成功",
+              message: "秤重明細已更新",
+              type: "success",
+            });
+            this.editForm = {};
+            await this.getWeightList();
+            await this.getDepartmets();
+          } else {
+            this.$message.error("秤重明細更新失敗:" + res.data.errorMsg);
+          }
+          this.editDialogVisible = false;
+          this.btnLoading = false;
+          this.btnDisabled = false;
+        }
+      });
+    },
+    /**
+     * 搜索秤重明細
+     */
+    searchWeight() {
+      this.queryMap.pageNum = 1;
+      this.getWeightList();
+    },
+    /**
+     * 修改秤重明細
+     */
+    async edit(id) {
+      const { data: res } = await this.$http.get("business/weight/edit/" + id);
+      if (res.success) {
+        this.editForm = res.data;
+        this.editDialogVisible = true;
+      } else {
+        return this.$message.error("秤重明細編輯失敗:" + res.data.errorMsg);
+      }
+    },
+    /**
+     *  改變頁碼
+     */
+    handleSizeChange(newSize) {
+      this.queryMap.pageSize = newSize;
+      this.getWeightList();
+    },
+    /**
+     * 翻頁
+     */
+    handleCurrentChange(current) {
+      this.queryMap.pageNum = current;
+      this.getWeightList();
+    },
+
+    /**
+     * 關閉新增彈出框
+     */
+    closeDialog() {
+      this.$refs.addFormRef.clearValidate();
+      this.addForm = {};
+    },
+    /**
+     * 關閉編輯彈出框
+     */
+    editClose() {
+      this.$refs.editFormRef.clearValidate();
+      this.editForm = {};
+    },
+    /**
+     * 禁用啟用用戶
+     */
+    async changeStatus(row) {
+      const { data: res } = await this.$http.put(
+        "business/weight/updateStatus/" + row.id + "/" + row.status
+      );
+      if (!res.success) {
+        this.$message.error("作廢秤重明細失敗:" + res.data.errorMsg);
+        row.status = !row.status;
+      } else {
+        const message = row.status ? "秤重明細已作廢" : "秤重明細已啟用";
+        this.$notify.success({
+          title: "操作成功",
+          message: message,
+        });
+      }
+    },
+    /**
+     * 加載所有公司
+     */
+    async getDepartmets() {
+      const { data: res } = await this.$http.get("system/department/findAll");
+      if (!res.success) {
+        return this.$message.error("獲取公司列表失敗:" + res.data.errorMsg);
+      }
+      this.departments = res.data;
+    },
+    count: function (num1, num2) {
+      var r1, r2, m, n;
+      try {
+        r1 = num1.toString().split(".")[1].length;
+      } catch (e) {
+        r1 = 0;
+      }
+      try {
+        r2 = num2.toString().split(".")[1].length;
+      } catch (e) {
+        r2 = 0;
+      }
+      m = Math.pow(10, Math.max(r1, r2));
+      n = r1 >= r2 ? r1 : r2;
+      return (Math.round(num1 * m - num2 * m) / m).toFixed(n);
+    },
+  },
+  created() {
+    this.getWeightList();
+    this.getDepartmets();
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
+  },
+};
 </script>
-
-

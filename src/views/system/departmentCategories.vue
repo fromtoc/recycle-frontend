@@ -76,12 +76,7 @@
           height="460"
           empty-text="暫無數據"
         >
-          <el-table-column
-            prop="id"
-            type="index"
-            label="序號"
-            width="50"
-          ></el-table-column>
+          <el-table-column label="序號" type="index" width="50"></el-table-column>
           <el-table-column
             prop="code"
             label="公司類型代碼"

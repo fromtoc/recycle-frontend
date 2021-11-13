@@ -38,7 +38,7 @@
           @selection-change="selsChange"
         >
           <el-table-column type="selection" width="55" align="center"></el-table-column>
-          <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
+          <el-table-column label="序號" type="index" width="50"></el-table-column>
           <el-table-column prop="username" label="登入用戶" width="150"></el-table-column>
           <el-table-column prop="loginTime" label="登入時間" width="190"></el-table-column>
           <el-table-column prop="location" label="登入地點" width="250"></el-table-column>

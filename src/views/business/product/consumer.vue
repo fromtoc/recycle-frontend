@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="search">查詢</el-button>
-          <el-button type="success" icon="el-icon-circle-plus-outline" v-hasPermission="'consumer:add'" @click="openAdd">添加</el-button>
+          <el-button type="success" icon="el-icon-circle-plus-outline" v-hasPermission="'consumer:add'" @click="openAdd">新增</el-button>
         </el-form-item>
       </el-form>
 
@@ -100,9 +100,9 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
-      <!-- 系別添加彈出框 -->
+      <!-- 系別新增彈出框 -->
       <el-dialog
-        title="添加廢棄物去處"
+        title="新增廢棄物去處"
         :visible.sync="addDialogVisible"
         width="50%"
         @close="closeAddDialog"
@@ -262,11 +262,11 @@ export default {
     return {
       loading: true,
       editDialogVisible: false,
-      addDialogVisible: false, //添加彈框是否顯示
+      addDialogVisible: false, //新增彈框是否顯示
       total: 0, //總共多少條數據
       consumerData: [], //表格數據
       queryMap: { pageNum: 1, pageSize: 10, name: "" }, //查詢對象
-      addRuleForm: {}, //添加表單數據
+      addRuleForm: {}, //新增表單數據
       editRuleForm: {}, //修改表單數據
       deans: [], //所有系主任
       addRules: {
@@ -305,7 +305,7 @@ export default {
   },
   methods: {
     /**
-     * 打開添加彈出框
+     * 打開新增彈出框
      */
     openAdd() {
       this.addDialogVisible = true;
@@ -381,7 +381,7 @@ export default {
       }
       this.editDialogVisible = true;
     },
-    //添加
+    //新增
     add() {
       this.$refs.addRuleFormRef.validate(async valid => {
         if (!valid) {
@@ -399,11 +399,11 @@ export default {
             this.addRuleForm
           );
           if (res.success) {
-            this.$message.success("廢棄物去處添加成功");
+            this.$message.success("廢棄物去處新增成功");
             this.addRuleForm = {};
             await this.getConsumerList();
           } else {
-            return this.$message.error("廢棄物去處添加失敗:" + res.data.errorMsg);
+            return this.$message.error("廢棄物去處新增失敗:" + res.data.errorMsg);
           }
           this.addDialogVisible = false;
         }
@@ -496,7 +496,7 @@ export default {
           this.addRuleForm.origin = this.originList[index].label;
         }
       });
-      //添加this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
+      //新增this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
       this.$forceUpdate();
     },
 

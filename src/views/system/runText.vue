@@ -51,6 +51,7 @@
       <!-- 表格區域 -->
       <template>
         <el-table
+          empty-text="暫無數據"
           border
           size="small"
           v-loading="loading"
@@ -60,9 +61,8 @@
           height="460"
         >
           <el-table-column
-            prop="id"
+            label="序號"
             type="index"
-            label="ID"
             width="50"
           ></el-table-column>
           <el-table-column
@@ -293,9 +293,7 @@ export default {
      * @param {Object} id
      */
     edit: async function (id) {
-      const { data: res } = await this.$http.get(
-        "system/runText/edit/" + id
-      );
+      const { data: res } = await this.$http.get("system/runText/edit/" + id);
       if (res.success) {
         this.editRuleForm = res.data;
       } else {
@@ -328,12 +326,9 @@ export default {
     },
     //加載跑馬燈列表
     async getRunTextList() {
-      const { data: res } = await this.$http.get(
-        "system/runText/findByPage",
-        {
-          params: this.queryMap,
-        }
-      );
+      const { data: res } = await this.$http.get("system/runText/findByPage", {
+        params: this.queryMap,
+      });
       if (!res.success) {
         return this.$message.error("獲取跑馬燈列表失敗:" + res.data.errorMsg);
       } else {

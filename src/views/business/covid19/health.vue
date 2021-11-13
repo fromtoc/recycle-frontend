@@ -391,7 +391,7 @@
                         this.ruleForm.origin = this.originList[index].label;
                     }
                 });
-                //添加this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
+                //新增this.$forceUpdate();進行强制渲染，效果實現。搜索資料得出结果：因為數據層次太多，render函數没有自動更新，需手動强制刷新。
                 this.$forceUpdate();
             },
 

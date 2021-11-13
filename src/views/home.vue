@@ -108,7 +108,7 @@
                     newPasswordAgain: [
                         { required: true, message: "請再次輸入新密碼", trigger: "blur" }
                     ]
-                } //添加驗證規則
+                } //新增驗證規則
             };
         },
         components: {

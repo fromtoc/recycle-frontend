@@ -23,7 +23,7 @@
                                     icon="el-icon-plus"
                                     style="margin-left:20px;"
                                     @click="openParentAdd"
-                            >父級</el-button>
+                            >一級選單</el-button>
                         </div>
                     </el-col>
                     <el-col :span="2">
@@ -32,7 +32,7 @@
                                 style="margin-left:20px;"
                                 icon="el-icon-download"
                                 @click="downExcel"
-                        >導出</el-button>
+                        >下載</el-button>
                     </el-col>
 
                 </el-row>
@@ -43,7 +43,6 @@
                         accordion
                         :auto-expand-parent="false"
                         node-key="id"
-                        show-checkbox
                         :default-expanded-keys="open"
                         :expand-on-click-node="false"
                         :render-content="renderContent"
@@ -67,12 +66,12 @@
           <el-form-item label="節點名稱" prop="menuName">
             <el-input v-model="addForm.menuName"></el-input>
           </el-form-item>
-          <el-form-item label="URL">
+          <!-- <el-form-item label="URL">
             <el-input v-model="addForm.url"></el-input>
           </el-form-item>
           <el-form-item label="權限編碼">
             <el-input v-model="addForm.perms"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="圖標">
             <el-input v-model="addForm.icon"></el-input>
           </el-form-item>
@@ -133,12 +132,12 @@
           <el-form-item label="節點名稱" prop="menuName">
             <el-input v-model="editForm.menuName"></el-input>
           </el-form-item>
-          <el-form-item label="URL">
+          <!-- <el-form-item label="URL">
             <el-input v-model="editForm.url"></el-input>
           </el-form-item>
           <el-form-item label="權限編碼">
             <el-input v-model="editForm.perms"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="圖標">
             <el-input v-model="editForm.icon"></el-input>
           </el-form-item>
@@ -211,7 +210,7 @@
                     disabled: "",
                     open: "",
                     perms: ""
-                }, //添加請求表單數據
+                }, //新增請求表單數據
                 editForm: {}, //編輯節點表單數據
                 addFormRules: {
                     menuName: [
@@ -227,7 +226,7 @@
                     ],
                     type: [{ required: true, message: "類型不能為空", trigger: "blur" }],
                     open: [{ required: true, message: "是否展開不能為空", trigger: "blur" }]
-                }, //添加表單驗證規則
+                }, //新增表單驗證規則
                 pNode: {}, //父節點
                 data: JSON.parse(JSON.stringify(data)),
 
@@ -251,7 +250,7 @@
             downExcel() {
                 var $this = this;
                 const res = axios.request({
-                    url: "/menu/excel",
+                    url: "system/menu/excel",
                     method: "post",
                     responseType: "blob"
                 })
@@ -318,7 +317,7 @@
                 if (!value) return true;
                 return data.menuName.indexOf(value) !== -1;
             },
-            //關閉添加
+            //關閉新增
             addClose() {
                 this.$refs.addFormRef.clearValidate();
                 this.addForm = {};
@@ -335,16 +334,16 @@
                     this.open = res.data.open;
                 }
             },
-            //打開添加框
+            //打開新增框
             openAdd(data) {
-                this.addTitle = "添加節點 ：當前【" + data.menuName + "】";
+                this.addTitle = "新增節點 ：當前【" + data.menuName + "】";
                 this.addDialogVisible = true;
                 this.addForm.parentId = data.id;
                 this.pNode = data;
             },
-            //添加最高父級節點
+            //新增最高父級節點
             openParentAdd(data) {
-                this.addTitle = "添加第一父級";
+                this.addTitle = "新增第一父級";
                 this.addDialogVisible = true;
                 this.addForm.parentId = 0;
             },
@@ -377,7 +376,7 @@
                     }
                 }
             },
-            //發送添加節點請求
+            //發送新增節點請求
             async addNode() {
                 this.$refs.addFormRef.validate(async valid => {
                     if (!valid) {
@@ -387,18 +386,18 @@
                         this.btnDisabled = true;
                         const { data: res } = await this.$http.post("system/menu/add", this.addForm);
                         if (res.success) {
-                            this.$message.success("節點添加成功");
+                            this.$message.success("節點新增成功");
                             this.addDialogVisible = false;
                             await this.getMenuTree();
                         } else {
-                            this.$message.error("節點添加失敗:"+res.data.errorMsg);
+                            this.$message.error("節點新增失敗:"+res.data.errorMsg);
                         }
                         this.btnLoading=false;
                         this.btnDisabled = false;
                     }
                 });
             },
-            //前端添加節點
+            //前端新增節點
             append(data, newChild) {
                 //   var newChild = { id: 1231, label: "qqqqq", children: [] };
                 if (!data.children) {

@@ -11,16 +11,16 @@
     </el-breadcrumb>
     <!-- 右側卡片區域 -->
     <el-card class="box-card">
-      <el-container style="margin-bottom: 20px">
+      <!-- <el-container style="margin-bottom: 20px">
         <el-alert
           show-icon
           title="友情提示:  廢棄物的分類只支持二級分類"
           type="warning"
         >
         </el-alert>
-      </el-container>
+      </el-container> -->
       <el-row :gutter="6">
-        <el-col :span="5">
+        <el-col :span="4">
           <el-cascader
             size="small"
             placeholder="請選擇分類查詢"
@@ -32,7 +32,7 @@
             clearable
           ></el-cascader>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="5">
           <el-input
             clearable
             size="small"
@@ -51,13 +51,13 @@
                         </el-select>
                     </template>
                 </el-col> -->
-        <el-col :span="12">
+        <el-col :span="15">
           <el-button
             size="small"
             type="primary"
             icon="el-icon-search"
             @click="search"
-            >查找</el-button
+            >查詢</el-button
           >
           <el-button
             size="small"
@@ -72,12 +72,12 @@
             icon="el-icon-circle-plus-outline"
             @click="openAdd"
             v-hasPermission="'product:add'"
-            >添加
+            >新增
           </el-button>
           <el-button size="small" icon="el-icon-refresh" @click="getproductList"
             >刷新</el-button
           >
-          <el-button
+          <!-- <el-button
             style="float: right"
             size="small"
             icon="el-icon-money"
@@ -85,8 +85,15 @@
             @click="costCenterDialogVisible = true"
             :disabled="this.sels.length === 0"
             >成本中心分配</el-button
+          > -->
+          <div style="float: right">
+            <span style="margin-right: 5px">顯示停用</span>
+            <el-switch v-model="showProductStop"></el-switch>
+          </div>
+          <router-link
+            style="float: right; margin-right: 20px"
+            to="/business/product/price"
           >
-          <router-link style="float: right" to="/business/product/price">
             <el-button size="small" icon="el-icon-price-tag" type="danger"
               >單價維護</el-button
             ></router-link
@@ -97,21 +104,20 @@
       <!-- 表格區域 -->
       <template>
         <el-table
+          empty-text="暫無數據"
           size="mini"
           v-loading="loading"
           border
           stripe
-          :data="productData"
+          :data="productListFilter"
           style="width: 100%; margin-top: 20px"
           height="400"
-          @selection-change="selsChange"
         >
           <el-table-column
-            type="selection"
-            width="55"
-            align="center"
+            label="序號"
+            type="index"
+            width="50"
           ></el-table-column>
-          <el-table-column prop="id" type="index" label="ID"></el-table-column>
 
           <!-- <el-table-column prop="imageUrl" label="圖片" align="center" width="150px" padding="0px"> -->
           <!--            <template slot-scope="scope">-->
@@ -133,14 +139,14 @@
                     </el-table-column> -->
           <el-table-column
             prop="oneCategoryName"
-            label="大類"
+            label="廢棄物大分類"
           ></el-table-column>
           <el-table-column
             prop="twoCategoryName"
-            label="小類"
+            label="廢棄物小分類"
           ></el-table-column>
           <el-table-column prop="name" label="廢棄物名稱"></el-table-column>
-          <el-table-column prop="modelName" label="成本中心"></el-table-column>
+          <!-- <el-table-column prop="modelName" label="成本中心"></el-table-column> -->
 
           <!-- <el-table-column prop="pnum" :show-overflow-tooltip='true' label="廢棄物編號"></el-table-column> -->
           <!-- <el-table-column label="單價" width="100">
@@ -153,13 +159,13 @@
               ></el-tag>
             </template>
           </el-table-column> -->
-          <el-table-column
+          <!-- <el-table-column
             prop="unit"
             label="單位"
             width="80"
-          ></el-table-column>
+          ></el-table-column> -->
           <!-- <el-table-column prop="remark" label="備註"></el-table-column> -->
-          <el-table-column prop="isban" label="是否禁用" width="100">
+          <el-table-column prop="isban" label="停用" width="100">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -207,9 +213,9 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
-      <!-- 廢棄物添加彈出框 -->
+      <!-- 廢棄物新增彈出框 -->
       <el-dialog
-        title="添加廢棄物"
+        title="新增廢棄物"
         :visible.sync="addDialogVisible"
         width="50%"
       >
@@ -222,9 +228,6 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="廢棄物名稱" prop="name">
-              <el-input v-model="addRuleForm.name"></el-input>
-            </el-form-item>
             <!-- <el-form-item label="廢棄物圖片" prop="name"> -->
             <!-- 圖片上傳部分 -->
             <!-- <el-upload
@@ -253,7 +256,7 @@
               </el-col> -->
               <el-col :span="12">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="分類" prop="categoryKeys">
+                  <el-form-item label="廢棄物分類" prop="categoryKeys">
                     <el-cascader
                       placeholder="請選擇"
                       :options="cateories"
@@ -266,15 +269,18 @@
                 </div>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="12">
+            <el-form-item label="廢棄物名稱" prop="name">
+              <el-input v-model="addRuleForm.name"></el-input>
+            </el-form-item>
+            <!-- <el-row> -->
+            <!-- <el-col :span="12">
                 <div class="grid-content bg-purple">
                   <el-form-item label="單位" prop="unit">
                     <el-input v-model="addRuleForm.unit"></el-input>
                   </el-form-item>
                 </div>
-              </el-col>
-              <el-col :span="12">
+              </el-col> -->
+            <!-- <el-col :span="12">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="排序" prop="sort">
                     <el-input-number
@@ -285,12 +291,12 @@
                     ></el-input-number>
                   </el-form-item>
                 </div>
-              </el-col>
-            </el-row>
+              </el-col> -->
+            <!-- </el-row> -->
 
-            <el-form-item label="備註信息" prop="remark">
+            <!-- <el-form-item label="備註信息" prop="remark">
               <el-input type="textarea" v-model="addRuleForm.remark"></el-input>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
         </span>
         <span slot="footer" class="dialog-footer">
@@ -307,7 +313,7 @@
 
       <!-- 廢棄物編輯彈出框 -->
       <el-dialog
-        title="更新廢棄物"
+        title="編輯廢棄物"
         :visible.sync="editDialogVisible"
         width="50%"
         @close="closeEditDialog"
@@ -321,9 +327,6 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="廢棄物名稱" prop="name">
-              <el-input v-model="editRuleForm.name"></el-input>
-            </el-form-item>
             <!-- <el-form-item label="廢棄物圖片" prop="name"> -->
             <!-- 圖片上傳部分 -->
             <!-- <el-upload
@@ -350,7 +353,7 @@
 
               <el-col :span="12">
                 <div class="grid-content bg-purple">
-                  <el-form-item label="分類" prop="categoryKeys">
+                  <el-form-item label="廢棄物分類" prop="categoryKeys">
                     <el-cascader
                       placeholder="請選擇"
                       :options="cateories"
@@ -363,7 +366,10 @@
                 </div>
               </el-col>
             </el-row>
-            <el-row>
+            <el-form-item label="廢棄物名稱" prop="name">
+              <el-input v-model="editRuleForm.name"></el-input>
+            </el-form-item>
+            <!-- <el-row>
               <el-col :span="12">
                 <div class="grid-content bg-purple">
                   <el-form-item label="單位" prop="unit">
@@ -383,7 +389,7 @@
                   </el-form-item>
                 </div>
               </el-col>
-            </el-row>
+            </el-row> -->
           </el-form>
         </span>
         <span slot="footer" class="dialog-footer">
@@ -434,7 +440,8 @@
 export default {
   data() {
     return {
-      sels: [], //選中的值顯示
+      showProductStop: false,
+      // sels: [], //選中的值顯示
       costCenters: [],
       costCenterId: "",
       uploadApi: this.BASE_API_URL + "system/upload/image",
@@ -461,8 +468,8 @@ export default {
       }, //級聯搜索選擇器配置项
 
       editDialogVisible: false,
-      addDialogVisible: false, //添加彈框是否顯示
-      costCenterDialogVisible: false, //添加彈框是否顯示
+      addDialogVisible: false, //新增彈框是否顯示
+      costCenterDialogVisible: false, //新增彈框是否顯示
       total: 0, //總共多少條數據
       productData: [], //表格數據
       queryMap: {
@@ -473,7 +480,7 @@ export default {
         supplier: "",
         status: "",
       }, //查詢對象
-      addRuleForm: {}, //添加表單數據
+      addRuleForm: {}, //新增表單數據
       editRuleForm: {}, //修改表單數據
       uploadDisabled: false,
       limitCount: 1,
@@ -482,21 +489,6 @@ export default {
       addRules: {
         name: [
           { required: true, message: "請輸入廢棄物名稱", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "長度在 2 到 10 個字符",
-            trigger: "blur",
-          },
-        ],
-        unit: [
-          { required: true, message: "請輸入廢棄物單位", trigger: "blur" },
-          {
-            min: 1,
-            max: 10,
-            message: "長度在 1 到 10 個字符",
-            trigger: "blur",
-          },
         ],
         // model: [
         //   { required: true, message: "請輸入單價", trigger: "blur" },
@@ -507,26 +499,35 @@ export default {
         //     trigger: "blur",
         //   },
         // ],
-        remark: [
-          { required: true, message: "請輸入廢棄物说明備註", trigger: "blur" },
-          {
-            min: 2,
-            max: 10,
-            message: "長度在 2 到 10 個字符",
-            trigger: "blur",
-          },
-        ],
+        // remark: [
+        //   { required: true, message: "請輸入廢棄物说明備註", trigger: "blur" },
+        //   {
+        //     min: 2,
+        //     max: 10,
+        //     message: "長度在 2 到 10 個字符",
+        //     trigger: "blur",
+        //   },
+        // ],
         categorys: [
           { required: true, message: "請輸入廢棄物分類", trigger: "blur" },
         ],
-        sort: [{ required: true, message: "請輸入排序", trigger: "blur" }],
+        // sort: [{ required: true, message: "請輸入排序", trigger: "blur" }],
         categoryKeys: [
           { required: true, message: "請選擇廢棄物分類", trigger: "blur" },
         ],
-      }, //添加驗證
+      }, //新增驗證
       imgFilesList: [],
       categorykeys: [], //搜索類別
     };
+  },
+
+  computed: {
+    productListFilter: function () {
+      if (!this.showProductStop) {
+        return this.productData.filter((item) => item.status !== true);
+      }
+      return this.productData.filter((item) => item.status == true);
+    },
   },
   methods: {
     //重置查詢表單
@@ -541,7 +542,7 @@ export default {
       };
     },
     /**
-     * 打開添加廢棄物彈框
+     * 打開新增廢棄物彈框
      */
     openAdd() {
       this.getCatetorys();
@@ -556,7 +557,7 @@ export default {
     },
 
     /**
-     * 廢棄物添加审核
+     * 廢棄物新增审核
      */
     async publish(id) {
       const { data: res } = await this.$http.put(
@@ -644,17 +645,17 @@ export default {
           id: item.id,
         });
       } else {
-        return this.$message.error("廢棄物信息編輯失敗" + res.data.errorMsg);
+        return this.$message.error("廢棄物信息編輯失敗" + res.data);
       }
       const array = [];
       array.push(res.data.oneCategoryId);
       array.push(res.data.twoCategoryId);
-      array.push(res.data.threeCategoryId);
+      // array.push(res.data.threeCategoryId);
       this.editRuleForm.categoryKeys = array;
       this.editDialogVisible = true;
     },
     /**
-     * 添加廢棄物
+     * 新增廢棄物
      */
     add() {
       this.$refs.addRuleFormRef.validate(async (valid) => {
@@ -668,11 +669,14 @@ export default {
             this.addRuleForm
           );
           if (res.success) {
-            this.$message.success("廢棄物添加成功");
+            this.$message.success("廢棄物新增成功");
             this.addRuleForm = {};
             await this.getproductList();
           } else {
-            return this.$message.error("廢棄物添加失敗:" + res.data.errorMsg);
+            this.addDialogVisible = false;
+            this.btnDisabled = false;
+            this.btnLoading = false;
+            return this.$message.error("廢棄物新增失敗:" + res.data);
           }
           this.addDialogVisible = false;
           this.btnDisabled = false;

@@ -52,6 +52,7 @@
       <!-- 表格區域 -->
       <template>
         <el-table
+          empty-text="暫無數據"
           border
           size="small"
           v-loading="loading"
@@ -61,9 +62,9 @@
           height="460"
         >
           <el-table-column
-            prop="id"
             label="序號"
-            width="70"
+            type="index"
+            width="50"
           ></el-table-column>
           <el-table-column
             prop="typeCodeName"
@@ -293,7 +294,10 @@
               <el-input v-model="editRuleForm.email"></el-input>
             </el-form-item>
             <el-form-item label="備註" prop="remark">
-              <el-input type="textarea" v-model="editRuleForm.remark"></el-input>
+              <el-input
+                type="textarea"
+                v-model="editRuleForm.remark"
+              ></el-input>
             </el-form-item>
             <!-- <el-form-item label="辦公地址" prop="address">
               <el-input
@@ -356,9 +360,7 @@ export default {
         typeId: [
           { required: true, message: "請選擇公司類型", trigger: "blur" },
         ],
-        name: [
-          { required: true, message: "請輸入公司名稱", trigger: "blur" },
-        ],
+        name: [{ required: true, message: "請輸入公司名稱", trigger: "blur" }],
         nickname: [
           { required: true, message: "請輸入公司簡稱", trigger: "blur" },
         ],
