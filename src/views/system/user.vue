@@ -57,39 +57,14 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="郵箱">
-          <el-input
-            @keyup.enter.native="searchUser"
-            clearable
-            @clear="searchUser"
-            v-model="queryMap.email"
-            placeholder="請輸入郵箱查詢"
-          ></el-input>
-        </el-form-item> -->
-
-        <!-- <el-form-item label="性別">
-          <el-radio v-model="queryMap.sex" label="1">男</el-radio>
-          <el-radio v-model="queryMap.sex" label="0">女</el-radio>
-          <el-radio v-model="queryMap.sex" label>全部</el-radio>
-        </el-form-item> -->
-        <!-- <el-form-item label="狀態">
-                  <el-select
-                    clearable
-                    v-model="queryMap.isban"
-                    @clear="searchUser"
-                    placeholder="請選擇用戶狀態"
-                  >
-                    <el-option label="全部" value=""></el-option>
-                    <el-option label="禁用" value="1"></el-option>
-                    <el-option label="正常" value="0"></el-option>
-                  </el-select>
-                </el-form-item>-->
-
-        <el-form-item style="margin-left: 50px">
-          <el-button @click="reset" icon="el-icon-refresh">重置</el-button>
+        <el-form-item style="margin-left: 20px">
           <el-button type="primary" @click="searchUser" icon="el-icon-search"
             >查詢</el-button
           >
+          <el-button @click="reset" icon="el-icon-refresh">重置</el-button>
+        </el-form-item>
+
+        <el-form-item style="float: right">
           <el-button
             type="success"
             icon="el-icon-plus"
@@ -203,6 +178,7 @@
             </el-tooltip>
             <!-- todo -->
             <el-tooltip
+              v-hasPermission="'user:changePassword'"
               class="item"
               effect="dark"
               content="重設密碼"
@@ -218,6 +194,7 @@
             </el-tooltip>
             <!-- todo -->
             <el-tooltip
+              v-hasPermission="'card:manage'"
               class="item"
               effect="dark"
               content="卡片管理"
@@ -539,7 +516,6 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button
-                v-hasPermission="'departmentCategory:edit'"
                 type="text"
                 size="small"
                 icon="el-icon-edit"
@@ -620,7 +596,6 @@
             >取消分配</el-button
           >
           <el-button
-            v-hasPermission="'product:assign'"
             type="primary"
             @click="doAssignCardProduct"
             class="el-icon-check"
@@ -1154,7 +1129,11 @@ export default {
     async getDepartmets() {
       const { data: res } = await this.$http.get("system/department/findAll");
       if (!res.success) {
-        return this.$message.error("獲取公司列表失敗:" + res.data.errorMsg);
+        if (res.data.errorMsg == "限本帳號") {
+          this.limitUser = true;
+        } else {
+          return this.$message.error("獲取公司列表失敗:" + res.data.errorMsg);
+        }
       }
       this.departments = res.data;
     },

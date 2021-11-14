@@ -29,7 +29,7 @@
             ></el-button>
           </el-input>
         </el-col>
-        <el-col :span="2">
+        <div style="float: right; margin-right: 20px">
           <el-button
             size="small"
             v-hasPermission="'role:add'"
@@ -38,8 +38,6 @@
             @click="addDialogVisible = true"
             >新增</el-button
           >
-        </el-col>
-        <el-col :span="2">
           <el-button
             size="small"
             v-hasPermission="'role:export'"
@@ -47,7 +45,7 @@
             @click="downExcel"
             >下載</el-button
           >
-        </el-col>
+        </div>
       </el-row>
       <!-- 表格區域 -->
       <template>
@@ -86,6 +84,7 @@
               <el-tag size="small" type="success" v-else>所有資料</el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="remark" label="備註"></el-table-column>
           <el-table-column prop="isban" label="停用" width="100">
             <template slot-scope="scope">
               <el-switch
@@ -94,7 +93,6 @@
               ></el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="remark" label="備註"></el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <el-button

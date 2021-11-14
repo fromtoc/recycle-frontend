@@ -11,23 +11,13 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>用戶信息</span>
-                        <el-button style="float: right;" size="mini" plain loading type="primary">用戶中心</el-button>
                     </div>
-                    <el-tooltip class="item" effect="dark" content="換頭像功能還未實現" placement="top-start">
-                        <el-avatar
-                                shape="square"
-                                :size="80"
-                                :src="userInfo.avatar"
-                                style="float:left;"
-                                :key="1"
-                        ></el-avatar>
-                    </el-tooltip>
-                    <div class="right" style="float:right;width:520px;">
+                    <div class="right" style="width:520px;">
                         <el-table :data="tableInfo" border height="100" empty-text="暫無數據">
-                            <el-table-column prop="username" label="用戶賬號"></el-table-column>
-                            <el-table-column prop="nickname" label="帳號稱"></el-table-column>
+                            <el-table-column prop="username" label="用戶帳號"></el-table-column>
+                            <el-table-column prop="nickname" label="用戶名稱"></el-table-column>
                             <el-table-column prop="department" label="所屬公司"></el-table-column>
-                            <el-table-column fixed="right" prop="roles" label="用戶角色" width="150"></el-table-column>
+                            <!-- <el-table-column fixed="right" prop="roles" label="用戶角色" width="150"></el-table-column> -->
                         </el-table>
                     </div>
                 </el-card>
@@ -36,7 +26,7 @@
                     <el-card style="height:125px;">
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <router-link to="/business/product/list">
+                                <router-link to="/system/users">
                                     <img
                                             src="../assets/1.svg"
                                             alt
@@ -44,12 +34,12 @@
                                             style="margin:0px auto; cursor: pointer;margin-left:20px;"
                                     />
                                 </router-link>
-                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物資料</div>
+                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">用戶管理</div>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple-light">
-                                <router-link to="/business/product/stocks">
+                                <router-link to="/business/product/list">
                                     <img
                                             src="../assets/2.svg"
                                             alt
@@ -57,13 +47,13 @@
                                             style="cursor: pointer;margin-left:20px;"
                                     />
                                 </router-link>
-                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物庫存</div>
+                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物管理</div>
                             </div>
                         </el-col>
 
                         <el-col :span="6">
                             <div class="grid-content bg-purple-light">
-                                <router-link to="/business/product/add-stocks">
+                                <router-link to="/business/weight/list">
                                     <img
                                             src="../assets/3.svg"
                                             alt
@@ -72,12 +62,12 @@
                                     />
                                 </router-link>
 
-                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物入庫</div>
+                                <div style="font-size:12px;margin-top:5px;margin-left:25px;">秤重明細維護</div>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple"></div>
-                            <router-link to="/business/product/publish">
+                            <router-link to="/business/report">
                                 <img
                                         src="../assets/4.svg"
                                         alt
@@ -85,14 +75,10 @@
                                         style="cursor: pointer;margin-left:20px;"
                                 />
                             </router-link>
-                            <div style="font-size:12px;margin-top:5px;margin-left:25px;">廢棄物發放</div>
+                            <div style="font-size:12px;margin-top:5px;margin-left:25px;">統計報表</div>
                         </el-col>
                     </el-card>
                 </el-row>
-                <el-card class="box-card" style="margin-top:20px;padding:0px;">
-                    <!-- 用戶登入報表 -->
-                    <div id="loginReport" style="width: 650px;height:270px;"></div>
-                </el-card>
             </el-col>
             <!-- 右邊部分 -->
         </el-row>

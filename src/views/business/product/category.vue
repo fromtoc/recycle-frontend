@@ -10,18 +10,23 @@
       <el-breadcrumb-item>廢棄物類型設定</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="box-card">
-      <el-row :gutter="20">
-          <el-col :span="2">
-          <el-button
-            size="small"
-            v-hasPermission="'productCategory:add'"
-            type="success"
-            icon="el-icon-circle-plus-outline"
-            @click="openAdd"
-            >新增</el-button
-          >
-        </el-col>
-      </el-row>
+      <div style="float: right; margin-right: 20px; margin-bottom: 20px">
+        <el-button
+          size="small"
+          v-hasPermission="'productCategory:add'"
+          type="success"
+          icon="el-icon-circle-plus-outline"
+          @click="openAdd"
+          >新增</el-button
+        >
+        <el-button
+          size="small"
+          icon="el-icon-download"
+          v-hasPermission="'productCategory:export'"
+          @click="downExcel"
+          >下載</el-button
+        >
+      </div>
       <!-- 表格部分 -->
       <zk-table
         v-loading="loading"

@@ -63,18 +63,18 @@ const routes = [
             {
                 path: '/business/product/list',
                 name: 'ProductList',
-                component: () => import( '../views/business/product/list.vue'), //廢棄物列表
+                component: () => import( '../views/business/product/list.vue'), //廢棄物管理
             },
             {
                 path: '/business/product/price',
                 name: 'ProductList',
-                component: () => import( '../views/business/product/price.vue'), //廢棄物列表
+                component: () => import( '../views/business/product/price.vue'), //廢棄物單價維護
             },
             /**********************************秤重管理的路由******************************/
             {
                 path: '/business/weight/list',
                 name: 'WeightList',
-                component: () => import( '../views/business/weight/list.vue'), //秤重明細查詢
+                component: () => import( '../views/business/weight/list.vue'), //秤重明細維護
             },
             {
                 path: '/business/weight/refill',
@@ -82,6 +82,11 @@ const routes = [
                 component: () => import( '../views/business/weight/refill.vue'), //相關資料補登
             },
             /**********************************報表查詢的路由******************************/
+            {
+                path: '/business/report',
+                name: 'Report',
+                component: () => import( '../views/business/report.vue'), //相關資料補登
+            },
             /**********************************權限管理的路由******************************/
             {
                 path: '/system/menus',
@@ -218,11 +223,12 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/error/401') {
         return next();
     }
+    
+    if (whiteListWeight.indexOf(to.path) != -1) {
+        return next();
+    }
 
     if (!token) {
-        if (whiteListWeight.indexOf(to.path) != -1) {
-            return next();
-        }
         return next('/login');
     } else {
         //判断是否有訪問該路徑的權限
@@ -231,6 +237,9 @@ router.beforeEach((to, from, next) => {
         if (store.state.userInfo.isAdmin) {
             return next();
         } else {
+            if (to.path === '/system/welcome') {
+                return next();
+            }
             if (urls.indexOf(to.path) > -1|| whiteList.indexOf(to.path)>-1) {
                 //則包含該元素
                 window.sessionStorage.setItem("activePath", to.path);

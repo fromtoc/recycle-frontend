@@ -44,7 +44,7 @@
             >查詢</el-button
           >
         </el-col>
-        <el-col :span="2">
+        <div style="float: right; margin-right: 20px">
           <el-button
             size="small"
             v-hasPermission="'region:add'"
@@ -53,8 +53,6 @@
             @click="addDialogVisible = true"
             >新增</el-button
           >
-        </el-col>
-        <el-col :span="2">
           <el-button
             size="small"
             icon="el-icon-download"
@@ -62,7 +60,7 @@
             @click="downExcel"
             >下載</el-button
           >
-        </el-col>
+        </div>
       </el-row>
       <!-- 表格區域 -->
       <template>

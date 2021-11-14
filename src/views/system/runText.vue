@@ -29,7 +29,7 @@
             ></el-button>
           </el-input>
         </el-col>
-        <el-col :span="2">
+        <div style="float: right; margin-right: 20px">
           <el-button
             size="small"
             v-hasPermission="'runText:add'"
@@ -38,7 +38,14 @@
             @click="addDialogVisible = true"
             >新增</el-button
           >
-        </el-col>
+          <el-button
+            size="small"
+            icon="el-icon-download"
+            v-hasPermission="'runText:export'"
+            @click="downExcel"
+            >下載</el-button
+          >
+        </div>
         <!-- <el-col :span="2">
                     <el-button
                             size="small"

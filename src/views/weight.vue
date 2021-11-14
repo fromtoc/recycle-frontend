@@ -829,11 +829,21 @@
             "
           >
             <div style="width: 100%; font-size: 45px">
-              <div style="width: 100%;">操作人：<span v-text="dept.name"></span></div>
-              <div style="width: 100%;">過磅物：<span v-text="productName"></span></div>
-              <div style="width: 100%;">總重：<span v-text="totalWeight"></span> KG</div>
-              <div style="width: 100%;">扣重：<span v-text="deductWeight"></span> KG</div>
-              <div style="width: 100%;">淨重：<span v-text="netWeight"></span> KG</div>
+              <div style="width: 100%">
+                操作人：<span v-text="dept.name"></span>
+              </div>
+              <div style="width: 100%">
+                過磅物：<span v-text="productName"></span>
+              </div>
+              <div style="width: 100%">
+                總重：<span v-text="totalWeight"></span> KG
+              </div>
+              <div style="width: 100%">
+                扣重：<span v-text="deductWeight"></span> KG
+              </div>
+              <div style="width: 100%">
+                淨重：<span v-text="netWeight"></span> KG
+              </div>
             </div>
           </div>
         </el-main>
@@ -846,7 +856,10 @@
               right: 600px;
               font-size: 40px;
             "
-            @click="finalPage = false; deductPage = true;"
+            @click="
+              finalPage = false;
+              deductPage = true;
+            "
             >上一步</el-button
           >
           <el-button
@@ -1056,21 +1069,21 @@ export default {
         this.totalPage = true;
       }
     },
-    count: function(num1, num2) {
-      var r1,r2,m,n;
-        try{
-            r1 = num1.toString().split('.')[1].length;
-        }catch(e){
-            r1 = 0;
-        }
-        try{
-            r2=num2.toString().split('.')[1].length;
-        }catch(e){
-            r2=0;
-        }
-        m=Math.pow(10,Math.max(r1,r2));
-        n=(r1>=r2)?r1:r2;
-        return (Math.round(num1*m-num2*m)/m).toFixed(n);
+    count: function (num1, num2) {
+      var r1, r2, m, n;
+      try {
+        r1 = num1.toString().split(".")[1].length;
+      } catch (e) {
+        r1 = 0;
+      }
+      try {
+        r2 = num2.toString().split(".")[1].length;
+      } catch (e) {
+        r2 = 0;
+      }
+      m = Math.pow(10, Math.max(r1, r2));
+      n = r1 >= r2 ? r1 : r2;
+      return (Math.round(num1 * m - num2 * m) / m).toFixed(n);
     },
     async printWeight() {
       this.loading = true;
@@ -1081,13 +1094,10 @@ export default {
         productId: this.productId,
         totalWeight: this.totalWeight,
         deductWeight: this.deductWeight,
-        netWeight: this.netWeight
-      }
+        netWeight: this.netWeight,
+      };
       //發起登入請求
-      const { data: res } = await this.$http.post(
-        "business/weight/add",
-        param
-      );
+      const { data: res } = await this.$http.post("business/weight/add", param);
       if (res.success) {
         this.$message({
           title: "秤重完成",
@@ -1103,9 +1113,11 @@ export default {
       }
       this.loading = false;
       this.cancel();
-    }
+    },
   },
-  created() {},
+  created() {
+    LocalStorage.clearAll();
+  },
 };
 </script>
 

@@ -29,7 +29,7 @@
             ></el-button>
           </el-input>
         </el-col>
-        <el-col :span="2">
+        <div style="float: right; margin-right: 20px">
           <el-button
             size="small"
             v-hasPermission="'department:add'"
@@ -38,8 +38,6 @@
             @click="addDialogVisible = true"
             >新增</el-button
           >
-        </el-col>
-        <el-col :span="2">
           <el-button
             size="small"
             icon="el-icon-download"
@@ -47,7 +45,7 @@
             @click="downExcel"
             >下載</el-button
           >
-        </el-col>
+        </div>
       </el-row>
       <!-- 表格區域 -->
       <template>
@@ -106,7 +104,7 @@
             label="備註"
             width="100"
           ></el-table-column>
-          <el-table-column prop="total" label="人數" sortable width="70">
+          <el-table-column prop="total" label="人數" width="70">
             <template slot-scope="scope">
               <el-tag
                 effect="plain"

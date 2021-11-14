@@ -17,7 +17,7 @@
         label-width="70px"
         size="small"
       >
-        <el-form-item label="公司">
+        <el-form-item v-if="!limitUser" label="公司">
           <el-select
             clearable
             @change="searchWeight"
@@ -40,7 +40,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用戶">
+        <el-form-item v-if="!limitUser" label="用戶">
           <el-input
             @keyup.enter.native="searchWeight"
             @clear="searchWeight"
@@ -57,26 +57,7 @@
             placeholder="請輸入廢棄物名稱查詢"
           ></el-input>
         </el-form-item>
-        <el-form-item style="margin-left: 50px"
-          ><el-button @click="reset" icon="el-icon-refresh">重置</el-button>
-          <el-button type="primary" @click="searchWeight" icon="el-icon-search"
-            >查詢</el-button
-          >
-          <el-button
-            type="success"
-            icon="el-icon-plus"
-            @click="addDialogVisible = true"
-            v-hasPermission="'user:add'"
-            >新增</el-button
-          >
-          <el-button
-            @click="downExcel"
-            v-hasPermission="'user:export'"
-            icon="el-icon-download"
-            >下載</el-button
-          ></el-form-item
-        >
-
+        <br>
         <el-form-item label="日期">
           <el-date-picker
             v-model="range"
@@ -87,14 +68,31 @@
             :value-format="'yyyy-MM-dd HH:mm:ss'"
           >
           </el-date-picker>
+          <el-button style="margin-left: 20px" type="primary" @click="searchWeight" icon="el-icon-search"
+            >查詢</el-button
+          >
+          <el-button @click="reset" icon="el-icon-refresh">重置</el-button>
         </el-form-item>
 
-        <el-form-item style="float: right">
-          <div style="float: right">
-            <span style="margin-right: 5px">顯示停用</span>
-            <el-switch v-model="showWeightStop"></el-switch>
-          </div>
-        </el-form-item>
+        <el-form-item style="float: right;"
+          >
+          <el-button
+            type="success"
+            icon="el-icon-plus"
+            @click="addDialogVisible = true"
+            v-hasPermission="'weight:add'"
+            >新增</el-button
+          >
+          <el-button
+            @click="downExcel"
+            v-hasPermission="'weight:export'"
+            icon="el-icon-download"
+            >下載</el-button
+          >
+          <span>
+            <span style="margin-left: 20px; margin-right: 5px">顯示作廢</span>
+            <el-switch v-model="showWeightStop"></el-switch></span
+        ></el-form-item>
       </el-form>
 
       <!-- 表格區域 -->
@@ -293,6 +291,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      limitUser: false,
       range: [],
       showWeightStop: false,
       regions: [],
@@ -549,7 +548,11 @@ export default {
     async getDepartmets() {
       const { data: res } = await this.$http.get("system/department/findAll");
       if (!res.success) {
-        return this.$message.error("獲取公司列表失敗:" + res.data.errorMsg);
+        if (res.data.errorMsg == "限本帳號") {
+          this.limitUser = true;
+        } else {
+          return this.$message.error("獲取公司列表失敗:" + res.data.errorMsg);
+        }
       }
       this.departments = res.data;
     },

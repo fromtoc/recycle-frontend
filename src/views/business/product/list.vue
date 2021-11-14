@@ -62,21 +62,12 @@
           <el-button
             size="small"
             icon="el-icon-refresh-right"
-            type="warning"
             @click="resetForm"
             >重置</el-button
           >
-          <el-button
-            size="small"
-            type="success"
-            icon="el-icon-circle-plus-outline"
-            @click="openAdd"
-            v-hasPermission="'product:add'"
-            >新增
-          </el-button>
-          <el-button size="small" icon="el-icon-refresh" @click="getproductList"
+          <!-- <el-button size="small" icon="el-icon-refresh" @click="getproductList"
             >刷新</el-button
-          >
+          > -->
           <!-- <el-button
             style="float: right"
             size="small"
@@ -91,6 +82,7 @@
             <el-switch v-model="showProductStop"></el-switch>
           </div>
           <router-link
+            v-hasPermission="'product:price'"
             style="float: right; margin-right: 20px"
             to="/business/product/price"
           >
@@ -98,6 +90,23 @@
               >單價維護</el-button
             ></router-link
           >
+          <el-button
+            style="float: right; margin-right: 20px"
+            size="small"
+            icon="el-icon-download"
+            v-hasPermission="'product:export'"
+            @click="downExcel"
+            >下載</el-button
+          >
+          <el-button
+            style="float: right; margin-right: 20px"
+            size="small"
+            type="success"
+            icon="el-icon-circle-plus-outline"
+            @click="openAdd"
+            v-hasPermission="'product:add'"
+            >新增
+          </el-button>
         </el-col>
       </el-row>
 
@@ -178,6 +187,7 @@
               <!--              给操作员提供的編輯和回收-->
               <span v-if="scope.row.status == 0">
                 <el-button
+                  v-hasPermission="'product:edit'"
                   type="text"
                   size="mini"
                   icon="el-icon-edit"
