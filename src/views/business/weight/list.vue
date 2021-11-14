@@ -234,7 +234,7 @@
       </el-dialog>
       <!-- 修改對話框 -->
       <el-dialog
-        title="編輯用戶"
+        title="編輯秤重明細"
         :visible.sync="editDialogVisible"
         width="60%"
         @close="editClose"
@@ -245,7 +245,7 @@
             :label-position="labelPosition"
             :rules="addFormRules"
             ref="editFormRef"
-            label-width="80px"
+            label-width="100px"
           >
             <el-form-item label="登入卡號" prop="cardName">
               <el-input v-model="editForm.cardName"></el-input>
