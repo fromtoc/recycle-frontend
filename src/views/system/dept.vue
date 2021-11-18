@@ -104,7 +104,7 @@
             label="備註"
             width="100"
           ></el-table-column>
-          <el-table-column prop="total" label="人數" width="70">
+          <!-- <el-table-column prop="total" label="人數" width="70">
             <template slot-scope="scope">
               <el-tag
                 effect="plain"
@@ -113,8 +113,8 @@
               >
               </el-tag>
             </template>
-          </el-table-column>
-          <el-table-column prop="isban" label="廚餘標記" width="100">
+          </el-table-column> -->
+          <el-table-column prop="isban" label="辦公大樓餐廳廚餘標記" width="150">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.food"
@@ -247,7 +247,7 @@
 
       <!-- 公司別編輯彈出框 -->
       <el-dialog
-        title="更新公司"
+        title="編輯公司"
         :visible.sync="editDialogVisible"
         width="50%"
         @close="closeEditDialog"

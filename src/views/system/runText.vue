@@ -77,7 +77,7 @@
             label="跑馬燈內容"
             width="1000"
           ></el-table-column>
-          <el-table-column prop="isban" label="是否禁用" width="100">
+          <el-table-column prop="isban" label="停用" width="100">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"

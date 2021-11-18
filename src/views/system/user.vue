@@ -5,7 +5,7 @@
       style="padding-left: 10px; padding-bottom: 10px; font-size: 12px"
     >
       <el-breadcrumb-item :to="{ path: '/home' }">首頁</el-breadcrumb-item>
-      <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+      <el-breadcrumb-item>基本資料</el-breadcrumb-item>
       <el-breadcrumb-item>用戶管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 用戶列表卡片區 -->
@@ -17,7 +17,7 @@
         label-width="70px"
         size="small"
       >
-        <el-form-item label="名稱">
+        <el-form-item label="">
           <el-input
             clearable
             @clear="searchUser"
@@ -25,7 +25,7 @@
             placeholder="請輸入用戶名稱查詢"
           ></el-input>
         </el-form-item>
-        <el-form-item label="帳號">
+        <el-form-item label="">
           <el-input
             @keyup.enter.native="searchUser"
             @clear="searchUser"
@@ -34,7 +34,7 @@
             placeholder="請輸入用戶帳號查詢"
           ></el-input>
         </el-form-item>
-        <el-form-item label="公司">
+        <el-form-item label="">
           <el-select
             clearable
             @change="searchUser"
@@ -61,7 +61,7 @@
           <el-button type="primary" @click="searchUser" icon="el-icon-search"
             >查詢</el-button
           >
-          <el-button @click="reset" icon="el-icon-refresh">重置</el-button>
+          <!-- <el-button @click="reset" icon="el-icon-refresh">重置</el-button> -->
         </el-form-item>
 
         <el-form-item style="float: right">
@@ -149,65 +149,36 @@
           <template slot-scope="scope">
             <el-button
               v-hasPermission="'user:edit'"
+              type="text"
               size="small"
-              type="primary"
-              icon="el-icon-edit-outline"
+              icon="el-icon-edit"
               @click="edit(scope.row.id)"
-            ></el-button>
-            <!-- <el-button
-              v-hasPermission="'user:delete'"
-              type="danger"
-              size="small"
-              icon="el-icon-delete"
-              @click="del(scope.row.id)"
-            ></el-button> -->
-            <el-tooltip
+              >編輯</el-button
+            >
+            <el-button
               v-hasPermission="'user:assign'"
-              class="item"
-              effect="dark"
-              content="分配角色"
-              placement="top"
-              :enterable="false"
+              type="text"
+              size="small"
+              icon="el-icon-edit"
+              @click="assignRoles(scope.row.id)"
+              >分配角色</el-button
             >
-              <el-button
-                type="warning"
-                size="small"
-                icon="el-icon-user-solid"
-                @click="assignRoles(scope.row.id)"
-              ></el-button>
-            </el-tooltip>
-            <!-- todo -->
-            <el-tooltip
+            <el-button
               v-hasPermission="'user:changePassword'"
-              class="item"
-              effect="dark"
-              content="重設密碼"
-              placement="top"
-              :enterable="false"
+              type="text"
+              size="small"
+              icon="el-icon-edit"
+              @click="resetPwd(scope.row.id)"
+              >修改密碼</el-button
             >
-              <el-button
-                type="info"
-                size="small"
-                icon="el-icon-setting"
-                @click="resetPwd(scope.row.id)"
-              ></el-button>
-            </el-tooltip>
-            <!-- todo -->
-            <el-tooltip
+            <el-button
               v-hasPermission="'card:manage'"
-              class="item"
-              effect="dark"
-              content="卡片管理"
-              placement="top"
-              :enterable="false"
+              type="text"
+              size="small"
+              icon="el-icon-edit"
+              @click="cardManage(scope.row.id)"
+              >卡片管理</el-button
             >
-              <el-button
-                type="success"
-                size="small"
-                icon="el-icon-bank-card"
-                @click="cardManage(scope.row.id)"
-              ></el-button>
-            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -303,9 +274,9 @@
                 </div>
               </el-col> -->
             </el-row>
-            <el-form-item label="密碼" prop="password">
+            <!-- <el-form-item label="密碼" prop="password">
               <el-input v-model="addForm.password"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="E-mail" prop="email">
               <el-input v-model="addForm.email"></el-input>
             </el-form-item>
@@ -462,14 +433,15 @@
         width="50%"
       >
         <el-button
+          size="small"
           type="success"
           icon="el-icon-plus"
           @click="addCardDialogVisible = true"
           v-hasPermission="'user:add'"
-          style="margin-bottom: 5px"
+          style="float: right; margin-bottom: 10px"
           >新增</el-button
         >
-        <div style="float: right">
+        <div style="float: right; margin-right: 10px">
           <span style="margin-right: 5px">顯示停用</span>
           <el-switch v-model="showCardStop"></el-switch>
         </div>
@@ -520,7 +492,7 @@
                 size="small"
                 icon="el-icon-edit"
                 @click="assignCardProduct(scope.row.id)"
-                >分配廢棄物</el-button
+                >編輯</el-button
               >
             </template>
           </el-table-column>
@@ -616,6 +588,9 @@
             <el-form-item label="輸入新密碼" prop="newPassword">
               <el-input type="text" v-model="newPassword"></el-input>
             </el-form-item>
+            <el-form-item label="再次輸入新密碼">
+              <el-input type="text" v-model="newPasswordAgain"></el-input>
+            </el-form-item>
           </el-form>
         </span>
         <span slot="footer" class="dialog-footer">
@@ -690,7 +665,7 @@ export default {
       addForm: {
         username: "",
         nickname: "",
-        password: "",
+        password: "123456",
         email: "",
         phoneNumber: "",
         sex: "",
@@ -701,11 +676,12 @@ export default {
       addCardId: "",
       changePasswordUserId: "",
       newPassword: "",
+      newPasswordAgain: "",
       addFormRules: {
         username: [
           { required: true, message: "請輸入用戶帳號", trigger: "blur" },
         ],
-        password: [{ required: true, message: "請輸入密碼", trigger: "blur" }],
+        // password: [{ required: true, message: "請輸入密碼", trigger: "blur" }],
         departmentId: [
           { required: true, message: "請選擇所屬公司", trigger: "blur" },
         ],
@@ -998,6 +974,10 @@ export default {
      * 更新用戶密碼
      */
     async changePassword(id) {
+      if (this.newPassword != this.newPasswordAgain){
+        this.$message.error("新密碼不相同");
+        return;
+      }
       const { data: res } = await this.$http.put(
         "system/user/change/password/" +
           this.changePasswordUserId +

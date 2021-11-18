@@ -17,7 +17,7 @@
         label-width="70px"
         size="small"
       >
-        <el-form-item v-if="!limitUser" label="公司">
+        <el-form-item v-if="!limitUser" label="">
           <el-select
             clearable
             @change="searchWeight"
@@ -40,7 +40,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="!limitUser" label="用戶">
+        <el-form-item v-if="!limitUser" label="">
           <el-input
             @keyup.enter.native="searchWeight"
             @clear="searchWeight"
@@ -49,7 +49,7 @@
             placeholder="請輸入用戶名稱查詢"
           ></el-input>
         </el-form-item>
-        <el-form-item label="廢棄物">
+        <el-form-item label="">
           <el-input
             clearable
             @clear="searchWeight"
@@ -57,8 +57,8 @@
             placeholder="請輸入廢棄物名稱查詢"
           ></el-input>
         </el-form-item>
-        <br>
-        <el-form-item label="日期">
+        <br />
+        <el-form-item label="">
           <el-date-picker
             v-model="range"
             type="datetimerange"
@@ -68,14 +68,17 @@
             :value-format="'yyyy-MM-dd HH:mm:ss'"
           >
           </el-date-picker>
-          <el-button style="margin-left: 20px" type="primary" @click="searchWeight" icon="el-icon-search"
+          <el-button
+            style="margin-left: 20px"
+            type="primary"
+            @click="searchWeight"
+            icon="el-icon-search"
             >查詢</el-button
           >
-          <el-button @click="reset" icon="el-icon-refresh">重置</el-button>
+          <!-- <el-button @click="reset" icon="el-icon-refresh">重置</el-button> -->
         </el-form-item>
 
-        <el-form-item style="float: right;"
-          >
+        <el-form-item style="float: right">
           <el-button
             type="success"
             icon="el-icon-plus"
@@ -106,11 +109,7 @@
         height="420"
       >
         <!-- <el-table-column type="selection" width="40"></el-table-column> -->
-        <el-table-column
-          label="流水編號"
-          prop="id"
-          width="100"
-        ></el-table-column>
+        <el-table-column label="序號" prop="id" width="100"></el-table-column>
         <el-table-column
           prop="departmentName"
           label="公司名稱"
@@ -248,10 +247,10 @@
             label-width="100px"
           >
             <el-form-item label="登入卡號" prop="cardName">
-              <el-input v-model="editForm.cardName"></el-input>
+              <el-input disabled v-model="editForm.cardName"></el-input>
             </el-form-item>
             <el-form-item label="廢棄物名稱" prop="productName">
-              <el-input v-model="editForm.productName"></el-input>
+              <el-input disabled v-model="editForm.productName"></el-input>
             </el-form-item>
             <el-form-item label="總重" prop="totalWeight">
               <el-input type="number" v-model="editForm.totalWeight"></el-input>
@@ -262,11 +261,11 @@
                 v-model="editForm.deductWeight"
               ></el-input>
             </el-form-item>
-            <el-form-item label="淨重" prop="netWeight">
+            <el-form-item label="淨重" prop="editNetWeight">
               <el-input
                 disabled
                 type="number"
-                v-model="editForm.netWeight"
+                v-model="editNetWeight"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -347,6 +346,9 @@ export default {
     },
     netWeight: function () {
       return this.count(this.addForm.totalWeight, this.addForm.deductWeight);
+    },
+    editNetWeight: function () {
+      return this.count(this.editForm.totalWeight, this.editForm.deductWeight);
     },
   },
   methods: {
@@ -448,6 +450,7 @@ export default {
      * 更新用戶
      */
     async updateWeight() {
+      this.editForm.netWeight = this.editNetWeight;
       this.$refs.editFormRef.validate(async (valid) => {
         if (!valid) {
           return;

@@ -891,6 +891,8 @@
 </template>
 
 <script>
+import {QueryUsbList, } from './js/BarcodePrinter'
+// import {_getbyte64, _decode_chars, _decode, _get_chars, _encode} from './js/jquery.base64'
 export default {
   data() {
     return {
@@ -920,6 +922,10 @@ export default {
   },
 
   methods: {
+    test: function () {
+      var RetData = QueryUsbList();
+      console.log(RetData);
+    },
     //登入提交
     async handleSubmit() {
       this.loading = true;
@@ -1117,6 +1123,7 @@ export default {
   },
   created() {
     LocalStorage.clearAll();
+    this.test();
   },
 };
 </script>

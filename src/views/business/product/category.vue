@@ -349,7 +349,7 @@ export default {
     //加載分類數據
     async getCategoryList() {
       const { data: res } = await this.$http.get(
-        "business/productCategory/categoryTree",
+        "business/productCategory/categoryTreeAll",
         {
           params: this.queryMap,
         }
