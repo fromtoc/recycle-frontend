@@ -890,8 +890,15 @@
   </div>
 </template>
 
+<script type='text/javascript' src='js/jquery-3.5.1.min.js'></script>
+<script type='text/javascript' src='js/BarcodePrinter.js'></script>
+<script type='text/javascript' src='js/jquery.base64.js'></script>
 <script>
-import {QueryUsbList, } from './js/BarcodePrinter'
+const _PADCHAR = "=";
+const _ALPHA =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+import axios from "axios";
+// import {QueryUsbList, } from './js/BarcodePrinter'
 // import {_getbyte64, _decode_chars, _decode, _get_chars, _encode} from './js/jquery.base64'
 export default {
   data() {
@@ -922,14 +929,11 @@ export default {
   },
 
   methods: {
-    test: function () {
-      var RetData = QueryUsbList();
-      console.log(RetData);
-    },
     //登入提交
     async handleSubmit() {
       this.loading = true;
       //發起登入請求
+
       const { data: res } = await this.$http.post(
         "business/weight/login",
         this.userLoginForm
@@ -940,7 +944,6 @@ export default {
           message: "歡迎你進入系統",
           type: "success",
         });
-        console.log(res.data);
         this.dept = res.data.dept;
         this.user = res.data.user;
         this.cardId = res.data.cardId;
@@ -1120,10 +1123,252 @@ export default {
       this.loading = false;
       this.cancel();
     },
+    QueryUsbList: function () {
+      return this.SendToPrinter("UsbList", "");
+    },
+    async SendToPrinter(FuncName, JsonObject) {
+      var RootUrl = "http://localhost:8050/";
+      // Response Data
+      var RetArray = [];
+
+      // Combine WebAPI URL
+      var SendUrl = RootUrl + FuncName + "/";
+
+      // Get Json Text
+      var SendData = JSON.stringify(JsonObject);
+
+      // Debug
+      //alert("Url = " + SendUrl + "\r\nData = " + SendData);
+
+      // Encrypt Data
+      if (SendData != "") {
+        SendData = this._encode(SendData);
+      }
+
+      var param = { EncodeData: SendData };
+
+      await axios
+        .request({
+          url: SendUrl,
+          method: "post",
+          data: param,
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
+        })
+        .then((res) => {
+          // Get Json Text
+          var JsonData = JSON.stringify(res.data);
+
+          // JsonData = {"AAA","BBB","CCC"}
+          if (JsonData.length > 4) {
+            // JsonData = AAA","BBB","CCC
+            JsonData = JsonData.substr(2, JsonData.length - 4);
+          }
+
+          // ItemList[0] = AAA
+          // ItemList[1] = BBB
+          // ItemList[2] = CCC
+          var ItemList = JsonData.split('","');
+          for (var i = 0; i < ItemList.length; i++) {
+            //alert(ItemList[i]);
+            var str = this._decode(ItemList[i]);
+            RetArray.push(str);
+          }
+        });
+
+      return RetArray;
+    },
+    _encode: function (s) {
+      if (arguments.length !== 1) {
+        throw "SyntaxError: exactly one argument required";
+      }
+
+      s = String(s);
+      if (s.length === 0) {
+        return s;
+      }
+
+      //s = _encode_utf8(s);
+      var i,
+        b10,
+        y = [],
+        x = [],
+        len = s.length;
+      i = 0;
+      while (i < len) {
+        this._get_chars(s.charCodeAt(i), y);
+        while (y.length >= 3) {
+          var ch1 = y.shift();
+          var ch2 = y.shift();
+          var ch3 = y.shift();
+          b10 = (ch1 << 16) | (ch2 << 8) | ch3;
+          x.push(_ALPHA.charAt(b10 >> 18));
+          x.push(_ALPHA.charAt((b10 >> 12) & 0x3f));
+          x.push(_ALPHA.charAt((b10 >> 6) & 0x3f));
+          x.push(_ALPHA.charAt(b10 & 0x3f));
+        }
+        i++;
+      }
+
+      switch (y.length) {
+        case 1:
+          var ch = y.shift();
+          b10 = ch << 16;
+          x.push(
+            _ALPHA.charAt(b10 >> 18) +
+              _ALPHA.charAt((b10 >> 12) & 0x3f) +
+              _PADCHAR +
+              _PADCHAR
+          );
+          break;
+
+        case 2:
+          var ch1 = y.shift();
+          var ch2 = y.shift();
+          b10 = (ch1 << 16) | (ch2 << 8);
+          x.push(
+            _ALPHA.charAt(b10 >> 18) +
+              _ALPHA.charAt((b10 >> 12) & 0x3f) +
+              _ALPHA.charAt((b10 >> 6) & 0x3f) +
+              _PADCHAR
+          );
+          break;
+      }
+
+      return x.join("");
+    },
+    _get_chars: function (ch, y) {
+      if (ch < 0x80) y.push(ch);
+      else if (ch < 0x800) {
+        y.push(0xc0 + ((ch >> 6) & 0x1f));
+        y.push(0x80 + (ch & 0x3f));
+      } else {
+        y.push(0xe0 + ((ch >> 12) & 0xf));
+        y.push(0x80 + ((ch >> 6) & 0x3f));
+        y.push(0x80 + (ch & 0x3f));
+      }
+    },
+    _decode: function (s) {
+      var pads = 0,
+        i,
+        b10,
+        imax = s.length,
+        x = [],
+        y = [];
+
+      s = String(s);
+
+      if (imax === 0) {
+        return s;
+      }
+
+      if (imax % 4 !== 0) {
+        throw "Cannot decode base64";
+      }
+
+      if (s.charAt(imax - 1) === _PADCHAR) {
+        pads = 1;
+
+        if (s.charAt(imax - 2) === _PADCHAR) {
+          pads = 2;
+        }
+
+        // either way, we want to ignore this last block
+        imax -= 4;
+      }
+
+      for (i = 0; i < imax; i += 4) {
+        var ch1 = this._getbyte64(s, i);
+        var ch2 = this._getbyte64(s, i + 1);
+        var ch3 = this._getbyte64(s, i + 2);
+        var ch4 = this._getbyte64(s, i + 3);
+
+        b10 =
+          (this._getbyte64(s, i) << 18) |
+          (this._getbyte64(s, i + 1) << 12) |
+          (this._getbyte64(s, i + 2) << 6) |
+          this._getbyte64(s, i + 3);
+        y.push(b10 >> 16);
+        y.push((b10 >> 8) & 0xff);
+        y.push(b10 & 0xff);
+        this._decode_chars(y, x);
+      }
+      switch (pads) {
+        case 1:
+          b10 =
+            (this._getbyte64(s, i) << 18) |
+            (this._getbyte64(s, i + 1) << 12) |
+            (this._getbyte64(s, i + 2) << 6);
+          y.push(b10 >> 16);
+          y.push((b10 >> 8) & 0xff);
+          break;
+
+        case 2:
+          b10 =
+            (this._getbyte64(s, i) << 18) | (this._getbyte64(s, i + 1) << 12);
+          y.push(b10 >> 16);
+          break;
+      }
+      this._decode_chars(y, x);
+      if (y.length > 0) throw "Cannot decode base64";
+      return x.join("");
+    },
+    _getbyte64: function (s, i) {
+      // This is oddly fast, except on Chrome/V8.
+      // Minimal or no improvement in performance by using a
+      // object with properties mapping chars to value (eg. 'A': 0)
+
+      var idx = _ALPHA.indexOf(s.charAt(i));
+
+      if (idx === -1) {
+        throw "Cannot decode base64";
+      }
+
+      return idx;
+    },
+    _decode_chars: function (y, x) {
+      while (y.length > 0) {
+        var ch = y[0];
+        if (ch < 0x80) {
+          y.shift();
+          x.push(String.fromCharCode(ch));
+        } else if ((ch & 0x80) == 0xc0) {
+          if (y.length < 2) break;
+          ch = y.shift();
+          var ch1 = y.shift();
+          x.push(String.fromCharCode(((ch & 0x1f) << 6) + (ch1 & 0x3f)));
+        } else {
+          if (y.length < 3) break;
+          ch = y.shift();
+          var ch1 = y.shift();
+          var ch2 = y.shift();
+          x.push(
+            String.fromCharCode(
+              ((ch & 0x0f) << 12) + ((ch1 & 0x3f) << 6) + (ch2 & 0x3f)
+            )
+          );
+        }
+      }
+    },
+    async PrinterCtrl_GetJson() {
+      var l = await this.QueryUsbList();
+      console.log(l);
+      var JsonObject = {
+        Interface: "USB",
+        USB: this._encode(l),
+        COM: "",
+        BaudRate: "",
+        LPT: "",
+        IP: "",
+        Port: "",
+      };
+      console.log(JsonObject)
+
+      // return JsonObject;
+    },
   },
   created() {
     LocalStorage.clearAll();
-    this.test();
+    this.PrinterCtrl_GetJson();
   },
 };
 </script>

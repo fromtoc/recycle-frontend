@@ -27,8 +27,12 @@ Vue.prototype.$http = axios
 Vue.prototype.BASE_API_URL=BASE_API_URL
 axios.defaults.baseURL = BASE_API_URL
 
-//請求拦截器
+// 請求拦截器
 axios.interceptors.request.use(config => {
+        console.log(config);
+        if (config.url.includes('localhost:8050')){
+            return config;
+        }
         NProgress.start()
         config.headers.Authorization = LocalStorage.get(LOCAL_KEY_XINGUAN_ACCESS_TOKEN);
         return config;
