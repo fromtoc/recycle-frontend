@@ -355,6 +355,9 @@ export default {
         categoryKeys: [
           { required: true, message: "請選擇廢棄物分類", trigger: "blur" },
         ],
+        validMonth: [
+          { required: true, message: "請選擇適用月份", trigger: "blur" },
+        ],
       }, //新增驗證
       imgFilesList: [],
       categorykeys: [], //搜索類別

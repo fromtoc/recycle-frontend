@@ -196,6 +196,11 @@ export default {
       addRules: {
         message: [
           { required: true, message: "請輸入跑馬燈內容", trigger: "blur" },
+          {
+            max: 100,
+            message: "長度最多 100 個字符",
+            trigger: "blur",
+          },
         ],
       }, //新增驗證
     };

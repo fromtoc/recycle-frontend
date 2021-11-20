@@ -114,7 +114,14 @@
               </el-tag>
             </template>
           </el-table-column> -->
-          <el-table-column prop="isban" label="辦公大樓餐廳廚餘標記" width="150">
+          <el-table-column
+            prop="isban"
+            width="100"
+          >
+            <template slot="header">
+              <div style="text-align: center;">辦公大樓</div>
+              <div style="text-align: center;">餐廳廚餘標記</div>
+            </template>
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.food"
@@ -362,15 +369,15 @@ export default {
         nickname: [
           { required: true, message: "請輸入公司簡稱", trigger: "blur" },
         ],
-        contact: [
-          { required: true, message: "請輸入聯絡人姓名", trigger: "blur" },
-        ],
-        cellPhone: [
-          { required: true, message: "請輸入聯絡人手機", trigger: "blur" },
-        ],
-        email: [
-          { required: true, message: "請輸入E-mail郵件信箱", trigger: "blur" },
-        ],
+        // contact: [
+        //   { required: true, message: "請輸入聯絡人姓名", trigger: "blur" },
+        // ],
+        // cellPhone: [
+        //   { required: true, message: "請輸入聯絡人手機", trigger: "blur" },
+        // ],
+        // email: [
+        //   { required: true, message: "請輸入E-mail郵件信箱", trigger: "blur" },
+        // ],
       }, //新增驗證
     };
   },

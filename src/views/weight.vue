@@ -259,6 +259,62 @@
       </el-container>
     </div>
     <!-- 讀取重量頁 -->
+    <div class="login-container" v-if="retryPage">
+      <el-container style="height: 100%">
+        <el-header style="height: 20%"></el-header>
+        <el-main style="height: 65%">
+          <div
+            style="
+              height: 60%;
+              width: 40%;
+              margin-left: 30%;
+              margin-top: 5%;
+              display: flex;
+              align-items: center;
+              background-color: white;
+            "
+          >
+            <div style="width: 100%; font-size: 60px">
+              <div style="width: 100%; text-align: center">重量讀取失敗</div>
+              <div style="width: 100%; text-align: center">
+                請將秤重物移開後
+              </div>
+              <div style="width: 100%; text-align: center">
+                重新置放
+              </div>
+            </div>
+          </div>
+        </el-main>
+        <el-footer style="height: 15%">
+          <el-button
+            style="
+              width: 200px;
+              height: 60px;
+              position: absolute;
+              right: 350px;
+              font-size: 40px;
+            "
+            @click="
+              retryPage = false;
+              toolPage = true;
+            "
+            >上一步</el-button
+          >
+          <el-button
+            style="
+              width: 200px;
+              height: 60px;
+              position: absolute;
+              right: 100px;
+              font-size: 40px;
+            "
+            @click="cancel"
+            >取消</el-button
+          ></el-footer
+        >
+      </el-container>
+    </div>
+    <!-- 讀取重量頁 -->
     <div class="login-container" v-if="waitingPage">
       <el-container style="height: 100%">
         <el-header style="height: 20%"></el-header>
@@ -274,7 +330,7 @@
               background-color: white;
             "
           >
-            <div style="width: 100%; font-size: 60px" @click="recieveWeight">
+            <div style="width: 100%; font-size: 60px">
               <div style="width: 100%; text-align: center">讀取重量</div>
               <div style="width: 100%; text-align: center">請稍後</div>
             </div>
@@ -904,6 +960,7 @@ export default {
   data() {
     return {
       //表單用戶登入數據
+      retryFlag: false,
       loading: false,
       userLoginForm: { cardName: "" },
       dept: {},
@@ -958,6 +1015,8 @@ export default {
         });
       }
       this.loading = false;
+
+      // this.testPort();
     },
     //重置表單
     resetForm: function () {
@@ -972,6 +1031,7 @@ export default {
       this.totalPage = false;
       this.deductPage = false;
       this.finalPage = false;
+      this.retryPage = false;
       this.loginPage = true;
       this.userLoginForm = {};
     },
@@ -987,13 +1047,24 @@ export default {
       this.tool = 1;
       this.toolPage = false;
       this.waitingPage = true;
+      this.recieveWeight();
+    },
+    retry: function () {
+      this.retryFlag = true;
+      this.waitingPage = false;
+      this.retryPage = true;
     },
     //收到重量
-    recieveWeight: function () {
-      this.totalWeight = 100;
-      this.deductWeight = "";
-      this.waitingPage = false;
-      this.deductPage = true;
+    async recieveWeight() {
+      this.retryFlag = false;
+      var timeoutID = window.setTimeout(() => this.retry(), 3000);
+      await this.testPort();
+      if (!this.retryFlag) {
+        window.clearTimeout(timeoutID);
+        this.deductWeight = "";
+        this.waitingPage = false;
+        this.deductPage = true;
+      }
     },
     //手輸總重
     inputTotalWeight: function () {
@@ -1361,14 +1432,57 @@ export default {
         IP: "",
         Port: "",
       };
-      console.log(JsonObject)
+      console.log(JsonObject);
 
       // return JsonObject;
+    },
+    async testPort() {
+      var port = null;
+      // port = await navigator.serial.requestPort();
+      port = await navigator.serial.getPorts();
+      if (port !== null && Array.isArray(port) && port.length > 0) {
+        port = port[0];
+      } else {
+        port = await navigator.serial.requestPort();
+      }
+      // 設定 baud rate 為 9600
+      await port.open({ baudRate: 9600 });
+      // 將 bit data 解碼為文字
+      let decoder = new TextDecoderStream();
+      let inputDone = port.readable.pipeTo(decoder.writable);
+      const reader = decoder.readable.getReader();
+      try {
+        var string = "";
+        var keepReading = true;
+        while (port.readable && keepReading) {
+          const { value, done } = await reader.read();
+          string += value;
+          var start = string.indexOf("ST,GS,+");
+          var end = string.indexOf("kg");
+          if (start != -1 && end != -1) {
+            if (start > end) {
+              string = string.replace("kg", "");
+            } else {
+              var number = string.substring(start + 7, end);
+              var g = Number(number);
+              this.totalWeight = g;
+              keepReading = false;
+            }
+          }
+        }
+      } catch (error) {
+        console.log("error:" + error);
+        // Handle error...
+      } finally {
+        await reader.cancel();
+        await inputDone.catch(() => {});
+        await port.close();
+      }
     },
   },
   created() {
     LocalStorage.clearAll();
-    this.PrinterCtrl_GetJson();
+    // this.PrinterCtrl_GetJson();
   },
 };
 </script>

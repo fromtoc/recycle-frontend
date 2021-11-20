@@ -211,9 +211,9 @@ export default {
             trigger: "blur",
           },
         ],
-        remark: [
-          { required: true, message: "請輸入備註信息", trigger: "blur" },
-        ],
+        // remark: [
+        //   { required: true, message: "請輸入備註信息", trigger: "blur" },
+        // ],
         sort: [{ required: true, message: "請輸入排序號", trigger: "blur" }],
       },
       total: 0,

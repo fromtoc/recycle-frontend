@@ -169,7 +169,7 @@
               size="small"
               icon="el-icon-edit"
               @click="resetPwd(scope.row.id)"
-              >修改密碼</el-button
+              >重設密碼</el-button
             >
             <el-button
               v-hasPermission="'card:manage'"
@@ -579,7 +579,7 @@
       </el-dialog>
       <!-- 修改密碼對話框 -->
       <el-dialog
-        title="修改密碼"
+        title="重設密碼"
         :visible.sync="resetPwdDialogVisable"
         width="50%"
       >
