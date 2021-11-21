@@ -58,18 +58,12 @@
         <template slot="caozuo" slot-scope="scope">
           <el-button
             v-hasPermission="'productCategory:edit'"
-            type="primary"
-            size="mini"
+            type="text"
+            size="small"
             icon="el-icon-edit"
             @click="edit(scope.row.id)"
-          ></el-button>
-          <!-- <el-button
-            v-hasPermission="'productCategory:delete'"
-            type="danger"
-            size="mini"
-            icon="el-icon-delete"
-            @click="del(scope.row.id)"
-          ></el-button> -->
+            >編輯</el-button
+          >
         </template>
       </zk-table>
       <!-- 分頁 -->
@@ -190,6 +184,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -441,6 +436,30 @@ export default {
     },
     clearParent() {
       this.addRuleForm.pid = "";
+    },
+    downExcel() {
+      const $this = this;
+      const res = axios
+        .request({
+          url: "business/productCategory/excel",
+          method: "post",
+          responseType: "blob",
+        })
+        .then((res) => {
+          if (res.headers["content-type"] === "application/json") {
+            return $this.$message.error(
+              "Subject does not have permission [productCategory:export]"
+            );
+          }
+          const data = res.data;
+          let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.href = url;
+          a.download = "廢棄物類型列表.xls";
+          a.click();
+          window.URL.revokeObjectURL(url);
+        });
     },
   },
   created() {

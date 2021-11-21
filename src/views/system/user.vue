@@ -36,6 +36,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-select
+            no-data-text="無數據"
             clearable
             @change="searchUser"
             @clear="searchUser"
@@ -217,6 +218,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="所屬公司" prop="departmentId">
                     <el-select
+                      no-data-text="無數據"
                       v-model="addForm.departmentId"
                       placeholder="請選擇所屬公司"
                     >
@@ -234,6 +236,7 @@
                 <div class="grid-content bg-purple">
                   <el-form-item label="區域" prop="regionId">
                     <el-select
+                      no-data-text="無數據"
                       v-model="addForm.regionId"
                       placeholder="請選擇區域"
                     >
@@ -314,6 +317,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="所屬公司" prop="departmentId">
                     <el-select
+                      no-data-text="無數據"
                       v-model="editForm.departmentId"
                       placeholder="請選擇所屬公司"
                     >
@@ -331,6 +335,7 @@
                 <div class="grid-content bg-purple">
                   <el-form-item label="區域" prop="regionId">
                     <el-select
+                      no-data-text="無數據"
                       v-model="editForm.regionId"
                       placeholder="請選擇區域"
                     >
@@ -533,7 +538,7 @@
         <span>
           <el-form label-width="140px" class="demo-ruleForm">
             <el-form-item label="輸入卡片號碼" prop="addCardId">
-              <el-input type="text" v-model="addCardId"></el-input>
+              <el-input @keyup.enter.native="addCard" type="text" v-model="addCardId"></el-input>
             </el-form-item>
           </el-form>
         </span>
@@ -586,10 +591,10 @@
         <span>
           <el-form label-width="140px" class="demo-ruleForm">
             <el-form-item label="輸入新密碼" prop="newPassword">
-              <el-input type="text" v-model="newPassword"></el-input>
+              <el-input type="password" v-model="newPassword"></el-input>
             </el-form-item>
             <el-form-item label="再次輸入新密碼">
-              <el-input type="text" v-model="newPasswordAgain"></el-input>
+              <el-input type="password" v-model="newPasswordAgain"></el-input>
             </el-form-item>
           </el-form>
         </span>
@@ -665,7 +670,7 @@ export default {
       addForm: {
         username: "",
         nickname: "",
-        password: "123456",
+        password: "8888",
         email: "",
         phoneNumber: "",
         sex: "",
@@ -974,7 +979,7 @@ export default {
      * 更新用戶密碼
      */
     async changePassword(id) {
-      if (this.newPassword != this.newPasswordAgain){
+      if (this.newPassword != this.newPasswordAgain) {
         this.$message.error("新密碼不相同");
         return;
       }
@@ -995,6 +1000,7 @@ export default {
       }
       this.changePasswordUserId = "";
       this.newPassword = "";
+      this.newPasswordAgain = "";
       this.resetPwdDialogVisable = false;
     },
     /**

@@ -447,6 +447,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -849,6 +850,30 @@ export default {
         return this.$message.error("獲取成本中心列表失敗:" + res.data.errorMsg);
       }
       this.costCenters = res.data;
+    },
+    downExcel() {
+      const $this = this;
+      const res = axios
+        .request({
+          url: "business/product/excel",
+          method: "post",
+          responseType: "blob",
+        })
+        .then((res) => {
+          if (res.headers["content-type"] === "application/json") {
+            return $this.$message.error(
+              "Subject does not have permission [product:export]"
+            );
+          }
+          const data = res.data;
+          let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.href = url;
+          a.download = "廢棄物列表.xls";
+          a.click();
+          window.URL.revokeObjectURL(url);
+        });
     },
   },
   created() {

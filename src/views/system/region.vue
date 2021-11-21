@@ -379,10 +379,10 @@ export default {
         "system/region/updateStatus/" + row.id + "/" + row.status
       );
       if (!res.success) {
-        this.$message.error("更新地區狀態失敗:" + res.data.errorMsg);
+        this.$message.error("更新區域狀態失敗:" + res.data.errorMsg);
         row.status = !row.status;
       } else {
-        const message = row.status ? "地區狀態已禁用" : "地區狀態已啟用";
+        const message = row.status ? "區域狀態已禁用" : "區域狀態已啟用";
         this.$notify.success({
           title: "操作成功",
           message: message,

@@ -70,7 +70,6 @@
             type="success"
             icon="el-icon-circle-plus-outline"
             @click="openAdd"
-            v-hasPermission="'product:add'"
             >新增
           </el-button>
           <el-button
@@ -83,7 +82,11 @@
           <el-button size="small" type="danger" @click="getPriceList"
             >產生報表</el-button
           >
-          <el-button size="small" icon="el-icon-download" @click="getPriceList"
+          <el-button
+            style="float: right; margin-right: 20px"
+            size="small"
+            icon="el-icon-download"
+            @click="downExcel"
             >下載</el-button
           >
         </el-col>
@@ -253,8 +256,8 @@
             <el-form-item label="廢棄物名稱" prop="name">
               <el-input disabled v-model="editRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item type="number" label="單價" prop="price">
-              <el-input v-model="editRuleForm.price"></el-input>
+            <el-form-item label="單價" prop="price">
+              <el-input type="number" v-model="editRuleForm.price"></el-input>
             </el-form-item>
             <el-form-item label="單位" prop="unit">
               <el-select
@@ -294,6 +297,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -587,6 +591,30 @@ export default {
     },
     selsChange(sels) {
       this.sels = sels;
+    },
+    downExcel() {
+      const $this = this;
+      const res = axios
+        .request({
+          url: "business/productPrice/excel",
+          method: "post",
+          responseType: "blob",
+        })
+        .then((res) => {
+          if (res.headers["content-type"] === "application/json") {
+            return $this.$message.error(
+              "Subject does not have permission"
+            );
+          }
+          const data = res.data;
+          let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.href = url;
+          a.download = "單價列表.xls";
+          a.click();
+          window.URL.revokeObjectURL(url);
+        });
     },
   },
   created() {

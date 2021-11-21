@@ -19,6 +19,7 @@
       >
         <el-form-item v-if="!limitUser" label="">
           <el-select
+            no-data-text="無數據"
             clearable
             @change="searchWeight"
             @clear="searchWeight"

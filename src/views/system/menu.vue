@@ -151,7 +151,11 @@
             label="父節點"
             prop="parentId"
           >
-            <el-select v-model="editForm.parentId" placeholder="請選擇父節點">
+            <el-select
+              no-data-text="無數據"
+              v-model="editForm.parentId"
+              placeholder="請選擇父節點"
+            >
               <el-option
                 v-for="menu in data"
                 :key="menu.id"
@@ -496,16 +500,6 @@ export default {
               }}
             >
               <i class="el-icon-edit"></i>&nbsp;編輯
-            </el-button>
-            <el-button
-              v-hasPermission="'menu:add'"
-              size="mini"
-              type="text"
-              on-click={() => {
-                this.openAdd(data);
-              }}
-            >
-              <i class="el-icon-plus"></i>&nbsp;增加
             </el-button>
           </span>
         </span>

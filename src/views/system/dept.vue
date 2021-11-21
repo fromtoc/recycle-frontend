@@ -114,13 +114,10 @@
               </el-tag>
             </template>
           </el-table-column> -->
-          <el-table-column
-            prop="isban"
-            width="100"
-          >
+          <el-table-column prop="isban" width="100">
             <template slot="header">
-              <div style="text-align: center;">辦公大樓</div>
-              <div style="text-align: center;">餐廳廚餘標記</div>
+              <div style="text-align: center">辦公大樓</div>
+              <div style="text-align: center">餐廳廚餘標記</div>
             </template>
             <template slot-scope="scope">
               <el-switch
@@ -200,6 +197,7 @@
           >
             <el-form-item label="公司類型" prop="typeId">
               <el-select
+                no-data-text="無數據"
                 v-model="addRuleForm.typeId"
                 placeholder="請選擇公司類型"
               >
@@ -269,6 +267,7 @@
           >
             <el-form-item label="公司類型" prop="typeId">
               <el-select
+                no-data-text="無數據"
                 v-model="editRuleForm.typeId"
                 placeholder="請選擇公司類型"
               >
