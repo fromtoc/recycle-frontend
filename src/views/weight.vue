@@ -279,9 +279,7 @@
               <div style="width: 100%; text-align: center">
                 請將秤重物移開後
               </div>
-              <div style="width: 100%; text-align: center">
-                重新置放
-              </div>
+              <div style="width: 100%; text-align: center">重新置放</div>
             </div>
           </div>
         </el-main>
@@ -953,8 +951,9 @@
 const _PADCHAR = "=";
 const _ALPHA =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-import axios from "axios";
-// import {QueryUsbList, } from './js/BarcodePrinter'
+// import axios from "axios";
+// import qs from "querystring";
+// import { QueryUsbList, SendToPrinter } from "./js/BarcodePrinter";
 // import {_getbyte64, _decode_chars, _decode, _get_chars, _encode} from './js/jquery.base64'
 export default {
   data() {
@@ -974,6 +973,7 @@ export default {
       productPage: false,
       toolPage: false,
       waitingPage: false,
+      retryPage: false,
       totalPage: false,
       deductPage: false,
       finalPage: false,
@@ -982,6 +982,7 @@ export default {
       totalWeight: "",
       deductWeight: "",
       netWeight: "",
+      addDate: "",
     };
   },
 
@@ -1165,6 +1166,49 @@ export default {
       n = r1 >= r2 ? r1 : r2;
       return (Math.round(num1 * m - num2 * m) / m).toFixed(n);
     },
+    async testPort() {
+      var port = null;
+      // port = await navigator.serial.requestPort();
+      port = await navigator.serial.getPorts();
+      if (port !== null && Array.isArray(port) && port.length > 0) {
+        port = port[0];
+      } else {
+        port = await navigator.serial.requestPort();
+      }
+      // 設定 baud rate 為 9600
+      await port.open({ baudRate: 9600 });
+      // 將 bit data 解碼為文字
+      let decoder = new TextDecoderStream();
+      let inputDone = port.readable.pipeTo(decoder.writable);
+      const reader = decoder.readable.getReader();
+      try {
+        var string = "";
+        var keepReading = true;
+        while (port.readable && keepReading) {
+          const { value, done } = await reader.read();
+          string += value;
+          var start = string.indexOf("ST,GS,+");
+          var end = string.indexOf("kg");
+          if (start != -1 && end != -1) {
+            if (start > end) {
+              string = string.replace("kg", "");
+            } else {
+              var number = string.substring(start + 7, end);
+              var g = Number(number);
+              this.totalWeight = g;
+              keepReading = false;
+            }
+          }
+        }
+      } catch (error) {
+        console.log("error:" + error);
+        // Handle error...
+      } finally {
+        await reader.cancel();
+        await inputDone.catch(() => {});
+        await port.close();
+      }
+    },
     async printWeight() {
       this.loading = true;
       var param = {
@@ -1176,9 +1220,11 @@ export default {
         deductWeight: this.deductWeight,
         netWeight: this.netWeight,
       };
-      //發起登入請求
       const { data: res } = await this.$http.post("business/weight/add", param);
-      if (res.success) {
+      if (res.success) {  
+        console.log(res);
+        this.addDate = res.data.date;
+        await this.Print_ecTextOut();
         this.$message({
           title: "秤重完成",
           message: "秤重完成，列印磅單",
@@ -1194,59 +1240,10 @@ export default {
       this.loading = false;
       this.cancel();
     },
-    QueryUsbList: function () {
-      return this.SendToPrinter("UsbList", "");
-    },
-    async SendToPrinter(FuncName, JsonObject) {
-      var RootUrl = "http://localhost:8050/";
-      // Response Data
-      var RetArray = [];
-
-      // Combine WebAPI URL
-      var SendUrl = RootUrl + FuncName + "/";
-
-      // Get Json Text
-      var SendData = JSON.stringify(JsonObject);
-
-      // Debug
-      //alert("Url = " + SendUrl + "\r\nData = " + SendData);
-
-      // Encrypt Data
-      if (SendData != "") {
-        SendData = this._encode(SendData);
-      }
-
-      var param = { EncodeData: SendData };
-
-      await axios
-        .request({
-          url: SendUrl,
-          method: "post",
-          data: param,
-          headers: { "Content-Type": "application/x-www-form-urlencoded" }, //加上这个
-        })
-        .then((res) => {
-          // Get Json Text
-          var JsonData = JSON.stringify(res.data);
-
-          // JsonData = {"AAA","BBB","CCC"}
-          if (JsonData.length > 4) {
-            // JsonData = AAA","BBB","CCC
-            JsonData = JsonData.substr(2, JsonData.length - 4);
-          }
-
-          // ItemList[0] = AAA
-          // ItemList[1] = BBB
-          // ItemList[2] = CCC
-          var ItemList = JsonData.split('","');
-          for (var i = 0; i < ItemList.length; i++) {
-            //alert(ItemList[i]);
-            var str = this._decode(ItemList[i]);
-            RetArray.push(str);
-          }
-        });
-
-      return RetArray;
+    // 印表機
+    async QueryUsbList() {
+      console.log("QueryUsbList");
+      return await this.SendToPrinter("UsbList", "");
     },
     _encode: function (s) {
       if (arguments.length !== 1) {
@@ -1421,68 +1418,156 @@ export default {
       }
     },
     async PrinterCtrl_GetJson() {
-      var l = await this.QueryUsbList();
-      console.log(l);
+      console.log("PrinterCtrl_GetJson");
+      // var l = await this.QueryUsbList();
       var JsonObject = {
         Interface: "USB",
-        USB: this._encode(l),
+        USB: "",
+        // USB: this._encode(l),
         COM: "",
         BaudRate: "",
         LPT: "",
         IP: "",
         Port: "",
       };
-      console.log(JsonObject);
 
-      // return JsonObject;
+      return JsonObject;
     },
-    async testPort() {
-      var port = null;
-      // port = await navigator.serial.requestPort();
-      port = await navigator.serial.getPorts();
-      if (port !== null && Array.isArray(port) && port.length > 0) {
-        port = port[0];
-      } else {
-        port = await navigator.serial.requestPort();
+    async SendCommand(mData) {
+      console.log("SendCommand");
+      // Get Json Object ( Printer Config )
+      var JsonObject = await this.PrinterCtrl_GetJson();
+
+      // Encode data
+      mData = this._encode(mData);
+
+      // Add Data to Json Object
+      JsonObject["Data"] = mData;
+
+      // Send To Printer
+      await this.SendToPrinter("Send", JsonObject);
+    },
+    async ecTextOut(PosX, PosY, FontHeight, mFontName, mData) {
+      console.log("ecTextOut");
+      // Get Json Object ( Printer Config )
+      var JsonObject = await this.PrinterCtrl_GetJson();
+
+      // Encode "FontName" and "Data"
+      mFontName = this._encode(mFontName);
+      mData = this._encode(mData);
+
+      JsonObject["PosX"] = PosX;
+      JsonObject["PosY"] = PosY;
+      JsonObject["FontHeight"] = FontHeight;
+      JsonObject["FontName"] = mFontName;
+      JsonObject["Data"] = mData;
+
+      // Send To Printer
+      await this.SendToPrinter("ecTextOut", JsonObject);
+    },
+    async Print_ecTextOut() {
+      console.log("Print_ecTextOut");
+      // Set Label Size
+      var LabelW = 54;
+      var LabelH = 40;
+      await this.SendCommand("^Q" + LabelH + ",0,0\n^W" + LabelW);
+      // Print Job Start
+      await this.SendCommand("^L");
+      // Print Text
+      //ecTextOut(10, 10, 24, "標楷體", "標楷體測試");
+      //ecTextOut(10, 100, 24, "MS Gothic", "日本のテスト");
+
+      // Print Text
+      var PosX = "30";
+      var PosY = "30";
+      var FontSize = "36";
+      var FontName = "標楷體";
+      var Data = this.addDate;
+      await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
+      PosX = "30";
+      PosY = "80";
+      var FontSize = "36";
+      var FontName = "標楷體";
+      var Data = this.dept.name;
+      await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
+      PosX = "30";
+      PosY = "130";
+      var FontSize = "36";
+      var FontName = "標楷體";
+      var Data = this.productName;
+      await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
+      PosX = "200";
+      PosY = "130";
+      var FontSize = "36";
+      var FontName = "標楷體";
+      var Data = this.netWeight + "  kg";
+      await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
+
+      // Print Job End
+      await this.SendCommand("E");
+    },
+    SendToPrinter(FuncName, JsonObject) {
+      // Response Data
+      var RetArray = [];
+
+      var RootUrl = "http://localhost:8050/";
+
+      // Combine WebAPI URL
+      var SendUrl = RootUrl + FuncName + "/";
+
+      // Get Json Text
+      var SendData = JSON.stringify(JsonObject);
+
+      // Debug
+      //alert("Url = " + SendUrl + "\r\nData = " + SendData);
+
+      // Encrypt Data
+      if (SendData != "") {
+        SendData = this._encode(SendData);
       }
-      // 設定 baud rate 為 9600
-      await port.open({ baudRate: 9600 });
-      // 將 bit data 解碼為文字
-      let decoder = new TextDecoderStream();
-      let inputDone = port.readable.pipeTo(decoder.writable);
-      const reader = decoder.readable.getReader();
-      try {
-        var string = "";
-        var keepReading = true;
-        while (port.readable && keepReading) {
-          const { value, done } = await reader.read();
-          string += value;
-          var start = string.indexOf("ST,GS,+");
-          var end = string.indexOf("kg");
-          if (start != -1 && end != -1) {
-            if (start > end) {
-              string = string.replace("kg", "");
-            } else {
-              var number = string.substring(start + 7, end);
-              var g = Number(number);
-              this.totalWeight = g;
-              keepReading = false;
-            }
+
+      // Send Ajax Request
+      $.ajax({
+        url: SendUrl,
+        type: "POST",
+        cache: false,
+        dataType: "json",
+        data: { EncodeData: SendData },
+        async: false,
+
+        success: function (data) {
+          // Get Json Text
+          var JsonData = JSON.stringify(data);
+          //alert(JsonData);
+
+          // JsonData = {"AAA","BBB","CCC"}
+          if (JsonData.length > 4) {
+            // JsonData = AAA","BBB","CCC
+            JsonData = JsonData.substr(2, JsonData.length - 4);
           }
-        }
-      } catch (error) {
-        console.log("error:" + error);
-        // Handle error...
-      } finally {
-        await reader.cancel();
-        await inputDone.catch(() => {});
-        await port.close();
-      }
+
+          // ItemList[0] = AAA
+          // ItemList[1] = BBB
+          // ItemList[2] = CCC
+          var ItemList = JsonData.split('","');
+          for (var i = 0; i < ItemList.length; i++) {
+            //alert(ItemList[i]);
+            var str = this._decode(ItemList[i]);
+            RetArray.push(str);
+          }
+        },
+
+        error: function (xhr, ajaxOptions, thrownError) {
+          //alert(xhr.status);
+          //alert(thrownError);
+        },
+      });
+
+      return RetArray;
     },
   },
-  created() {
+  async created() {
     LocalStorage.clearAll();
-    // this.PrinterCtrl_GetJson();
   },
 };
 </script>

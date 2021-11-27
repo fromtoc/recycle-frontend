@@ -72,13 +72,27 @@
             @click="openAdd"
             >新增
           </el-button>
-          <el-button
+          <el-upload
+            style="display: inline-block; margin: 0 10px"
+            class="upload-demo"
+            action=""
+            :http-request="upload"
+            :before-upload="beforeUpload"
+            accept=".xlsx"
+            :auto-upload="true"
+            :show-file-list="false"
+          >
+            <el-button type="warning" size="small">
+              <i class="el-icon-upload2" />批次上傳</el-button
+            >
+          </el-upload>
+          <!-- <el-button
             size="small"
             icon="el-icon-circle-plus-outline"
             type="warning"
             @click="resetForm"
             >批次上傳</el-button
-          >
+          > -->
           <el-button size="small" type="danger" @click="getPriceList"
             >產生報表</el-button
           >
@@ -602,9 +616,7 @@ export default {
         })
         .then((res) => {
           if (res.headers["content-type"] === "application/json") {
-            return $this.$message.error(
-              "Subject does not have permission"
-            );
+            return $this.$message.error("Subject does not have permission");
           }
           const data = res.data;
           let url = window.URL.createObjectURL(data); // 將二進制文件轉化為可訪問的url
@@ -615,6 +627,104 @@ export default {
           a.click();
           window.URL.revokeObjectURL(url);
         });
+    },
+    beforeUpload: function (file) {
+      let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
+      let size = file.size / 1024 / 1024;
+      if (extension !== "xlsx") {
+        this.$message.warning("只能上傳後綴是.xlsx的文件");
+      }
+      if (size > 10) {
+        this.$message.warning("文件大小不得超過10M");
+      }
+    },
+    upload: function (param) {
+      let formData = new FormData();
+      formData.append("file", param.file);
+      this.importExcel(formData).then(
+        (res) => {
+          if (res.data.success) {
+            this.$message({
+              message: "文件上傳成功,請刷新頁面！ ",
+              type: "ok",
+            });
+          } else {
+            let data = res.data.data;
+            if (data.type == "empty") {
+              var products = "";
+              data.list.forEach((element) => {
+                products = products + " " + element.name;
+              });
+              this.$alert(products, "廢棄物名稱不存在", {
+                confirmButtonText: "確定",
+                type: "error",
+              });
+            }
+            if (data.type == "same") {
+              var products = "";
+              data.list.forEach((element) => {
+                products =
+                  products +
+                  "<div>" +
+                  element.validMonth +
+                  ": " +
+                  element.name +
+                  " " +
+                  element.price +
+                  " " +
+                  element.unit +
+                  "</div>";
+              });
+              this.$confirm(products, "廢棄物單價已存在，是否覆蓋原有資料？", {
+                distinguishCancelAndClose: true,
+                confirmButtonText: "確認覆蓋",
+                cancelButtonText: "取消",
+                dangerouslyUseHTMLString: true,
+              })
+                .then(async() => {
+                  const { data: res } = await this.$http.post(
+                    "business/productPrice/recover",
+                    data.entityList
+                  );
+                  if (res.success) {
+                    console.log("success");
+                    this.$message.success("廢棄物單價批次上傳成功");
+                    this.getPriceList();
+                  } else {
+                    return this.$message.error(
+                      "廢棄物單價批次上傳失敗:" + res.data
+                    );
+                  }
+                })
+                .catch((action) => {
+                  if (action === "cancel") {
+                    this.$message({
+                      type: "info",
+                      message: "放棄覆蓋",
+                    });
+                  }
+                });
+              // this.$alert(products, "廢棄物單價已存在", {
+              //   confirmButtonText: "確定",
+              //   type: "error",
+              // });
+            }
+          }
+        },
+        (err) => {
+          this.$message({ message: "文件上傳失敗,請刷新頁面！ ", type: "ok" });
+        }
+      );
+    },
+    importExcel: function (data) {
+      return axios({
+        url: "/business/productPrice/import",
+        method: "post",
+        headers: {
+          "Content-type": "multipart/from-data",
+        },
+        data,
+      });
     },
   },
   created() {

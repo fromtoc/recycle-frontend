@@ -20,7 +20,7 @@ export function SendToPrinter(FuncName, JsonObject)
 	// Encrypt Data
 	if (SendData != "")
 	{
-		SendData = $.base64.encode(SendData);
+		SendData = this._encode(SendData);
 	}
 	
 	// Send Ajax Request

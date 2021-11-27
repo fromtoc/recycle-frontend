@@ -29,7 +29,6 @@ axios.defaults.baseURL = BASE_API_URL
 
 // 請求拦截器
 axios.interceptors.request.use(config => {
-        console.log(config);
         if (config.url.includes('localhost:8050')){
             return config;
         }
