@@ -121,7 +121,6 @@
     </el-row>
     <!-- 大樓租賃相關數據統計 -->
     <el-dialog
-    
       title="上傳大樓租賃相關數據統計資料"
       :visible.sync="dialogVisible1"
       width="50%"
@@ -136,17 +135,21 @@
           class="demo-ruleForm"
         >
           <div>
-            <span style="margin: 0 10px">請選擇上傳月份</span>
-            <el-date-picker
-              size="small"
-              v-model="addRuleForm1.uploadMonth"
-              type="month"
-              placeholder="選擇上傳月份"
-              value-format="yyyy-MM"
+            <el-form-item
+              label="請選擇上傳月份"
+              prop="uploadMonth"
+              label-width="130px"
             >
-            </el-date-picker>
+              <el-date-picker
+                size="small"
+                v-model="addRuleForm1.uploadMonth"
+                type="month"
+                placeholder="選擇上傳月份"
+                value-format="yyyy-MM"
+              >
+              </el-date-picker>
+            </el-form-item>
           </div>
-          <br />
           <el-table
             :data="tableData1"
             stripe
@@ -166,11 +169,7 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible1 = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="add1"
-          :disabled="btnDisabled"
-          :loading="btnLoading"
+        <el-button type="primary" @click="add1" :disabled="btnDisabled"
           >確 定</el-button
         >
       </span>
@@ -191,15 +190,20 @@
           class="demo-ruleForm"
         >
           <div>
-            <span style="margin: 0 10px">請選擇上傳月份</span>
-            <el-date-picker
-              size="small"
-              v-model="addRuleForm2.uploadMonth"
-              type="month"
-              placeholder="選擇上傳月份"
-              value-format="yyyy-MM"
+            <el-form-item
+              label="請選擇上傳月份"
+              prop="uploadMonth"
+              label-width="130px"
             >
-            </el-date-picker>
+              <el-date-picker
+                size="small"
+                v-model="addRuleForm2.uploadMonth"
+                type="month"
+                placeholder="選擇上傳月份"
+                value-format="yyyy-MM"
+              >
+              </el-date-picker>
+            </el-form-item>
           </div>
           <br />
           <el-table
@@ -221,11 +225,7 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="add2"
-          :disabled="btnDisabled"
-          :loading="btnLoading"
+        <el-button type="primary" @click="add2" :disabled="btnDisabled"
           >確 定</el-button
         >
       </span>
@@ -246,15 +246,20 @@
           class="demo-ruleForm"
         >
           <div>
-            <span style="margin: 0 10px">請選擇上傳月份</span>
-            <el-date-picker
-              size="small"
-              v-model="addRuleForm3.uploadMonth"
-              type="month"
-              placeholder="選擇上傳月份"
-              value-format="yyyy-MM"
+            <el-form-item
+              label="請選擇上傳月份"
+              prop="uploadMonth"
+              label-width="130px"
             >
-            </el-date-picker>
+              <el-date-picker
+                size="small"
+                v-model="addRuleForm3.uploadMonth"
+                type="month"
+                placeholder="選擇上傳月份"
+                value-format="yyyy-MM"
+              >
+              </el-date-picker>
+            </el-form-item>
           </div>
           <br />
           <el-table
@@ -276,11 +281,7 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible3 = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="add3"
-          :disabled="btnDisabled"
-          :loading="btnLoading"
+        <el-button type="primary" @click="add3" :disabled="btnDisabled"
           >確 定</el-button
         >
       </span>
@@ -301,15 +302,20 @@
           class="demo-ruleForm"
         >
           <div>
-            <span style="margin: 0 10px">請選擇上傳月份</span>
-            <el-date-picker
-              size="small"
-              v-model="addRuleForm4.uploadMonth"
-              type="month"
-              placeholder="選擇上傳月份"
-              value-format="yyyy-MM"
+            <el-form-item
+              label="請選擇上傳月份"
+              prop="uploadMonth"
+              label-width="130px"
             >
-            </el-date-picker>
+              <el-date-picker
+                size="small"
+                v-model="addRuleForm4.uploadMonth"
+                type="month"
+                placeholder="選擇上傳月份"
+                value-format="yyyy-MM"
+              >
+              </el-date-picker>
+            </el-form-item>
           </div>
           <br />
           <el-table
@@ -331,11 +337,7 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible4 = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="add4"
-          :disabled="btnDisabled"
-          :loading="btnLoading"
+        <el-button type="primary" @click="add4" :disabled="btnDisabled"
           >確 定</el-button
         >
       </span>
@@ -349,6 +351,29 @@ export default {
 
   data() {
     return {
+      itemMap: {
+        1: "大樓出租面積",
+        2: "大樓租戶員工人數(發卡數)",
+        3: "投遞系統",
+        5: "回收級配粗料",
+        6: "回收級配細料",
+        7: "回收木材",
+        8: "含鐵金屬",
+        9: "非鐵金屬",
+        10: "回收塑膠料",
+        11: "不可回收垃圾",
+        12: "投遞系統壓縮櫃",
+        13: "工程廢棄物開放櫃",
+        14: "人工投遞壓縮櫃",
+        15: "木頭開放櫃",
+        16: "紙類開放櫃",
+        17: "資源回收物",
+        18: "契約服務費用",
+        19: "資源回收金額",
+        20: "焚化廠規費(內湖、北投、木柵)",
+        21: "焚化廠規費(山豬坑)",
+        22: "工程廢棄物(尊弘環保)",
+      },
       btnLoading: false,
       btnDisabled: false,
       loading: true,
@@ -361,23 +386,23 @@ export default {
       addRuleForm3: {}, //新增表單數據
       addRuleForm4: {}, //新增表單數據
       addRules1: {
-        code: [
-          { required: true, message: "請輸入公司類型代碼", trigger: "blur" },
+        uploadMonth: [
+          { required: true, message: "請選擇上傳月份", trigger: "blur" },
         ],
       }, //新增驗證
       addRules2: {
-        code: [
-          { required: true, message: "請輸入公司類型代碼", trigger: "blur" },
+        uploadMonth: [
+          { required: true, message: "請選擇上傳月份", trigger: "blur" },
         ],
       }, //新增驗證
       addRules3: {
-        code: [
-          { required: true, message: "請輸入公司類型代碼", trigger: "blur" },
+        uploadMonth: [
+          { required: true, message: "請選擇上傳月份", trigger: "blur" },
         ],
       }, //新增驗證
       addRules4: {
-        code: [
-          { required: true, message: "請輸入公司類型代碼", trigger: "blur" },
+        uploadMonth: [
+          { required: true, message: "請選擇上傳月份", trigger: "blur" },
         ],
       }, //新增驗證
       tableData1: [
@@ -479,54 +504,283 @@ export default {
     closeDialog1() {
       this.$refs.addRuleFormRef1.clearValidate();
       this.addRuleForm1 = {};
+      this.closePage();
     },
     closeDialog2() {
       this.$refs.addRuleFormRef2.clearValidate();
       this.addRuleForm2 = {};
+      this.closePage();
     },
     closeDialog3() {
       this.$refs.addRuleFormRef3.clearValidate();
       this.addRuleForm3 = {};
+      this.closePage();
     },
     closeDialog4() {
       this.$refs.addRuleFormRef4.clearValidate();
       this.addRuleForm4 = {};
+      this.closePage();
     },
     add1() {
-      this.addRuleForm1.number1 = this.tableData1[0].number;
-      this.addRuleForm1.number2 = this.tableData1[1].number;
-      console.log(this.addRuleForm1);
+      this.$refs.addRuleFormRef1.validate(async (valid) => {
+        if (!valid) {
+          return;
+        } else {
+          const mySet = [];
+          for (var i = 0; i <= 1; i++) {
+            if (this.tableData1[i].number) {
+              let obj = {
+                itemId: i + 1,
+                value: this.tableData1[i].number,
+                validMonth: this.addRuleForm1.uploadMonth,
+              };
+              mySet.push(obj);
+            }
+          }
+          if (mySet.length == 0) {
+            this.$message.warning("請輸入補登資料");
+          } else {
+            this.upload(mySet);
+          }
+        }
+      });
+
+      // this.addRuleForm1.number1 = this.tableData1[0].number;
+      // this.addRuleForm1.number2 = this.tableData1[1].number;
+      // console.log(this.addRuleForm1);
     },
     add2() {
-      this.addRuleForm2.number1 = this.tableData2[0].number;
-      console.log(this.addRuleForm2);
+      this.$refs.addRuleFormRef2.validate(async (valid) => {
+        if (!valid) {
+          return;
+        } else {
+          const mySet = [];
+          for (var i = 0; i <= 0; i++) {
+            if (this.tableData2[i].number) {
+              let obj = {
+                itemId: i + 3,
+                value: this.tableData2[i].number,
+                validMonth: this.addRuleForm2.uploadMonth,
+              };
+              mySet.push(obj);
+            }
+          }
+          if (mySet.length == 0) {
+            this.$message.warning("請輸入補登資料");
+          } else {
+            this.upload(mySet);
+          }
+        }
+      });
     },
     add3() {
-      this.addRuleForm3.number1 = this.tableData3[0].number;
-      this.addRuleForm3.number2 = this.tableData3[1].number;
-      this.addRuleForm3.number3 = this.tableData3[2].number;
-      this.addRuleForm3.number4 = this.tableData3[3].number;
-      this.addRuleForm3.number5 = this.tableData3[4].number;
-      this.addRuleForm3.number6 = this.tableData3[5].number;
-      this.addRuleForm3.number7 = this.tableData3[6].number;
-      console.log(this.addRuleForm3);
+      this.$refs.addRuleFormRef3.validate(async (valid) => {
+        if (!valid) {
+          return;
+        } else {
+          const mySet = [];
+          for (var i = 0; i <= 6; i++) {
+            if (this.tableData3[i].number) {
+              let obj = {
+                itemId: i + 5,
+                value: this.tableData3[i].number,
+                validMonth: this.addRuleForm3.uploadMonth,
+              };
+              mySet.push(obj);
+            }
+          }
+          if (mySet.length == 0) {
+            this.$message.warning("請輸入補登資料");
+          } else {
+            this.upload(mySet);
+          }
+        }
+      });
     },
     add4() {
-      this.addRuleForm4.number1 = this.tableData4[0].number;
-      this.addRuleForm4.number2 = this.tableData4[1].number;
-      this.addRuleForm4.number3 = this.tableData4[2].number;
-      this.addRuleForm4.number4 = this.tableData4[3].number;
-      this.addRuleForm4.number5 = this.tableData4[4].number;
-      this.addRuleForm4.number6 = this.tableData4[5].number;
-      this.addRuleForm4.number7 = this.tableData4[6].number;
-      this.addRuleForm4.number8 = this.tableData4[7].number;
-      this.addRuleForm4.number9 = this.tableData4[8].number;
-      this.addRuleForm4.number10 = this.tableData4[9].number;
-      this.addRuleForm4.number11 = this.tableData4[10].number;
-      console.log(this.addRuleForm4);
+      this.$refs.addRuleFormRef4.validate(async (valid) => {
+        if (!valid) {
+          return;
+        } else {
+          const mySet = [];
+          for (var i = 0; i <= 10; i++) {
+            if (this.tableData4[i].number) {
+              let obj = {
+                itemId: i + 12,
+                value: this.tableData4[i].number,
+                validMonth: this.addRuleForm4.uploadMonth,
+              };
+              mySet.push(obj);
+            }
+          }
+          if (mySet.length == 0) {
+            this.$message.warning("請輸入補登資料");
+          } else {
+            this.upload(mySet);
+          }
+        }
+      });
+    },
+    async upload(mySet) {
+      console.log(mySet);
+      const { data: res } = await this.$http.post(
+        "business/inputElement/add",
+        mySet
+      );
+      if (res.success) {
+        this.$message({
+          message: "上傳成功！",
+          type: "success",
+        });
+        this.closePage();
+      } else {
+        let data = res.data;
+        if (data.type == "same") {
+          var products = "";
+          data.list.forEach((element) => {
+            products =
+              products +
+              "<div>" +
+              element.validMonth +
+              ": " +
+              this.itemMap[element.itemId] +
+              " " +
+              element.value +
+              "</div>";
+          });
+          this.$confirm(products, "補登資料已存在，是否覆蓋原有資料？", {
+            distinguishCancelAndClose: true,
+            confirmButtonText: "確認覆蓋",
+            cancelButtonText: "取消",
+            dangerouslyUseHTMLString: true,
+          })
+            .then(async () => {
+              const { data: res } = await this.$http.post(
+                "business/inputElement/recover",
+                data.entityList
+              );
+              if (res.success) {
+                console.log("success");
+                this.$message.success("補登資料上傳成功");
+                this.closePage();
+              } else {
+                return this.$message.error("補登資料上傳失敗:" + res.data);
+              }
+            })
+            .catch((action) => {
+              if (action === "cancel") {
+                this.$message({
+                  type: "info",
+                  message: "放棄覆蓋",
+                });
+              }
+            });
+        }
+      }
+    },
+    closePage: function () {
+      this.dialogVisible1 = false;
+      this.dialogVisible2 = false;
+      this.dialogVisible3 = false;
+      this.dialogVisible4 = false;
+      this.addRuleForm1 = {};
+      this.addRuleForm2 = {};
+      this.addRuleForm3 = {};
+      this.addRuleForm4 = {};
+      this.tableData1 = [
+        {
+          point: "大樓出租面積",
+          unit: "坪",
+        },
+        {
+          point: "大樓租戶員工人數(發卡數)",
+          unit: "人",
+        },
+      ];
+      this.tableData2 = [
+        {
+          point: "投遞系統",
+          unit: "KG",
+        },
+      ];
+      this.tableData3 = [
+        {
+          point: "回收級配粗料",
+          unit: "KG",
+        },
+        {
+          point: "回收級配細料",
+          unit: "KG",
+        },
+        {
+          point: "回收木材",
+          unit: "KG",
+        },
+        {
+          point: "含鐵金屬",
+          unit: "KG",
+        },
+        {
+          point: "非鐵金屬",
+          unit: "KG",
+        },
+        {
+          point: "回收塑膠料",
+          unit: "KG",
+        },
+        {
+          point: "不可回收垃圾",
+          unit: "KG",
+        },
+      ];
+      this.tableData4 = [
+        {
+          point: "投遞系統壓縮櫃",
+          unit: "次",
+        },
+        {
+          point: "工程廢棄物開放櫃",
+          unit: "次",
+        },
+        {
+          point: "人工投遞壓縮櫃",
+          unit: "次",
+        },
+        {
+          point: "木頭開放櫃",
+          unit: "次",
+        },
+        {
+          point: "紙類開放櫃",
+          unit: "次",
+        },
+        {
+          point: "資源回收物",
+          unit: "次",
+        },
+        {
+          point: "契約服務費用",
+          unit: "元",
+        },
+        {
+          point: "資源回收金額",
+          unit: "元",
+        },
+        {
+          point: "焚化廠規費(內湖、北投、木柵)",
+          unit: "元",
+        },
+        {
+          point: "焚化廠規費(山豬坑)",
+          unit: "元",
+        },
+        {
+          point: "工程廢棄物(尊弘環保)",
+          unit: "元",
+        },
+      ];
     },
   },
-
   created() {},
   mounted: function () {},
 };
