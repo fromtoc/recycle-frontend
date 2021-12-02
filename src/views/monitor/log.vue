@@ -89,15 +89,26 @@
 
           <!-- <el-table-column :show-overflow-tooltip="true" prop="method" label="方法" width="180">
 
-          </el-table-column>
+          </el-table-column> -->
 
-          <el-table-column :show-overflow-tooltip="true" prop="params"  label="参數" width="100">
+          <el-table-column
+            prop="username"
+            label="操作人"
+            width="150"
+          ></el-table-column>
+
+          <el-table-column
+            :show-overflow-tooltip="true"
+            prop="params"
+            label="参數"
+            width="800"
+          >
             <template slot-scope="scope">
-                  <span>{{ scope.row.params }}</span>
+              <span>{{ scope.row.params }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column prop="time" label="耗時" width="120" sortable>
+          <!-- <el-table-column prop="time" label="耗時" width="120" sortable>
               <template slot-scope="scope">
                   <el-tag v-if="scope.row.time>=2000" size="mini" type="danger" >
                    {{scope.row.time+'毫秒'}}
@@ -112,11 +123,6 @@
           </el-table-column>
             <el-table-column prop="location" label="操作地點" width="240"></el-table-column>
             <el-table-column prop="ip" label="IP地址" width="160"></el-table-column> -->
-          <el-table-column
-            prop="username"
-            label="操作人"
-            width="150"
-          ></el-table-column>
 
           <!-- <el-table-column label="操作" width="100px;" fixed="right">
             <template slot-scope="scope">

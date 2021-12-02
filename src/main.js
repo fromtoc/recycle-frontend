@@ -20,7 +20,7 @@ Vue.use(echarts)
 NProgress.configure({ease: 'ease', speed: 500});
 NProgress.configure({minimum: 0.3});
 
-let BASE_API_URL="http://www.localhost:8989/";
+let BASE_API_URL="http://localhost:8082/";
 //const BASE_API_URL="https://www.zykhome.club/api/";
 
 Vue.prototype.$http = axios
