@@ -10,9 +10,9 @@
                 <!-- 用戶信息表格 -->
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>用戶信息</span>
+                        <span>用戶資訊</span>
                     </div>
-                    <div class="right" style="width:520px;">
+                    <div class="right" style="width:100%;">
                         <el-table :data="tableInfo" border height="100" empty-text="暫無數據">
                             <el-table-column prop="username" label="用戶帳號"></el-table-column>
                             <el-table-column prop="nickname" label="用戶名稱"></el-table-column>

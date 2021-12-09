@@ -10,6 +10,9 @@ import axios from 'axios'
 import echarts from 'echarts'
 import ZkTable from 'vue-table-with-tree-grid'
 import {hasPermission} from './utils/permissionDirect'
+import locale from 'element-ui/lib/locale/lang/zh-TW'
+
+Vue.use(ElementUI, { locale })
 const Plugins = [hasPermission]
 
 Plugins.map((plugin) => {
@@ -20,7 +23,9 @@ Vue.use(echarts)
 NProgress.configure({ease: 'ease', speed: 500});
 NProgress.configure({minimum: 0.3});
 
-let BASE_API_URL="http://localhost:8082/";
+let BASE_API_URL="http://localhost:8089/";
+// let BASE_API_URL="http://211.23.139.11:8089/";
+// let BASE_API_URL="http://211.23.139.11:8088/api/";
 //const BASE_API_URL="https://www.zykhome.club/api/";
 
 Vue.prototype.$http = axios

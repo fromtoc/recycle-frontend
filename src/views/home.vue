@@ -16,8 +16,9 @@
       </div>
       <el-dropdown>
         <div class="block">
-          <!-- <el-avatar  :size="50" :src="this.userInfo.avatar" style="cursor: pointer;"></el-avatar> -->
-          <el-avatar :size="50" :src="this" style="cursor: pointer"></el-avatar>
+            <el-button icon="el-icon-user-solid" style="font-size: 20px" circle></el-button>
+          <!-- <i class="el-icon-user" style="font-size: 30px"></i> -->
+          <!-- <el-avatar :size="50" :src="this" style="cursor: pointer"></el-avatar> -->
         </div>
         <el-dropdown-menu slot="dropdown" trigger="click">
           <el-dropdown-item>
@@ -246,7 +247,7 @@ export default {
   },
   created() {
     this.getMenuList();
-    this.activePath = window.sessionStorage.getItem("activePath");
+    // this.activePath = window.sessionStorage.getItem("activePath");
     setTimeout(() => {
       this.loading = false;
     }, 500);

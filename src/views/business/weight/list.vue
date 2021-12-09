@@ -175,14 +175,14 @@
       </el-table>
 
       <!-- 分頁 -->
-      <el-pagination
+    <el-pagination
         style="margin-top: 10px"
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="queryMap.pageNo"
-        :page-sizes="[6, 10, 20, 30]"
-        :page-size="queryMap.pageSize"
+        :current-page="this.queryMap.pageNum"
+        :page-sizes="[6, 10, 15, 20]"
+        :page-size="this.queryMap.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>

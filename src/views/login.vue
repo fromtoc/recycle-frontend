@@ -33,7 +33,7 @@
             </el-form-item>
             <div></div>
 
-            <el-checkbox v-model="checked" class="rememberme">記住密碼</el-checkbox>
+            <!-- <el-checkbox v-model="checked" class="rememberme">記住密碼</el-checkbox> -->
             <el-form-item style="width:100%;">
                 <div style="float:right;">
                     <el-button
@@ -77,8 +77,8 @@
                 //表單用戶登入數據
                 loading: false,
                 userLoginForm: {
-                    username: "admin",
-                    password: "123456"
+                    // username: "admin",
+                    // password: "123456"
                 },
                 checked: true,
 
@@ -111,7 +111,8 @@
             },
             //重置表單
             resetForm: function () {
-                this.$refs.userLoginFormRef.resetFields();
+                this.userLoginForm = {};
+                // this.$refs.userLoginFormRef.resetFields();
             },
             //驗證成功
             async success() {
