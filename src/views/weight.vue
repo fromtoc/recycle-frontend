@@ -1,5 +1,31 @@
 <template>
   <div id="weight" class="login-container">
+    <!-- 初始頁面 -->
+    <div class="login-container" v-if="startPage">
+      <el-container style="height: 100%">
+        <el-header style="height: 20%"></el-header>
+        <el-main style="height: 65%">
+          <div
+            style="
+              height: 50%;
+              width: 40%;
+              margin-left: 30%;
+              margin-top: 5%;
+              display: flex;
+              align-items: center;
+              background-color: white;
+            "
+          >
+            <div style="width: 100%; font-size: 60px">
+              <div @click="start" style="width: 100%; text-align: center">
+                首頁
+              </div>
+            </div>
+          </div>
+        </el-main>
+        <el-footer style="height: 15%"></el-footer>
+      </el-container>
+    </div>
     <!-- 登入頁 -->
     <div v-if="loginPage">
       <h1
@@ -968,7 +994,8 @@ export default {
       productId: "",
       productName: "",
       products: [],
-      loginPage: true,
+      startPage: true,
+      loginPage: false,
       deptInfoPage: false,
       productPage: false,
       toolPage: false,
@@ -987,6 +1014,48 @@ export default {
   },
 
   methods: {
+    start: function () {
+      this.startPage = false;
+      this.loginPage = true;
+      // this.loginPort();
+    },
+    async loginPort() {
+      // var port = null;
+      // port = await navigator.serial.requestPort();
+      // port = await navigator.serial.getPorts();
+      // if (port !== null && Array.isArray(port) && port.length > 0) {
+      //   port = port[0];
+      // } else {
+      //   port = await navigator.serial.requestPort();
+      // }
+      // 設定 baud rate 為 9600
+      // await port.open({ baudRate: 9600 });
+      // 將 bit data 解碼為文字
+      // let decoder = new TextDecoderStream();
+      // let inputDone = port.readable.pipeTo(decoder.writable);
+      // const reader = decoder.readable.getReader();
+      try {
+        var string = "\\u218000D7E90\\u3";
+        var keepReading = true;
+        while (keepReading) {
+          // const { value, done } = await reader.read();
+          // string += value;
+          var start = string.indexOf("\\u2");
+          var end = string.indexOf("\\u3");
+          var card = string.substring(start + 4, end);
+          this.userLoginForm.cardName = card;
+          await this.handleSubmit();
+          keepReading = false;
+        }
+      } catch (error) {
+        console.log("error:" + error);
+        // Handle error...
+      } finally {
+        // await reader.cancel();
+        // await inputDone.catch(() => {});
+        // await port.close();
+      }
+    },
     //登入提交
     async handleSubmit() {
       this.loading = true;
@@ -1033,7 +1102,8 @@ export default {
       this.deductPage = false;
       this.finalPage = false;
       this.retryPage = false;
-      this.loginPage = true;
+      this.loginPage = false;
+      this.startPage = true;
       this.userLoginForm = {};
     },
     //選擇廢棄物
@@ -1131,9 +1201,17 @@ export default {
     confirmDeductNumber: function () {
       var reg = /^(0|[1-9][0-9]*)+(.[0-9]{1,6})?$/;
       if (reg.test(this.deductWeight)) {
-        this.netWeight = this.count(this.totalWeight, this.deductWeight);
-        this.deductPage = false;
-        this.finalPage = true;
+        if (this.count(this.totalWeight, this.deductWeight) < 0) {
+          this.$message.error({
+            title: "扣重不可大於總重",
+            message: "扣重不可大於總重",
+            type: "error",
+          });
+        } else {
+          this.netWeight = this.count(this.totalWeight, this.deductWeight);
+          this.deductPage = false;
+          this.finalPage = true;
+        }
       } else {
         this.$message.error({
           title: "扣重數字異常",
@@ -1221,7 +1299,7 @@ export default {
         netWeight: this.netWeight,
       };
       const { data: res } = await this.$http.post("business/weight/add", param);
-      if (res.success) {  
+      if (res.success) {
         console.log(res);
         this.addDate = res.data.date;
         await this.Print_ecTextOut();
@@ -1496,7 +1574,7 @@ export default {
       var FontName = "標楷體";
       var Data = this.productName;
       await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
-      PosX = "200";
+      PosX = "250";
       PosY = "130";
       var FontSize = "36";
       var FontName = "標楷體";
