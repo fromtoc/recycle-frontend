@@ -19,6 +19,11 @@ const routes = [
         component: () => import( '../views/login.vue'), //登入頁面
     },
     {
+        path: '/logout',
+        name: 'Logout',
+        component: () => import( '../views/logout.vue'), //登出頁面
+    },
+    {
         path: '/home',
         component: () => import( '../views/home.vue'), //後台主體框架
         redirect: '/system/welcome',
@@ -83,9 +88,49 @@ const routes = [
             },
             /**********************************報表查詢的路由******************************/
             {
-                path: '/business/report',
-                name: 'Report',
-                component: () => import( '../views/business/report.vue'), //相關資料補登
+                path: '/business/report/report1',
+                name: 'Report1',
+                component: () => import( '../views/business/report/report1.vue'), //報表1
+            },
+            {
+                path: '/business/report/report2',
+                name: 'Report2',
+                component: () => import( '../views/business/report/report2.vue'), //報表2
+            },
+            {
+                path: '/business/report/report3',
+                name: 'Report3',
+                component: () => import( '../views/business/report/report3.vue'), //報表3
+            },
+            {
+                path: '/business/report/report4',
+                name: 'Report4',
+                component: () => import( '../views/business/report/report4.vue'), //報表4
+            },
+            {
+                path: '/business/report/report5',
+                name: 'Report5',
+                component: () => import( '../views/business/report/report5.vue'), //報表5
+            },
+            {
+                path: '/business/report/report6',
+                name: 'Report6',
+                component: () => import( '../views/business/report/report6.vue'), //報表6
+            },
+            {
+                path: '/business/report/report7',
+                name: 'Report7',
+                component: () => import( '../views/business/report/report7.vue'), //報表7
+            },
+            {
+                path: '/business/report/report8',
+                name: 'Report8',
+                component: () => import( '../views/business/report/report8.vue'), //報表8
+            },
+            {
+                path: '/business/report/report9',
+                name: 'Report9',
+                component: () => import( '../views/business/report/report9.vue'), //報表9
             },
             /**********************************權限管理的路由******************************/
             {
@@ -212,7 +257,7 @@ const whiteListWeight=[
 //路由導航守卫
 router.beforeEach((to, from, next) => {
     const token = LocalStorage.get(LOCAL_KEY_XINGUAN_ACCESS_TOKEN);
-    if (to.path === '/login') {
+    if (to.path === '/login' || to.path === '/logout') {
         if (!token) {
             return next();
         } else {

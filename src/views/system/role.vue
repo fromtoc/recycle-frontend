@@ -128,7 +128,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="queryMap.pageNum"
-        :page-sizes="[8, 16, 32, 64]"
+        :page-sizes="[7, 10, 15, 20]"
         :page-size="queryMap.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"

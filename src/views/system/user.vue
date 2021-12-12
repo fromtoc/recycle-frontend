@@ -191,7 +191,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="queryMap.pageNo"
-        :page-sizes="[6, 10, 20, 30]"
+        :page-sizes="[7, 10, 20, 30]"
         :page-size="queryMap.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -659,7 +659,7 @@ export default {
       //查詢對象
       queryMap: {
         pageNum: 1,
-        pageSize: 6,
+        pageSize: 7,
         username: "",
         sex: "",
         nickname: "",
@@ -670,7 +670,7 @@ export default {
       addForm: {
         username: "",
         nickname: "",
-        password: "8888",
+        password: "",
         email: "",
         phoneNumber: "",
         sex: "",
@@ -719,7 +719,7 @@ export default {
     reset() {
       this.queryMap = {
         pageNum: 1,
-        pageSize: 6,
+        pageSize: 7,
         username: "",
         sex: "",
         nickname: "",

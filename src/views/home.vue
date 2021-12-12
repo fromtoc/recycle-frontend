@@ -170,7 +170,7 @@ export default {
       });
       if (res === "confirm") {
         LocalStorage.clearAll();
-        await this.$router.push("/login");
+        await this.$router.push("/logout");
       }
     },
     /**

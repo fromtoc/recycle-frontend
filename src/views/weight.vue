@@ -1,11 +1,35 @@
 <template>
-  <div id="weight" class="login-container">
+  <div id="weight" class="login-container background">
     <!-- 初始頁面 -->
     <div class="login-container" v-if="startPage">
       <el-container style="height: 100%">
-        <el-header style="height: 20%"></el-header>
-        <el-main style="height: 65%">
-          <div
+        <header style="height: 20%"></header>
+        <main style="height: 65%">
+          <a href="http://www.google.com.tw" target="_blank">
+          <el-button style="
+              width: 300px;
+              height: 120px;
+              position: absolute;
+              right: 650px;
+              top: 200px;
+              font-size: 50px;
+            "
+            >電子展視屏
+            </el-button
+          ></a>
+          <el-button
+            style="
+              width: 300px;
+              height: 120px;
+              position: absolute;
+              right: 650px;
+              top: 400px;
+              font-size: 50px;
+            "
+            @click="start"
+            >秤重系統</el-button
+          >
+          <!-- <div
             style="
               height: 50%;
               width: 40%;
@@ -21,13 +45,57 @@
                 首頁
               </div>
             </div>
-          </div>
-        </el-main>
+          </div> -->
+        </main>
         <el-footer style="height: 15%"></el-footer>
       </el-container>
     </div>
     <!-- 登入頁 -->
-    <div v-if="loginPage">
+    <div class="login-container" v-if="loginPage">
+      <el-container style="height: 100%">
+        <header style="height: 20%"></header>
+        <main style="height: 65%">
+          <el-form
+            :model="userLoginForm"
+            status-icon
+            ref="userLoginFormRef"
+            label-position="left"
+            label-width="0px"
+            class="demo-ruleForm login-page"
+          >
+            <h3 class="title">刷卡登入</h3>
+            <el-form-item prop="username">
+              <el-input
+                type="text"
+                @keyup.enter.native="handleSubmit"
+                v-model="userLoginForm.cardName"
+                auto-complete="off"
+                placeholder="刷卡"
+                prefix-icon="iconfont el-icon-user"
+              ></el-input>
+            </el-form-item>
+            <div></div>
+            <el-form-item style="width: 100%">
+              <div style="float: right">
+                <el-button
+                  type="primary"
+                  class="el-icon-mobile-phone"
+                  @click="handleSubmit"
+                  :loading="loading"
+                  >登入
+                </el-button>
+                <el-button class="el-icon-refresh" @click="resetForm"
+                  >重置</el-button
+                >
+              </div>
+            </el-form-item>
+          </el-form>
+        </main>
+        <el-footer style="height: 15%"></el-footer>
+      </el-container>
+    </div>
+
+    <!-- <div v-if="loginPage">
       <h1
         style="
           position: absolute;
@@ -74,12 +142,12 @@
           </div>
         </el-form-item>
       </el-form>
-    </div>
+    </div> -->
     <!-- 公司資料確認頁 -->
     <div class="login-container" v-if="deptInfoPage">
       <el-container style="height: 100%">
-        <el-header style="height: 20%"></el-header>
-        <el-main style="height: 65%">
+        <header style="height: 20%"></header>
+        <main style="height: 65%">
           <div
             style="
               height: 80%;
@@ -98,7 +166,7 @@
               ></div>
             </div>
           </div>
-        </el-main>
+        </main>
         <el-footer style="height: 15%">
           <el-button
             style="
@@ -131,7 +199,7 @@
     <!-- 選擇品項 -->
     <div class="login-container" v-if="productPage">
       <el-container style="height: 100%">
-        <el-header style="height: 20%"
+        <header style="height: 20%"
           ><div
             style="
               height: 50%;
@@ -147,10 +215,10 @@
             <span style="text-align: center; width: 100%; font-size: 50px"
               >請選擇品項</span
             >
-          </div></el-header
+          </div></header
         >
-        <el-main style="height: 65%; width: 100%">
-          <div style="width: 100%; display: inline-block">
+        <main style="height: 65%; width: 100%">
+          <div style="width: 100%; display: inline-block; margin-left:20px">
             <div
               style="width: 14%; display: inline-block"
               v-for="product in products"
@@ -168,7 +236,7 @@
               >
             </div>
           </div>
-        </el-main>
+        </main>
         <el-footer style="height: 15%">
           <el-button
             style="
@@ -201,7 +269,7 @@
     <!-- 選擇器具 -->
     <div class="login-container" v-if="toolPage">
       <el-container style="height: 100%">
-        <el-header style="height: 20%"
+        <header style="height: 20%"
           ><div
             style="
               height: 60%;
@@ -217,9 +285,9 @@
             <span style="text-align: center; width: 100%; font-size: 60px"
               >請選擇器具</span
             >
-          </div></el-header
+          </div></header
         >
-        <el-main style="height: 65%; width: 100%">
+        <main style="height: 65%; width: 100%">
           <div style="width: 100%; height: 100%; display: inline-block">
             <div
               style="
@@ -254,7 +322,7 @@
               >
             </div>
           </div>
-        </el-main>
+        </main>
         <el-footer style="height: 15%">
           <el-button
             style="
@@ -287,8 +355,8 @@
     <!-- 讀取重量頁 -->
     <div class="login-container" v-if="retryPage">
       <el-container style="height: 100%">
-        <el-header style="height: 20%"></el-header>
-        <el-main style="height: 65%">
+        <header style="height: 20%"></header>
+        <main style="height: 65%">
           <div
             style="
               height: 60%;
@@ -308,7 +376,7 @@
               <div style="width: 100%; text-align: center">重新置放</div>
             </div>
           </div>
-        </el-main>
+        </main>
         <el-footer style="height: 15%">
           <el-button
             style="
@@ -341,8 +409,8 @@
     <!-- 讀取重量頁 -->
     <div class="login-container" v-if="waitingPage">
       <el-container style="height: 100%">
-        <el-header style="height: 20%"></el-header>
-        <el-main style="height: 65%">
+        <header style="height: 20%"></header>
+        <main style="height: 65%">
           <div
             style="
               height: 50%;
@@ -359,15 +427,15 @@
               <div style="width: 100%; text-align: center">請稍後</div>
             </div>
           </div>
-        </el-main>
+        </main>
         <el-footer style="height: 15%"></el-footer>
       </el-container>
     </div>
     <!-- 手動輸入總重 -->
     <div class="login-container" v-if="totalPage">
       <el-container style="height: 100%">
-        <el-header style="height: 15%"></el-header>
-        <el-main style="height: 70%; width: 100%">
+        <header style="height: 15%"></header>
+        <main style="height: 70%; width: 100%">
           <div style="width: 50%; text-align: center; display: inline-block">
             <div
               style="
@@ -591,7 +659,7 @@
               >
             </div>
           </div>
-        </el-main>
+        </main>
         <el-footer style="height: 15%">
           <el-button
             style="
@@ -624,8 +692,8 @@
     <!-- 輸入扣重 -->
     <div class="login-container" v-if="deductPage">
       <el-container style="height: 100%">
-        <el-header style="height: 15%"></el-header>
-        <el-main style="height: 70%; width: 100%">
+        <header style="height: 15%"></header>
+        <main style="height: 70%; width: 100%">
           <div style="width: 50%; text-align: center; display: inline-block">
             <div
               style="
@@ -865,7 +933,7 @@
               >
             </div>
           </div>
-        </el-main>
+        </main>
         <el-footer style="height: 15%">
           <el-button
             style="
@@ -895,8 +963,8 @@
     <!-- 最後確認頁 -->
     <div class="login-container" v-if="finalPage">
       <el-container style="height: 100%">
-        <el-header style="height: 10%"></el-header>
-        <el-main style="height: 70%">
+        <header style="height: 10%"></header>
+        <main style="height: 70%">
           <div
             style="
               height: 70%;
@@ -926,7 +994,7 @@
               </div>
             </div>
           </div>
-        </el-main>
+        </main>
         <el-footer style="height: 15%">
           <el-button
             style="
@@ -1017,44 +1085,45 @@ export default {
     start: function () {
       this.startPage = false;
       this.loginPage = true;
-      // this.loginPort();
+      this.loginPort();
     },
     async loginPort() {
       // var port = null;
-      // port = await navigator.serial.requestPort();
       // port = await navigator.serial.getPorts();
-      // if (port !== null && Array.isArray(port) && port.length > 0) {
+      // if (port !== null && Array.isArray(port) && port.length == 2) {
       //   port = port[0];
       // } else {
       //   port = await navigator.serial.requestPort();
       // }
-      // 設定 baud rate 為 9600
+      // // 設定 baud rate 為 9600
       // await port.open({ baudRate: 9600 });
-      // 將 bit data 解碼為文字
+      // // 將 bit data 解碼為文字
       // let decoder = new TextDecoderStream();
       // let inputDone = port.readable.pipeTo(decoder.writable);
       // const reader = decoder.readable.getReader();
-      try {
-        var string = "\\u218000D7E90\\u3";
-        var keepReading = true;
-        while (keepReading) {
-          // const { value, done } = await reader.read();
-          // string += value;
-          var start = string.indexOf("\\u2");
-          var end = string.indexOf("\\u3");
-          var card = string.substring(start + 4, end);
-          this.userLoginForm.cardName = card;
-          await this.handleSubmit();
-          keepReading = false;
-        }
-      } catch (error) {
-        console.log("error:" + error);
-        // Handle error...
-      } finally {
-        // await reader.cancel();
-        // await inputDone.catch(() => {});
-        // await port.close();
-      }
+      // try {
+      //   var string = "";
+      //   var keepReading = true;
+      //   while (keepReading) {
+      //     const { value, done } = await reader.read();
+      //     if (this.loginPage) {
+      //       string += value;
+      //       var start = string.indexOf("\\u2");
+      //       var end = string.indexOf("\\u3");
+      //       var card = string.substring(start + 4, end);
+      //       this.userLoginForm.cardName = card;
+      //       await this.handleSubmit();
+      //       keepReading = false;
+      //     }
+      //   }
+      // } catch (error) {
+      //   console.log("error:" + error);
+      //   // Handle error...
+      // } finally {
+      //   await reader.cancel();
+      //   await inputDone.catch(() => {});
+      //   await port.close();
+      // }
     },
     //登入提交
     async handleSubmit() {
@@ -1102,9 +1171,10 @@ export default {
       this.deductPage = false;
       this.finalPage = false;
       this.retryPage = false;
-      this.loginPage = false;
-      this.startPage = true;
+      this.loginPage = true;
+      this.startPage = false;
       this.userLoginForm = {};
+      this.loginPort();
     },
     //選擇廢棄物
     chooseProduct: function (id, name) {
@@ -1248,8 +1318,10 @@ export default {
       var port = null;
       // port = await navigator.serial.requestPort();
       port = await navigator.serial.getPorts();
-      if (port !== null && Array.isArray(port) && port.length > 0) {
+      if (port !== null && Array.isArray(port) && port.length == 1) {
         port = port[0];
+      } else if (port !== null && Array.isArray(port) && port.length == 2) {
+        port = port[1];
       } else {
         port = await navigator.serial.requestPort();
       }
@@ -1665,10 +1737,10 @@ export default {
 }
 
 .login-page {
-  position: relative;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  margin: 190px auto;
+  margin-left: 600px;
+  margin-top: 50px;
   width: 370px;
   padding: 40px 35px 15px;
   background: #fff;
@@ -1678,6 +1750,13 @@ export default {
 label.el-checkbox.rememberme {
   margin: 0px 0px 15px;
   text-align: left;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  background: url("../assets/picture.jpg") center center no-repeat;
+  background-size: cover;
 }
 </style>
 

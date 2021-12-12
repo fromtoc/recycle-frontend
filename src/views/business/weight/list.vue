@@ -147,7 +147,7 @@
           width="100"
         ></el-table-column>
         <el-table-column
-          prop="createTime"
+          prop="loadTime"
           label="日期"
           width="150"
         ></el-table-column>
@@ -181,7 +181,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="this.queryMap.pageNum"
-        :page-sizes="[6, 10, 15, 20]"
+        :page-sizes="[7, 10, 15, 20]"
         :page-size="this.queryMap.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -306,7 +306,7 @@ export default {
       //查詢對象
       queryMap: {
         pageNum: 1,
-        pageSize: 6,
+        pageSize: 7,
       },
       weightList: [],
 
@@ -360,7 +360,7 @@ export default {
       this.range = [];
       this.queryMap = {
         pageNum: 1,
-        pageSize: 6,
+        pageSize: 7,
       };
     },
     /**

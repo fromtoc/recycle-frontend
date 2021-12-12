@@ -218,7 +218,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="this.queryMap.pageNum"
-        :page-sizes="[6, 10, 15, 20]"
+        :page-sizes="[7, 10, 15, 20]"
         :page-size="this.queryMap.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -485,7 +485,7 @@ export default {
       productData: [], //表格數據
       queryMap: {
         pageNum: 1,
-        pageSize: 6,
+        pageSize: 7,
         name: "",
         categoryId: "",
         supplier: "",

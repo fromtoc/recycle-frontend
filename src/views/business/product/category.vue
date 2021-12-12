@@ -117,7 +117,7 @@
               <el-input-number
                 v-model="addRuleForm.sort"
                 :min="1"
-                :max="10"
+                :max="30"
                 label="排序"
               ></el-input-number>
             </el-form-item>

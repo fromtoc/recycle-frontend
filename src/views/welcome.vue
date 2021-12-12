@@ -22,7 +22,7 @@
                     </div>
                 </el-card>
                 <!-- 功能列表 -->
-                <el-row style="margin-top:10px;" :gutter="10">
+                <!-- <el-row style="margin-top:10px;" :gutter="10">
                     <el-card style="height:125px;">
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
@@ -78,7 +78,7 @@
                             <div style="font-size:12px;margin-top:5px;margin-left:25px;">統計報表</div>
                         </el-col>
                     </el-card>
-                </el-row>
+                </el-row> -->
             </el-col>
             <!-- 右邊部分 -->
         </el-row>
