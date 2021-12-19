@@ -93,7 +93,12 @@
         height="420"
       >
         <!-- <el-table-column type="selection" width="40"></el-table-column> -->
-        <el-table-column label="序號" type="index" width="50"></el-table-column>
+        <el-table-column
+          label="序號"
+          type="index"
+          :index="getIndex"
+          width="50"
+        ></el-table-column>
         <el-table-column
           prop="nickname"
           label="用戶名稱"
@@ -538,7 +543,11 @@
         <span>
           <el-form label-width="140px" class="demo-ruleForm">
             <el-form-item label="輸入卡片號碼" prop="addCardId">
-              <el-input @keyup.enter.native="addCard" type="text" v-model="addCardId"></el-input>
+              <el-input
+                @keyup.enter.native="addCard"
+                type="text"
+                v-model="addCardId"
+              ></el-input>
             </el-form-item>
           </el-form>
         </span>
@@ -713,6 +722,9 @@ export default {
     },
   },
   methods: {
+    getIndex(index) {
+      return (this.queryMap.pageNum - 1) * this.queryMap.pageSize + index + 1;
+    },
     /**
      * 重置
      */

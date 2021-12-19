@@ -162,7 +162,7 @@
               <el-input-number
                 v-model="editRuleForm.sort"
                 :min="1"
-                :max="10"
+                :max="30"
                 label="排序"
               ></el-input-number>
             </el-form-item>
@@ -201,8 +201,8 @@ export default {
           { required: true, message: "請輸入分類名", trigger: "blur" },
           {
             min: 2,
-            max: 10,
-            message: "長度在 2 到 10 個字符",
+            max: 30,
+            message: "長度在 2 到 30 個字符",
             trigger: "blur",
           },
         ],

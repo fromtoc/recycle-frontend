@@ -73,6 +73,7 @@
           <el-table-column
             label="識別碼"
             type="index"
+            :index="getIndex"
             width="70"
             align="center"
           ></el-table-column>
@@ -158,6 +159,9 @@ export default {
     };
   },
   methods: {
+    getIndex(index) {
+      return (this.queryMap.pageNum - 1) * this.queryMap.pageSize + index + 1;
+    },
     async deleteFileOrDirectory() {
       const ids = this.sels.map((item) => item.id).join(); //獲取所有選中行的id组成的字符串，以逗號分隔
       const res = await this.$confirm(

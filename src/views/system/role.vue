@@ -59,7 +59,7 @@
           size="small"
         >
           <!-- <el-table-column prop="id" label="序號" width="180"></el-table-column> -->
-          <el-table-column label="序號" type="index" width="50">
+          <el-table-column label="序號" type="index" :index="getIndex" width="50">
           </el-table-column>
           <el-table-column
             prop="roleName"
@@ -280,6 +280,9 @@ export default {
     };
   },
   methods: {
+    getIndex(index) {
+      return (this.queryMap.pageNum - 1) * this.queryMap.pageSize + index + 1;
+    },
     checkChange(a, b, c) {
       const anode = this.$refs.tree.getNode(a);
       !anode.checked ? this.findchildren(anode.parent) : "";

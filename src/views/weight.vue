@@ -1318,6 +1318,7 @@ export default {
       var port = null;
       // port = await navigator.serial.requestPort();
       port = await navigator.serial.getPorts();
+      console.log("port:"+port);
       if (port !== null && Array.isArray(port) && port.length == 1) {
         port = port[0];
       } else if (port !== null && Array.isArray(port) && port.length == 2) {
@@ -1335,8 +1336,11 @@ export default {
         var string = "";
         var keepReading = true;
         while (port.readable && keepReading) {
+          console.log("reading");
           const { value, done } = await reader.read();
           string += value;
+          console.log("value:" + value);
+          console.log("string:" + string);
           var start = string.indexOf("ST,GS,+");
           var end = string.indexOf("kg");
           if (start != -1 && end != -1) {

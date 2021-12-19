@@ -122,6 +122,7 @@
           <el-table-column
             label="序號"
             type="index"
+            :index="getIndex"
             width="50"
           ></el-table-column>
           <el-table-column
@@ -394,6 +395,9 @@ export default {
     },
   },
   methods: {
+    getIndex(index) {
+      return (this.queryMap.pageNum - 1) * this.queryMap.pageSize + index + 1;
+    },
     //重置查詢表單
     resetForm() {
       this.queryMap = {
@@ -494,8 +498,37 @@ export default {
             this.$message.success("廢棄物單價新增成功");
             this.addRuleForm = {};
             await this.getPriceList();
-          } else {
-            return this.$message.error("廢棄物單價新增失敗:" + res.data);
+          } else if (res.data == "廢棄物名稱不存在") {
+            this.$message.error("廢棄物單價新增失敗:" + res.data);
+          } else if (res.data == "該筆資料已存在，請問是否覆蓋?") {
+            this.$confirm("該筆資料已存在，請問是否覆蓋?", {
+              distinguishCancelAndClose: true,
+              confirmButtonText: "確認覆蓋",
+              cancelButtonText: "取消",
+              dangerouslyUseHTMLString: true,
+            })
+              .then(async () => {
+                this.addRuleForm.recover = true;
+                const { data: res } = await this.$http.post(
+                  "business/productPrice/add",
+                  this.addRuleForm
+                );
+                if (res.success) {
+                  this.$message.success("廢棄物單價新增成功");
+                  this.addRuleForm = {};
+                  await this.getPriceList();
+                } else {
+                  this.$message.error("廢棄物單價新增失敗:" + res.data);
+                }
+              })
+              .catch((action) => {
+                if (action === "cancel") {
+                  this.$message({
+                    type: "info",
+                    message: "放棄覆蓋",
+                  });
+                }
+              });
           }
           this.addDialogVisible = false;
           this.btnDisabled = false;
@@ -681,7 +714,7 @@ export default {
                 cancelButtonText: "取消",
                 dangerouslyUseHTMLString: true,
               })
-                .then(async() => {
+                .then(async () => {
                   const { data: res } = await this.$http.post(
                     "business/productPrice/recover",
                     data.entityList

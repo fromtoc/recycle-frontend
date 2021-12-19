@@ -110,7 +110,7 @@
         height="420"
       >
         <!-- <el-table-column type="selection" width="40"></el-table-column> -->
-        <el-table-column label="序號" prop="id" width="100"></el-table-column>
+        <el-table-column label="序號" type="index" :index="getIndex" width="100"></el-table-column>
         <el-table-column
           prop="departmentName"
           label="公司名稱"
@@ -353,6 +353,9 @@ export default {
     },
   },
   methods: {
+    getIndex(index) {
+      return (this.queryMap.pageNum - 1) * this.queryMap.pageSize + index + 1;
+    },
     /**
      * 重置
      */

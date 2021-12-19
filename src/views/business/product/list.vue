@@ -118,13 +118,14 @@
           v-loading="loading"
           border
           stripe
-          :data="productListFilter"
+          :data="productData"
           style="width: 100%; margin-top: 20px"
           height="400"
         >
           <el-table-column
             label="序號"
             type="index"
+            :index="getIndex"
             width="50"
           ></el-table-column>
 
@@ -489,7 +490,7 @@ export default {
         name: "",
         categoryId: "",
         supplier: "",
-        status: "",
+        status: false,
       }, //查詢對象
       addRuleForm: {}, //新增表單數據
       editRuleForm: {}, //修改表單數據
@@ -533,24 +534,33 @@ export default {
   },
 
   computed: {
-    productListFilter: function () {
-      if (!this.showProductStop) {
-        return this.productData.filter((item) => item.status !== true);
-      }
-      return this.productData.filter((item) => item.status == true);
-    },
+    // productListFilter: function () {
+    //   if (!this.showProductStop) {
+    //     this.queryMap.status = true;
+    //     this.getproductList();
+    //     return this.productData.filter((item) => item.status !== true);
+    //   }
+    //   this.queryMap.status = true;
+    //   this.getproductList();
+    //   return this.productData.filter((item) => item.status == true);
+    // },
   },
   methods: {
+    // :index="getIndex"
+    getIndex(index) {
+      return (this.queryMap.pageNum - 1) * this.queryMap.pageSize + index + 1;
+    },
     //重置查詢表單
     resetForm() {
       this.queryMap = {
         pageNum: 1,
-        pageSize: 5,
+        pageSize: 7,
         name: "",
         categoryId: "",
         supplier: "",
-        status: 0,
+        status: false,
       };
+      this.showProductStop = false;
     },
     /**
      * 打開新增廢棄物彈框
@@ -883,6 +893,20 @@ export default {
     setTimeout(() => {
       this.loading = false;
     }, 500);
+  },
+  watch: {
+    showProductStop: function (newValue, oldValue) {
+      this.queryMap = {
+        pageNum: 1,
+        pageSize: 7,
+        name: "",
+        categoryId: "",
+        supplier: "",
+        status: false,
+      };
+      this.queryMap.status = newValue;
+      this.getproductList();
+    },
   },
 };
 </script>

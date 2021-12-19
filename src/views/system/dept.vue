@@ -62,6 +62,7 @@
           <el-table-column
             label="序號"
             type="index"
+            :index="getIndex"
             width="50"
           ></el-table-column>
           <el-table-column
@@ -381,6 +382,9 @@ export default {
     };
   },
   methods: {
+    getIndex(index) {
+      return (this.queryMap.pageNum - 1) * this.queryMap.pageSize + index + 1;
+    },
     /**
      * 加載公司表格
      */
