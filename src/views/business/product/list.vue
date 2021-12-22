@@ -868,6 +868,8 @@ export default {
           url: "business/product/excel",
           method: "post",
           responseType: "blob",
+          data: this.queryMap,
+          params: this.queryMap,
         })
         .then((res) => {
           if (res.headers["content-type"] === "application/json") {

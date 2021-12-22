@@ -395,6 +395,7 @@ export default {
           url: "system/department/excel",
           method: "post",
           responseType: "blob",
+          data: this.queryMap,
         })
         .then((res) => {
           if (res.headers["content-type"] === "application/json") {

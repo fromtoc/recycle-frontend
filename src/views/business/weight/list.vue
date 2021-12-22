@@ -376,13 +376,20 @@ export default {
     /**
      * 加載用戶表格
      */
-    downExcel() {
+    async downExcel() {
       const $this = this;
-      const res = axios
+      if (this.range != null && this.range.length === 1) {
+        this.queryMap.createTimeStart = this.range[0];
+      } else if (this.range != null && this.range.length === 2) {
+        this.queryMap.createTimeStart = this.range[0];
+        this.queryMap.createTimeEnd = this.range[1];
+      }
+      const res = await axios
         .request({
           url: "business/weight/excel",
           method: "post",
           responseType: "blob",
+          data: this.queryMap,
         })
         .then((res) => {
           if (res.headers["content-type"] === "application/json") {

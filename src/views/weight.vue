@@ -1331,7 +1331,7 @@ export default {
       port = await navigator.serial.getPorts();
       console.log("port:" + port);
       if (port !== null && Array.isArray(port) && port.length == 1) {
-        port = await navigator.serial.requestPort();
+        port = port[0];
       } else if (port !== null && Array.isArray(port) && port.length == 2) {
         port = port[1];
       } else {

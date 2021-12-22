@@ -210,7 +210,8 @@ import store from '../store'//引入store
 //白名單頁面
 const whiteList=[
     '/business/product/add-stocks',
-    '/business/product/publish'
+    '/business/product/publish',
+    '/business/product/price',
 ];
 
 //白名

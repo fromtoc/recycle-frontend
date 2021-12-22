@@ -93,9 +93,6 @@
             @click="resetForm"
             >批次上傳</el-button
           > -->
-          <el-button size="small" type="danger" @click="getPriceList"
-            >產生報表</el-button
-          >
           <el-button
             style="float: right; margin-right: 20px"
             size="small"
@@ -646,6 +643,8 @@ export default {
           url: "business/productPrice/excel",
           method: "post",
           responseType: "blob",
+          data: this.queryMap,
+          params: this.queryMap,
         })
         .then((res) => {
           if (res.headers["content-type"] === "application/json") {
