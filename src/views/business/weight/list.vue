@@ -104,13 +104,18 @@
         empty-text="暫無數據"
         v-loading="loading"
         size="small"
-        :data="weightListFilter"
+        :data="weightList"
         border
         style="width: 100%"
         height="420"
       >
         <!-- <el-table-column type="selection" width="40"></el-table-column> -->
-        <el-table-column label="序號" type="index" :index="getIndex" width="100"></el-table-column>
+        <el-table-column
+          label="序號"
+          type="index"
+          :index="getIndex"
+          width="100"
+        ></el-table-column>
         <el-table-column
           prop="departmentName"
           label="公司名稱"
@@ -175,7 +180,7 @@
       </el-table>
 
       <!-- 分頁 -->
-    <el-pagination
+      <el-pagination
         style="margin-top: 10px"
         background
         @size-change="handleSizeChange"
@@ -307,6 +312,7 @@ export default {
       queryMap: {
         pageNum: 1,
         pageSize: 7,
+        status: false,
       },
       weightList: [],
 
@@ -339,12 +345,12 @@ export default {
     };
   },
   computed: {
-    weightListFilter: function () {
-      if (!this.showWeightStop) {
-        return this.weightList.filter((item) => item.status !== true);
-      }
-      return this.weightList.filter((item) => item.status == true);
-    },
+    // weightListFilter: function () {
+    //   if (!this.showWeightStop) {
+    //     return this.weightList.filter((item) => item.status !== true);
+    //   }
+    //   return this.weightList.filter((item) => item.status == true);
+    // },
     netWeight: function () {
       return this.count(this.addForm.totalWeight, this.addForm.deductWeight);
     },
@@ -364,6 +370,7 @@ export default {
       this.queryMap = {
         pageNum: 1,
         pageSize: 7,
+        status: false,
       };
     },
     /**
@@ -420,6 +427,9 @@ export default {
      * 新增秤重明細
      */
     async addWeight() {
+      if (this.netWeight < 0) {
+        return this.$message.error("扣重不可大於總重");
+      }
       this.addForm.netWeight = this.netWeight;
       this.$refs.addFormRef.validate(async (valid) => {
         if (!valid) {
@@ -454,6 +464,9 @@ export default {
      * 更新用戶
      */
     async updateWeight() {
+      if (this.editNetWeight < 0) {
+        return this.$message.error("扣重不可大於總重");
+      }
       this.editForm.netWeight = this.editNetWeight;
       this.$refs.editFormRef.validate(async (valid) => {
         if (!valid) {
@@ -586,6 +599,17 @@ export default {
     setTimeout(() => {
       this.loading = false;
     }, 500);
+  },
+  watch: {
+    showWeightStop: function (newValue, oldValue) {
+      this.queryMap = {
+        pageNum: 1,
+        pageSize: 7,
+        status: false,
+      };
+      this.queryMap.status = newValue;
+      this.getWeightList();
+    },
   },
 };
 </script>

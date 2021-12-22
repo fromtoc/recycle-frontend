@@ -220,7 +220,8 @@ export default {
             message: "用戶密碼更新",
             type: "success",
           });
-          // await this.getRoleList();
+          LocalStorage.clearAll();
+          await this.$router.push("/login");
         } else {
           this.$message.error("用戶密碼更新失敗:" + res.data);
         }

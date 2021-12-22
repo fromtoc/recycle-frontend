@@ -5,18 +5,22 @@
       <el-container style="height: 100%">
         <header style="height: 20%"></header>
         <main style="height: 65%">
-          <a href="http://www.google.com.tw" target="_blank">
-          <el-button style="
-              width: 300px;
-              height: 120px;
-              position: absolute;
-              right: 650px;
-              top: 200px;
-              font-size: 50px;
-            "
-            >電子展視屏
-            </el-button
-          ></a>
+          <a
+            href="https://192.168.89.50:8088/hengshi/#/share/app/S83089DCC7EEE6B86DFC62B0DBCC0BB27"
+            target="_blank"
+          >
+            <el-button
+              style="
+                width: 300px;
+                height: 120px;
+                position: absolute;
+                right: 650px;
+                top: 200px;
+                font-size: 50px;
+              "
+              >電子展視屏
+            </el-button></a
+          >
           <el-button
             style="
               width: 300px;
@@ -72,6 +76,7 @@
                 auto-complete="off"
                 placeholder="刷卡"
                 prefix-icon="iconfont el-icon-user"
+                ref="loginButton"
               ></el-input>
             </el-form-item>
             <div></div>
@@ -199,8 +204,8 @@
     <!-- 選擇品項 -->
     <div class="login-container" v-if="productPage">
       <el-container style="height: 100%">
-        <header style="height: 20%"
-          ><div
+        <header style="height: 20%">
+          <div
             style="
               height: 50%;
               width: 20%;
@@ -215,10 +220,10 @@
             <span style="text-align: center; width: 100%; font-size: 50px"
               >請選擇品項</span
             >
-          </div></header
-        >
+          </div>
+        </header>
         <main style="height: 65%; width: 100%">
-          <div style="width: 100%; display: inline-block; margin-left:20px">
+          <div style="width: 100%; display: inline-block; margin-left: 20px">
             <div
               style="width: 14%; display: inline-block"
               v-for="product in products"
@@ -269,8 +274,8 @@
     <!-- 選擇器具 -->
     <div class="login-container" v-if="toolPage">
       <el-container style="height: 100%">
-        <header style="height: 20%"
-          ><div
+        <header style="height: 20%">
+          <div
             style="
               height: 60%;
               width: 30%;
@@ -285,8 +290,8 @@
             <span style="text-align: center; width: 100%; font-size: 60px"
               >請選擇器具</span
             >
-          </div></header
-        >
+          </div>
+        </header>
         <main style="height: 65%; width: 100%">
           <div style="width: 100%; height: 100%; display: inline-block">
             <div
@@ -1088,9 +1093,13 @@ export default {
       this.loginPort();
     },
     async loginPort() {
+      this.$nextTick(() => {
+        this.$refs.loginButton.$el.querySelector("input").focus();
+      });
       // var port = null;
       // port = await navigator.serial.getPorts();
-      // if (port !== null && Array.isArray(port) && port.length == 2) {
+      //       console.log("port:"+port);
+      // if (port !== null && Array.isArray(port) && port.length == 1) {
       //   port = port[0];
       // } else {
       //   port = await navigator.serial.requestPort();
@@ -1108,6 +1117,8 @@ export default {
       //     const { value, done } = await reader.read();
       //     if (this.loginPage) {
       //       string += value;
+      //       console.log(value);
+      //               console.log(string);
       //       var start = string.indexOf("\\u2");
       //       var end = string.indexOf("\\u3");
       //       var card = string.substring(start + 4, end);
@@ -1318,9 +1329,9 @@ export default {
       var port = null;
       // port = await navigator.serial.requestPort();
       port = await navigator.serial.getPorts();
-      console.log("port:"+port);
+      console.log("port:" + port);
       if (port !== null && Array.isArray(port) && port.length == 1) {
-        port = port[0];
+        port = await navigator.serial.requestPort();
       } else if (port !== null && Array.isArray(port) && port.length == 2) {
         port = port[1];
       } else {

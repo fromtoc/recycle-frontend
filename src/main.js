@@ -25,8 +25,8 @@ NProgress.configure({minimum: 0.3});
 
 // let BASE_API_URL="http://localhost:8089/";
 // let BASE_API_URL="http://211.23.139.11:8089/";
+// let BASE_API_URL="https://192.168.89.50:8088/api/";
 let BASE_API_URL="https://211.23.139.11:8088/api/";
-//const BASE_API_URL="https://www.zykhome.club/api/";
 
 Vue.prototype.$http = axios
 Vue.prototype.BASE_API_URL=BASE_API_URL

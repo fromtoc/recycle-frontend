@@ -90,7 +90,12 @@ const routes = [
             {
                 path: '/business/report/report1',
                 name: 'Report1',
-                component: () => import( '../views/business/report/report1.vue'), //固定報表
+                component: () => import( '../views/business/report/report1.vue'), //廢棄物統計分析
+            },
+            {
+                path: '/business/report/report2',
+                name: 'Report2',
+                component: () => import( '../views/business/report/report2.vue'), //資源回收統計
             },
             /**********************************權限管理的路由******************************/
             {
