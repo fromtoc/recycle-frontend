@@ -6,7 +6,7 @@
         <header style="height: 20%"></header>
         <main style="height: 65%">
           <a
-            href="https://192.168.89.50:8088/hengshi/#/share/app/S83089DCC7EEE6B86DFC62B0DBCC0BB27"
+            href="https://192.168.89.50:8088/hengshi/#/share/app/S558A8A346867ACCE545BBDE752A024B9"
             target="_blank"
           >
             <el-button
@@ -1138,8 +1138,15 @@ export default {
     },
     //登入提交
     async handleSubmit() {
-      this.loading = true;
       //發起登入請求
+      if (this.userLoginForm.cardName=="") {
+        return this.$message.error({
+          title: "登入失敗",
+          message: "請刷卡登入",
+          type: "error",
+        });
+      }
+      this.loading = true;
 
       const { data: res } = await this.$http.post(
         "business/weight/login",
@@ -1170,7 +1177,7 @@ export default {
     },
     //重置表單
     resetForm: function () {
-      this.userLoginForm = {};
+      this.userLoginForm.cardName="";
     },
     //取消
     cancel: function () {
@@ -1184,7 +1191,7 @@ export default {
       this.retryPage = false;
       this.loginPage = true;
       this.startPage = false;
-      this.userLoginForm = {};
+      this.userLoginForm.cardName="";
       this.loginPort();
     },
     //選擇廢棄物
