@@ -25,7 +25,7 @@ export default {
         console.log(res.token);
         this.iframeSrc = 
             res.headerUrl + 
-            "#/private/share/E85444BE8DCD2703B8D84062CDB420D4B/dashboard/EFE3CFA6B2AF340F29248A46AD568573?copyright=false&_k=x07fqs" + 
+            "#/private/share/E1CE991EC709AC01F08A11391C7818B0A/dashboard/EA7DC23099080937EC5AEB4696AA7D86D?copyright=false&_k=x07fqs" + 
             "&activeAuth=jwt-param&jwtParam=" + 
             res.token;
         console.log(this.iframeSrc);

@@ -169,11 +169,11 @@
               ></el-tag>
             </template>
           </el-table-column> -->
-          <!-- <el-table-column
-            prop="unit"
-            label="單位"
+          <el-table-column
+            prop="sort"
+            label="排序"
             width="80"
-          ></el-table-column> -->
+          ></el-table-column>
           <!-- <el-table-column prop="remark" label="備註"></el-table-column> -->
           <el-table-column prop="isban" label="停用" width="100">
             <template slot-scope="scope">
@@ -291,18 +291,18 @@
                   </el-form-item>
                 </div>
               </el-col> -->
-            <!-- <el-col :span="12">
+            <el-col :span="12">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="排序" prop="sort">
                     <el-input-number
                       v-model="addRuleForm.sort"
                       :min="1"
-                      :max="10"
+                      :max="1000"
                       label="排序"
                     ></el-input-number>
                   </el-form-item>
                 </div>
-              </el-col> -->
+              </el-col>
             <!-- </el-row> -->
 
             <!-- <el-form-item label="備註信息" prop="remark">
@@ -380,27 +380,27 @@
             <el-form-item label="廢棄物名稱" prop="name">
               <el-input v-model="editRuleForm.name"></el-input>
             </el-form-item>
-            <!-- <el-row>
-              <el-col :span="12">
+            <el-row>
+              <!-- <el-col :span="12">
                 <div class="grid-content bg-purple">
                   <el-form-item label="單位" prop="unit">
                     <el-input v-model="editRuleForm.unit"></el-input>
                   </el-form-item>
                 </div>
-              </el-col>
+              </el-col> -->
               <el-col :span="12">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="排序" prop="sort">
                     <el-input-number
                       v-model="editRuleForm.sort"
                       :min="1"
-                      :max="10"
+                      :max="1000"
                       label="排序"
                     ></el-input-number>
                   </el-form-item>
                 </div>
               </el-col>
-            </el-row> -->
+            </el-row>
           </el-form>
         </span>
         <span slot="footer" class="dialog-footer">
@@ -523,7 +523,7 @@ export default {
         categorys: [
           { required: true, message: "請輸入廢棄物分類", trigger: "blur" },
         ],
-        // sort: [{ required: true, message: "請輸入排序", trigger: "blur" }],
+        sort: [{ required: true, message: "請輸入排序", trigger: "blur" }],
         categoryKeys: [
           { required: true, message: "請選擇廢棄物分類", trigger: "blur" },
         ],

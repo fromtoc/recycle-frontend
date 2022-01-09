@@ -208,11 +208,39 @@
             ref="addFormRef"
             label-width="100px"
           >
-            <el-form-item label="登入卡號" prop="cardName">
-              <el-input v-model="addForm.cardName"></el-input>
+            <el-form-item label="日期" prop="loadTime">
+              <el-date-picker
+                size="small"
+                v-model="addForm.loadTime"
+                type="datetime"
+                placeholder="選擇日期時間"
+                value-format="yyyy-MM-dd HH:mm:ss"
+              >
+              </el-date-picker>
             </el-form-item>
-            <el-form-item label="廢棄物名稱" prop="productName">
-              <el-input v-model="addForm.productName"></el-input>
+            <el-form-item label="登入卡號" prop="cardId">
+              <el-cascader
+                placeholder="請選擇"
+                :options="cardTree"
+                clearable
+                filterable
+                :props="selectProps"
+                :show-all-levels="false"
+                v-model="addForm.cardId"
+              ></el-cascader>
+              <!-- <el-input v-model="addForm.cardName"></el-input> -->
+            </el-form-item>
+            <el-form-item label="廢棄物名稱" prop="productId">
+              <el-cascader
+                placeholder="請選擇"
+                :options="productTree"
+                clearable
+                filterable
+                :props="selectProps"
+                :show-all-levels="false"
+                v-model="addForm.productId"
+              ></el-cascader>
+              <!-- <el-input v-model="addForm.productName"></el-input> -->
             </el-form-item>
             <el-form-item label="總重" prop="totalWeight">
               <el-input type="number" v-model="addForm.totalWeight"></el-input>
@@ -296,6 +324,15 @@ import axios from "axios";
 export default {
   data() {
     return {
+      productTree: [],
+      cardTree: [],
+      selectProps: {
+        expandTrigger: "hover",
+        value: "id",
+        label: "name",
+        children: "children",
+        checkStrictly: false,
+      }, //級聯選擇器配置项
       limitUser: false,
       range: [],
       showWeightStop: false,
@@ -323,10 +360,13 @@ export default {
       changePasswordUserId: "",
       newPassword: "",
       addFormRules: {
-        cardName: [
+        loadTime: [
+          { required: true, message: "請輸入日期", trigger: "blur" },
+        ],
+        cardId: [
           { required: true, message: "請輸入登入卡號", trigger: "blur" },
         ],
-        productName: [
+        productId: [
           { required: true, message: "請輸入廢棄物名稱", trigger: "blur" },
         ],
         totalWeight: [
@@ -438,6 +478,11 @@ export default {
         return this.$message.error("扣重不可大於總重");
       }
       this.addForm.netWeight = this.netWeight;
+      console.log(this.addForm.cardId[2]);
+      this.addForm.cardId = this.addForm.cardId[2];
+      console.log(this.addForm.productId[2]);
+      this.addForm.productId = this.addForm.productId[2];
+      this.addForm.createTime = this.addForm.loadTime;
       this.$refs.addFormRef.validate(async (valid) => {
         if (!valid) {
           return;
@@ -599,9 +644,29 @@ export default {
       n = r1 >= r2 ? r1 : r2;
       return (Math.round(num1 * m - num2 * m) / m).toFixed(n);
     },
+    async getCardTree() {
+      const { data: res } = await this.$http.get("business/weight/cardTree");
+      if (!res.success) {
+        return this.$message.error("獲取卡片列表失敗");
+      } else {
+        console.log(res);
+        this.cardTree = res.data;
+      }
+    },
+    async getProductTree() {
+      const { data: res } = await this.$http.get("business/weight/productTree");
+      if (!res.success) {
+        return this.$message.error("獲取廢棄物列表失敗");
+      } else {
+        console.log(res);
+        this.productTree = res.data;
+      }
+    },
   },
   created() {
     this.getWeightList();
+    this.getCardTree();
+    this.getProductTree();
     this.getDepartmets();
     setTimeout(() => {
       this.loading = false;

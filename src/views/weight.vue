@@ -1,7 +1,7 @@
 <template>
-  <div id="weight" class="login-container background">
+  <div id="weight" class="login-container">
     <!-- 初始頁面 -->
-    <div class="login-container" v-if="startPage">
+    <div class="login-container background" v-if="startPage">
       <el-container style="height: 100%">
         <header style="height: 20%"></header>
         <main style="height: 65%">
@@ -55,7 +55,7 @@
       </el-container>
     </div>
     <!-- 登入頁 -->
-    <div class="login-container" v-if="loginPage">
+    <div class="login-container background" v-if="loginPage">
       <el-container style="height: 100%">
         <header style="height: 20%"></header>
         <main style="height: 65%">
@@ -149,7 +149,7 @@
       </el-form>
     </div> -->
     <!-- 公司資料確認頁 -->
-    <div class="login-container" v-if="deptInfoPage">
+    <div class="login-container background" v-if="deptInfoPage">
       <el-container style="height: 100%">
         <header style="height: 20%"></header>
         <main style="height: 65%">
@@ -1216,7 +1216,7 @@ export default {
     //收到重量
     async recieveWeight() {
       this.retryFlag = false;
-      var timeoutID = window.setTimeout(() => this.retry(), 3000);
+      var timeoutID = window.setTimeout(() => this.retry(), 10000);
       await this.testPort();
       if (!this.retryFlag) {
         window.clearTimeout(timeoutID);
@@ -1362,9 +1362,12 @@ export default {
           var start = string.indexOf("ST,GS,+");
           var end = string.indexOf("kg");
           if (start != -1 && end != -1) {
+            console.log("if1");
             if (start > end) {
+              console.log("if2");
               string = string.replace("kg", "");
             } else {
+              console.log("else:");
               var number = string.substring(start + 7, end);
               var g = Number(number);
               this.totalWeight = g;
@@ -1372,13 +1375,19 @@ export default {
             }
           }
         }
+        await reader.cancel();
+        console.log("cancel");
+        await inputDone.catch((error) => {console.log("error2:" + error);});
+        console.log("catch");
+        await port.close();
       } catch (error) {
         console.log("error:" + error);
+        await port.close();
+        console.log("close");
+        await this.testPort();
         // Handle error...
       } finally {
-        await reader.cancel();
-        await inputDone.catch(() => {});
-        await port.close();
+        console.log("finally");
       }
     },
     async printWeight() {
@@ -1642,7 +1651,11 @@ export default {
       // Set Label Size
       var LabelW = 54;
       var LabelH = 40;
+
       await this.SendCommand("^Q" + LabelH + ",0,0\n^W" + LabelW);
+            await this.SendCommand("^XSETCUT,MODE,0");
+                  await this.SendCommand("^D1");
+
       // Print Job Start
       await this.SendCommand("^L");
       // Print Text
@@ -1651,25 +1664,25 @@ export default {
 
       // Print Text
       var PosX = "30";
-      var PosY = "30";
+      var PosY = "50";
       var FontSize = "36";
       var FontName = "標楷體";
       var Data = this.addDate;
       await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
       PosX = "30";
-      PosY = "80";
+      PosY = "100";
       var FontSize = "36";
       var FontName = "標楷體";
       var Data = this.dept.name;
       await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
       PosX = "30";
-      PosY = "130";
+      PosY = "150";
       var FontSize = "36";
       var FontName = "標楷體";
       var Data = this.productName;
       await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
       PosX = "250";
-      PosY = "130";
+      PosY = "150";
       var FontSize = "36";
       var FontName = "標楷體";
       var Data = this.netWeight + "  kg";
@@ -1677,6 +1690,7 @@ export default {
 
       // Print Job End
       await this.SendCommand("E");
+            await this.SendCommand("^B5");
     },
     SendToPrinter(FuncName, JsonObject) {
       // Response Data
