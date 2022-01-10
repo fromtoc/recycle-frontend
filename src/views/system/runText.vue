@@ -363,6 +363,7 @@ export default {
         this.$message.error("更新跑馬燈狀態失敗:" + res.data.errorMsg);
         row.status = !row.status;
       } else {
+        this.getRunTextList();
         const message = row.status ? "跑馬燈狀態已禁用" : "跑馬燈狀態已啟用";
         this.$notify.success({
           title: "操作成功",
