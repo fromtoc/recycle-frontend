@@ -1653,14 +1653,11 @@ export default {
       var LabelH = 40;
 
       await this.SendCommand("^Q" + LabelH + ",0,0\n^W" + LabelW);
-            await this.SendCommand("^XSETCUT,MODE,0");
-                  await this.SendCommand("^D1");
+      await this.SendCommand("^XSETCUT,MODE,0");
+      await this.SendCommand("^D1");
 
       // Print Job Start
       await this.SendCommand("^L");
-      // Print Text
-      //ecTextOut(10, 10, 24, "標楷體", "標楷體測試");
-      //ecTextOut(10, 100, 24, "MS Gothic", "日本のテスト");
 
       // Print Text
       var PosX = "30";
@@ -1687,10 +1684,10 @@ export default {
       var FontName = "標楷體";
       var Data = this.netWeight + "  kg";
       await this.ecTextOut(PosX, PosY, FontSize, FontName, Data);
+      await this.SendCommand("^E27");
 
       // Print Job End
       await this.SendCommand("E");
-            await this.SendCommand("^B5");
     },
     SendToPrinter(FuncName, JsonObject) {
       // Response Data
